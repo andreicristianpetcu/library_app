@@ -37,6 +37,32 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
     };
   }])
 
+    .factory('Books', ['$http', 'REST_URLS', function ($http, REST_URLS) {
+        function getBooks(successCallback, errorCallback) {
+            $http.post(REST_URLS.BOOKS)
+                .success(function (data) {
+                    successCallback(data);
+                })
+                .error(errorCallback);
+        }
+
+        //TODO: test me pls
+        function getBook(bookId, successCallback, errorCallback) {
+            $http.get(REST_URLS.USER + '/' + bookId)
+                .success(function (data) {
+                    successCallback(data);
+                })
+                .error(function (error) {
+                    errorCallback(error);
+                });
+        }
+
+        return {
+            getBooks: getBooks,
+            getBook: getBook
+        };
+    }])
+
   .factory('Auth', ['$http', 'REST_URLS', '$cookieStore', function ($http, REST_URLS, $cookieStore) {
     var user = {userId: '', roles: []};
 
@@ -131,6 +157,8 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
     LOGIN: 'http://localhost:8080/backend/j_spring_security_check',
     LOGOUT: 'http://localhost:8080/backend/j_spring_security_logout',
     USERS: 'http://localhost:8080/backend/rest/users',
-    USER: 'http://localhost:8080/backend/rest/user'
+    USER: 'http://localhost:8080/backend/rest/user',
+    BOOKS: 'http://localhost:8080/backend/rest/books',
+    BOOK: 'http://localhost:8080/backend/rest/book'
   });
 

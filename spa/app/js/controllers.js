@@ -8,7 +8,7 @@ angular.module('userAdmin.controllers', [])
   .controller('LoginController', ['$scope', '$location', LoginController])
   .controller('LoginDirectiveController', ['$rootScope', '$scope', 'Auth', '$location', LoginDirectiveController])
   .controller('UsersController', ['$rootScope', 'Users', '$scope','$location','Alerts', UsersController])
-  .controller('BooksController', ['$scope', BooksController])
+  .controller('BooksController', ['Books', '$scope', 'Alerts', BooksController])
   .controller('UserCtrl', [function () {
   }]);
 
@@ -67,19 +67,13 @@ function UsersController($rootScope, Users, $scope, $location, Alerts) {
     }
 }
 
-function BooksController($scope) {
-    $scope.books =  [
-        {'id': '1',
-            'title': 'Welcome to NodeJS',
-            'author' : 'Monica'},
-        {'id': '2',
-            'title': 'Welcome to Angular',
-            'author' : 'Andrei'},
-        {'id': '3',
-            'title': 'Welcome to Scrum',
-            'author' : 'Cristina'}
-    ];
-
+function BooksController(Books, $scope, Alerts) {
+    Books.getBooks(
+        function success(responseData) {
+            $scope.books = responseData;
+        },
+        Alerts.handler
+    );
 
     var MENU_ACTION_IDS = {
         ACTION_1: 'ACTION_1'
