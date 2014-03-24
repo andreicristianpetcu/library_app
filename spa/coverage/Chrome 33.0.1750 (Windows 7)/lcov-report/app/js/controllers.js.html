@@ -199,16 +199,16 @@
     <h1>Code coverage report for <span class="entity">./app/js/controllers.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">53.49% <small>(23 / 43)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">56% <small>(28 / 50)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
         Branches: <span class="metric">0% <small>(0 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Functions: <span class="metric">40% <small>(10 / 25)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">40.74% <small>(11 / 27)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">53.49% <small>(23 / 43)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">56% <small>(28 / 50)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
     </h2>
@@ -328,11 +328,42 @@
 110
 111
 112
-113</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -396,6 +427,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -450,6 +510,7 @@ angular.module('userAdmin.controllers', [])
   .controller('LoginController', ['$scope', '$location', LoginController])
   .controller('LoginDirectiveController', ['$rootScope', '$scope', 'Auth', '$location', LoginDirectiveController])
   .controller('UsersController', ['$rootScope', 'Users', '$scope','$location','Alerts', UsersController])
+  .controller('BooksController', ['$scope', BooksController])
   .controller('UserCtrl', [<span class="fstat-no" title="function not covered" >function () {</span>
   }]);
 &nbsp;
@@ -493,19 +554,48 @@ function UsersController($rootScope, Users, $scope, $location, Alerts) {
     );
 &nbsp;
 &nbsp;
-  var MENU_ACTION_IDS = {
-    ACTION_1: 'ACTION_1'
-  }
+    var MENU_ACTION_IDS = {
+        ACTION_1: 'ACTION_1'
+    }
 &nbsp;
-  $scope.sidebarMenuItems = [
-    {id: MENU_ACTION_IDS.ACTION_1, text: 'Action 1' }
-  ];
+    $scope.sidebarMenuItems = [
+        {id: MENU_ACTION_IDS.ACTION_1, text: 'Action 1' }
+    ];
 &nbsp;
 &nbsp;
-  $scope.sidebarActionSelected = <span class="fstat-no" title="function not covered" >function (sidebarAction) {</span>
-<span class="cstat-no" title="statement not covered" >    console.log(sidebarAction);</span>
-<span class="cstat-no" title="statement not covered" >    alert(sidebarAction.text + " was clicked");</span>
-  }
+    $scope.sidebarActionSelected = <span class="fstat-no" title="function not covered" >function (sidebarAction) {</span>
+<span class="cstat-no" title="statement not covered" >        console.log(sidebarAction);</span>
+<span class="cstat-no" title="statement not covered" >        alert(sidebarAction.text + " was clicked");</span>
+    }
+}
+&nbsp;
+function BooksController($scope) {
+    $scope.books =  [
+        {'id': '1',
+            'title': 'Welcome to NodeJS',
+            'author' : 'Monica'},
+        {'id': '2',
+            'title': 'Welcome to Angular',
+            'author' : 'Andrei'},
+        {'id': '3',
+            'title': 'Welcome to Scrum',
+            'author' : 'Cristina'}
+    ];
+&nbsp;
+&nbsp;
+    var MENU_ACTION_IDS = {
+        ACTION_1: 'ACTION_1'
+    };
+&nbsp;
+    $scope.sidebarMenuItems = [
+        {id: MENU_ACTION_IDS.ACTION_1, text: 'Action 1' }
+    ];
+&nbsp;
+&nbsp;
+    $scope.sidebarActionSelected = <span class="fstat-no" title="function not covered" >function (sidebarAction) {</span>
+<span class="cstat-no" title="statement not covered" >        console.log(sidebarAction);</span>
+<span class="cstat-no" title="statement not covered" >        alert(sidebarAction.text + " was clicked");</span>
+    }
 }
 &nbsp;
 &nbsp;
@@ -557,7 +647,7 @@ function UsersController($rootScope, Users, $scope, $location, Alerts) {
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Mar 20 2014 15:10:04 GMT+0200 (GTB Standard Time)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Mar 24 2014 10:03:34 GMT+0200 (GTB Standard Time)</div>
 </div>
 
 <script src="../prettify.js"></script>

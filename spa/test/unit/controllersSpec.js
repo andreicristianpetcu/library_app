@@ -41,6 +41,32 @@ describe('controllers', function () {
 
   });
 
+
+
+    describe('BooksController', function () {
+        var alertsMock, booksMock, BooksController;
+
+        beforeEach(function () {
+            module(function ($provide) {
+                $provide.value('Books', {});
+            });
+
+            inject(function ($controller, $rootScope) {
+                scope = $rootScope.$new();
+                booksMock = jasmine.createSpyObj('Books', ['getBooks']);
+                alertsMock = jasmine.createSpyObj('Alerts',['handler']);
+
+                BooksController = $controller('BooksController', {$scope: scope, Books: booksMock, Alerts: alertsMock});
+            });
+
+        });
+
+        it('should have three books', function () {
+            expect(scope.books.length).toBe(3);
+        });
+    });
+
+
   describe('LoginDirectiveController', function () {
     var url = 'scope-url-value';
 

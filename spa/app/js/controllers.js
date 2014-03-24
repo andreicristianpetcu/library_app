@@ -8,6 +8,7 @@ angular.module('userAdmin.controllers', [])
   .controller('LoginController', ['$scope', '$location', LoginController])
   .controller('LoginDirectiveController', ['$rootScope', '$scope', 'Auth', '$location', LoginDirectiveController])
   .controller('UsersController', ['$rootScope', 'Users', '$scope','$location','Alerts', UsersController])
+  .controller('BooksController', ['$scope', BooksController])
   .controller('UserCtrl', [function () {
   }]);
 
@@ -51,19 +52,48 @@ function UsersController($rootScope, Users, $scope, $location, Alerts) {
     );
 
 
-  var MENU_ACTION_IDS = {
-    ACTION_1: 'ACTION_1'
-  }
+    var MENU_ACTION_IDS = {
+        ACTION_1: 'ACTION_1'
+    }
 
-  $scope.sidebarMenuItems = [
-    {id: MENU_ACTION_IDS.ACTION_1, text: 'Action 1' }
-  ];
+    $scope.sidebarMenuItems = [
+        {id: MENU_ACTION_IDS.ACTION_1, text: 'Action 1' }
+    ];
 
 
-  $scope.sidebarActionSelected = function (sidebarAction) {
-    console.log(sidebarAction);
-    alert(sidebarAction.text + " was clicked");
-  }
+    $scope.sidebarActionSelected = function (sidebarAction) {
+        console.log(sidebarAction);
+        alert(sidebarAction.text + " was clicked");
+    }
+}
+
+function BooksController($scope) {
+    $scope.books =  [
+        {'id': '1',
+            'title': 'Welcome to NodeJS',
+            'author' : 'Monica'},
+        {'id': '2',
+            'title': 'Welcome to Angular',
+            'author' : 'Andrei'},
+        {'id': '3',
+            'title': 'Welcome to Scrum',
+            'author' : 'Cristina'}
+    ];
+
+
+    var MENU_ACTION_IDS = {
+        ACTION_1: 'ACTION_1'
+    };
+
+    $scope.sidebarMenuItems = [
+        {id: MENU_ACTION_IDS.ACTION_1, text: 'Action 1' }
+    ];
+
+
+    $scope.sidebarActionSelected = function (sidebarAction) {
+        console.log(sidebarAction);
+        alert(sidebarAction.text + " was clicked");
+    }
 }
 
 

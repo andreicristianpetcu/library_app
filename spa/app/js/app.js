@@ -7,6 +7,7 @@ angular.module('userAdmin', ['ngRoute', 'ui.bootstrap', 'userAdmin.filters', 'us
             .when('/', {templateUrl: 'partials/home.html', controller: 'HomeCtrl'})
             .when('/users', {templateUrl: 'partials/users.html', controller: 'UsersController', role: 'ADMIN'})
             .when('/user/:id', {templateUrl: 'partials/user.html', controller: 'UserController', role: 'ADMIN'})
+            .when('/books', {templateUrl: 'partials/books.html', controller: 'BooksController', role: 'ADMIN'})
             .otherwise({redirectTo: '/'});
     }])
     .config(['$httpProvider', function($httpProvider) {
