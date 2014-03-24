@@ -1,9 +1,6 @@
 package com.cegeka.rest.user;
 
-import com.cegeka.application.BookTo;
-import com.cegeka.application.UserFacade;
-import com.cegeka.application.UserProfileTo;
-import com.cegeka.application.UserTo;
+import com.cegeka.application.*;
 import com.cegeka.application.security.LoggedInUser;
 import com.cegeka.application.security.UserDetailsTO;
 import org.slf4j.Logger;
@@ -29,16 +26,13 @@ public class BookRestService {
 
     private Logger logger = LoggerFactory.getLogger(BookRestService.class);
 
+    @Autowired
+    private BookFacade bookFacade;
+
     @RequestMapping("/books")
     @ResponseBody
     public List<BookTo> getBooks(){
-        return new ArrayList<BookTo>(){
-            {
-                add(new BookTo("0", "Welcome to Node JS 2nd edition", "Monica", "123"));
-                add(new BookTo("1", "Welcome to Angular 2nd edition", "Andrei", "123"));
-                add(new BookTo("2", "Welcome to Scrum 2nd edition", "Cristina", "123"));
-            }
-        };
+        return bookFacade.getBooks();
     }
 
     @RequestMapping(value="/book/{id}", method = GET)
