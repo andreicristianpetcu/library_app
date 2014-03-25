@@ -8,7 +8,7 @@ angular.module('userAdmin.controllers', [])
   .controller('LoginController', ['$scope', '$location', LoginController])
   .controller('LoginDirectiveController', ['$rootScope', '$scope', 'Auth', '$location', LoginDirectiveController])
   .controller('UsersController', ['$rootScope', 'Users', '$scope','$location','Alerts', UsersController])
-  .controller('BooksController', ['Books', '$scope', 'Alerts', BooksController])
+  .controller('BooksController', ['Books', '$scope', '$location', 'Alerts', BooksController])
   .controller('UserCtrl', [function () {
   }]);
 
@@ -67,7 +67,7 @@ function UsersController($rootScope, Users, $scope, $location, Alerts) {
     }
 }
 
-function BooksController(Books, $scope, Alerts) {
+function BooksController(Books, $scope, $location, Alerts) {
     Books.getBooks(
         function success(responseData) {
             $scope.books = responseData;
@@ -92,10 +92,8 @@ function BooksController(Books, $scope, Alerts) {
     $scope.addBook = function () {
         Books.addBook($scope.book)
             .then(function () {
-                $location.path('/book');
-
+                $location.path('/books');
             }, function error() {
-
             })
     }
 }

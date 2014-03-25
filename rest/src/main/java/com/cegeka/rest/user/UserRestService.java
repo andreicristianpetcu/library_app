@@ -53,6 +53,7 @@ public class UserRestService {
     public UserTo getUser(@PathVariable("id") String userId){
         return userFacade.getUser(userId);
     }
+
     @RequestMapping(value = "/user", method = POST)
     @ResponseBody
     public ResponseEntity saveUser(@RequestBody UserTo userTO) {

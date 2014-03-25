@@ -54,6 +54,7 @@ describe('ginkgo admin app', function () {
 
         beforeEach(function () {
             browser().navigateTo('#/books');
+            //mock some books?
         });
 
         it('should render books when user navigates to /user/:id', function () {
@@ -82,7 +83,21 @@ describe('ginkgo admin app', function () {
             input('query').enter('motorola');
             expect(repeater('.books li').count()).toBe(2);
         });
+    });
 
+    describe('add book view', function () {
+
+        beforeEach(function () {
+            browser().navigateTo('#/book/1');
+        });
+
+        it('should display a form', function () {
+            //TODO
+        });
+
+        it('should post to /book on submit button click', function () {
+            //TODO
+        });
     });
 
     describe('book view', function () {
