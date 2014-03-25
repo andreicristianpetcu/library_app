@@ -50,13 +50,28 @@ describe('ginkgo admin app', function () {
 
     });
 
-    describe('books', function () {
-
+    describe('books view', function () {
 
         beforeEach(function () {
             browser().navigateTo('#/books');
         });
 
+        it('should render books when user navigates to /user/:id', function () {
+            console.log(element('body').text);
+            expect(element('[ng-view] h1:first').text()).toMatch(/Books/);
+        });
+
+        it('should contain a list of books', function () {
+//            TODO implement
+        });
+
+        it('should contain an add book button when user has admin role', function () {
+//            TODO implement
+        });
+
+        it('should not contain an add book button when user does not have admin role', function () {
+//            TODO implement
+        });
 
         it('should filter the book list as user types into the search box', function () {
             expect(repeater('.books li').count()).toBe(3);
@@ -66,6 +81,19 @@ describe('ginkgo admin app', function () {
 
             input('query').enter('motorola');
             expect(repeater('.books li').count()).toBe(2);
+        });
+
+    });
+
+    describe('book view', function () {
+
+        beforeEach(function () {
+            browser().navigateTo('#/book/1');
+        });
+
+        it('should render book when user navigates to /user/:id', function () {
+            console.log(element('body').text);
+            expect(element('[ng-view] h1:first').text()).toMatch(/Book Title/);
         });
 
     });
