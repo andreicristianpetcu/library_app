@@ -41,9 +41,11 @@ public class BookRestService {
         return new BookTo(bookId, "New book", "Library App", "123");
     }
 
+    //TODO: HATEOAS? return location as well?
     @RequestMapping(value = "/book", method = POST)
     @ResponseBody
     public ResponseEntity saveBook(@RequestBody BookTo bookTo) {
+        bookFacade.saveBook(bookTo);
         return new ResponseEntity<String>("success", HttpStatus.OK);
     }
 }
