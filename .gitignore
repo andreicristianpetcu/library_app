@@ -2,3 +2,6 @@
 *.iml
 target/
 spa/coverage/
+spa/node_modules/
+spa/dist/
+spa/logs/
