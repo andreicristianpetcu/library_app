@@ -57,9 +57,15 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
                 });
         }
 
+        //TODO: test me pls
+        function addBook(book) {
+            return $http.post(REST_URLS.BOOK, book);
+        }
+
         return {
             getBooks: getBooks,
-            getBook: getBook
+            getBook: getBook,
+            addBook: addBook
         };
     }])
 

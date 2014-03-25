@@ -19,6 +19,7 @@ import java.util.List;
 import static com.cegeka.application.Role.USER;
 
 @Service
+@Transactional(readOnly = true)
 public class BookFacadeImpl implements BookFacade {
 
     @Autowired
@@ -39,9 +40,11 @@ public class BookFacadeImpl implements BookFacade {
     }
 
     @Override
+    @Transactional
     public BookTo saveBook(BookTo newBook) {
         BookEntity bookEntity = bookToMapper.toNewEntity(newBook);
-        return bookToMapper.toTo(bookRepository.saveAndFlush(bookEntity));
+        BookEntity bookEntity1 = bookRepository.saveAndFlush(bookEntity);
+        return bookToMapper.toTo(bookEntity1);
     }
 
     public void setBookRepository(BookRepository bookRepository) {

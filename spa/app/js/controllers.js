@@ -88,6 +88,16 @@ function BooksController(Books, $scope, Alerts) {
         console.log(sidebarAction);
         alert(sidebarAction.text + " was clicked");
     }
+
+    $scope.addBook = function () {
+        Books.addBook($scope.book)
+            .then(function () {
+                $location.path('/book');
+
+            }, function error() {
+
+            })
+    }
 }
 
 
