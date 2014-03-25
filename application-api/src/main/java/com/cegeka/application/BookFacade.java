@@ -8,4 +8,5 @@ public interface BookFacade {
 
     BookTo getBook(String userId);
 
+    BookTo saveBook(BookTo newBook);
 }

@@ -41,6 +41,7 @@ public class BookToMapper {
         };
     }
 
+    //TODO remove me
     public void toExistingEntity(UserEntity userEntity, UserTo userTo) {
         userEntity.setEmail(userTo.getEmail());
         userEntity.getProfile().setFirstName(userTo.getFirstName());

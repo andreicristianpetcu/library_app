@@ -1,5 +1,6 @@
 package com.cegeka.application;
 
+import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.books.BookRepository;
 import com.cegeka.domain.confirmation.ConfirmationService;
 import com.cegeka.domain.users.*;
@@ -20,7 +21,6 @@ import static com.cegeka.application.Role.USER;
 @Service
 public class BookFacadeImpl implements BookFacade {
 
-    ApplicationContext applicationContext;
     @Autowired
     private BookRepository bookRepository;
 
@@ -36,6 +36,12 @@ public class BookFacadeImpl implements BookFacade {
     @Override
     public BookTo getBook(String bookId) {
         return bookToMapper.toTo(bookRepository.findOne(bookId));
+    }
+
+    @Override
+    public BookTo saveBook(BookTo newBook) {
+        BookEntity bookEntity = bookToMapper.toNewEntity(newBook);
+        return bookToMapper.toTo(bookRepository.saveAndFlush(bookEntity));
     }
 
     public void setBookRepository(BookRepository bookRepository) {
