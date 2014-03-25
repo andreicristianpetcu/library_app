@@ -34,9 +34,21 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void canRetrieve() {
+    public void canRetrieveOneItem() {
         List<BookEntity> all = bookRepository.findAll();
         assertThat(all.size()).isEqualTo(1);
         assertThat(all).contains(aBookEntity);
+    }
+
+    @Test
+    public void canSaveOneItem () {
+        BookEntity bookEntity = new BookEntity("New book", "New author", "ISBN");
+        bookRepository.saveAndFlush(bookEntity);
+        assertThat(bookEntity.getId()).isNotNull();
+
+        List<BookEntity> all = bookRepository.findAll();
+        assertThat(all.size()).isEqualTo(2);
+        assertThat(all).contains(aBookEntity);
+        assertThat(all).contains(bookEntity);
     }
 }
