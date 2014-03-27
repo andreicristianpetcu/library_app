@@ -46,6 +46,14 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
                 .error(errorCallback);
         }
 
+        function lookUpBookByIsbn(bookIsbn, successCallback, errorCallback) {
+            $http.jsonp(REST_URLS.BOOKS_BY_ISBN + bookIsbn)
+                .success(function (data) {
+                    successCallback(data);
+                })
+                .error(errorCallback);
+        }
+
         //TODO: test me pls
         function getBook(bookId, successCallback, errorCallback) {
             $http.get(REST_URLS.USER + '/' + bookId)
@@ -65,7 +73,8 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
         return {
             getBooks: getBooks,
             getBook: getBook,
-            addBook: addBook
+            addBook: addBook,
+            lookUpBookByIsbn: lookUpBookByIsbn
         };
     }])
 
@@ -165,6 +174,7 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
     USERS: 'http://localhost:8080/backend/rest/users',
     USER: 'http://localhost:8080/backend/rest/user',
     BOOKS: 'http://localhost:8080/backend/rest/books',
-    BOOK: 'http://localhost:8080/backend/rest/book'
+    BOOK: 'http://localhost:8080/backend/rest/book',
+    BOOKS_BY_ISBN: 'https://openlibrary.org/api/books?callback=JSON_CALLBACK&jscmd=data&bibkeys=ISBN:'
   });
 
