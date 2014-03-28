@@ -5,7 +5,7 @@
 describe('ginkgo admin app', function () {
 
     beforeEach(function () {
-        browser().navigateTo('/app/index.html');
+        browser().navigateTo('/app/');
     });
 
 
