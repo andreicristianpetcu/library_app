@@ -53,7 +53,6 @@ describe('ginkgo admin app', function () {
         });
 
         it('should render books when user navigates to /books', function () {
-            console.log(element('body').text);
             expect(element('[ng-view] h1:first').text()).toMatch(/Books/);
         });
 
@@ -62,8 +61,6 @@ describe('ginkgo admin app', function () {
         });
 
         it('should contain an add book button when user has admin role', function () {
-            console.log(element('[ng-view] #btnAddBook').text());
-            pause();
             expect(element('[ng-view] #btnAddBook').text()).toMatch("add book");
         });
 
