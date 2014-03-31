@@ -2,21 +2,13 @@ package com.cegeka.application;
 
 import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.books.BookRepository;
-import com.cegeka.domain.confirmation.ConfirmationService;
-import com.cegeka.domain.users.*;
+import com.cegeka.domain.books.BookToMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
-
-import static com.cegeka.application.Role.USER;
 
 @Service
 @Transactional(readOnly = true)
