@@ -29,10 +29,10 @@
         <tr ng-repeat="book in books  | filter:query">
             <td>{{book.title}}</td>
             <td>{{book.author}}</td>
-            <td><a href="#/book/{{book.id}}">view</a></td>
+            <td>{{book.isbn}}</td>
         </tr>
 
         </tbody>
     </table>
-    <a href="#/add_book/" class="btn btn-primary">add book</a>
+    <a id="btnAddBook" href="#/add_book/" class="btn btn-primary">add book</a>
 </div>

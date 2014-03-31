@@ -12,13 +12,13 @@ module.exports = function (config) {
       'app/js/*.js': 'coverage'
     },
 
-    autoWatch: false,
+    autoWatch: true,
 
     browsers: ['Chrome'],
 
     frameworks: ['ng-scenario'],
 
-    singleRun: true,
+    singleRun: false,
 
     proxies: {
       '/app/': 'http://localhost:8000/'

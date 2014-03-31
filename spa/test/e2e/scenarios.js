@@ -8,13 +8,11 @@ describe('ginkgo admin app', function () {
         browser().navigateTo('/app/');
     });
 
-
     it('should automatically redirect to / when location hash/fragment is empty', function () {
         expect(browser().location().url()).toBe("/");
     });
 
     describe('home', function () {
-
         beforeEach(function () {
             browser().navigateTo('#/');
         });
@@ -23,10 +21,16 @@ describe('ginkgo admin app', function () {
             expect(element('[ng-view] h1:first').text()).toMatch(/Welcome/);
         });
 
+        it('redirects to books after login', function () {
+            input('username').enter('admin@mailinator.com');
+            input('password').enter('test');
+            element("#login").click();
+            expect(browser().location().url()).toBe("/books");
+        });
+
     });
 
     describe('users', function () {
-
         beforeEach(function () {
             browser().navigateTo('#/users');
         });
@@ -35,17 +39,8 @@ describe('ginkgo admin app', function () {
             expect(element('[ng-view] h1:first').text()).toMatch(/Users/);
         });
 
-    });
-
-    describe('user', function () {
-
-        beforeEach(function () {
-            browser().navigateTo('#/user/1');
-        });
-
-        it('should render user when user navigates to /user/:id', function () {
-            console.log(element('body').text);
-            expect(element('[ng-view] h1:first').text()).toMatch(/Romeo/);
+        it('should contain a table', function () {
+            expect(element('[ng-view] table th').text()).toMatch("#NameEmailRoleEdit");
         });
 
     });
@@ -57,38 +52,31 @@ describe('ginkgo admin app', function () {
             //mock some books?
         });
 
-        it('should render books when user navigates to /user/:id', function () {
+        it('should render books when user navigates to /books', function () {
             console.log(element('body').text);
             expect(element('[ng-view] h1:first').text()).toMatch(/Books/);
         });
 
         it('should contain a list of books', function () {
-//            TODO implement
+            expect(element('[ng-view] table th').text()).toMatch("TitleAuthorISBN");
         });
 
         it('should contain an add book button when user has admin role', function () {
-//            TODO implement
+            console.log(element('[ng-view] #btnAddBook').text());
+            pause();
+            expect(element('[ng-view] #btnAddBook').text()).toMatch("add book");
         });
 
         it('should not contain an add book button when user does not have admin role', function () {
 //            TODO implement
         });
 
-        it('should filter the book list as user types into the search box', function () {
-            expect(repeater('.books li').count()).toBe(3);
-
-            input('query').enter('nexus');
-            expect(repeater('.books li').count()).toBe(1);
-
-            input('query').enter('motorola');
-            expect(repeater('.books li').count()).toBe(2);
-        });
     });
 
     describe('add book view', function () {
 
         beforeEach(function () {
-            browser().navigateTo('#/book/1');
+            browser().navigateTo('#/add_book');
         });
 
         it('should display a form', function () {
@@ -100,16 +88,4 @@ describe('ginkgo admin app', function () {
         });
     });
 
-    describe('book view', function () {
-
-        beforeEach(function () {
-            browser().navigateTo('#/book/1');
-        });
-
-        it('should render book when user navigates to /user/:id', function () {
-            console.log(element('body').text);
-            expect(element('[ng-view] h1:first').text()).toMatch(/Book Title/);
-        });
-
-    });
 });
