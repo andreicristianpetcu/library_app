@@ -61,9 +61,6 @@ describe('controllers', function () {
 
         });
 
-        it('should have three books', function () {
-            expect(scope.books.length).toBe(3);
-        });
     });
 
 
