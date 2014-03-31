@@ -17,6 +17,11 @@ describe('ginkgo admin app', function () {
 
         beforeEach(function () {
             browser().navigateTo('#/');
+            input('username').enter('admin@mailinator.com');
+            input('password').enter('test');
+            pause();
+            element('#login').click();
+            pause();
         });
 
         it('should render home when user navigates to /', function () {
