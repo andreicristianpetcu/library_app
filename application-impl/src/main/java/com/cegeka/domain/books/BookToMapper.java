@@ -1,14 +1,12 @@
-package com.cegeka.domain.users;
+package com.cegeka.domain.books;
 
 import com.cegeka.application.BookTo;
-import com.cegeka.application.Role;
 import com.cegeka.application.UserTo;
-import com.cegeka.domain.books.BookEntity;
+import com.cegeka.domain.users.UserEntity;
 import com.google.common.base.Function;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 
 import static com.google.common.collect.Collections2.transform;
