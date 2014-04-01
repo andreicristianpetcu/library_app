@@ -1,14 +1,11 @@
-package com.cegeka.domain.bookloan;
+package com.cegeka.domain.bookloans;
 
 import com.cegeka.IntegrationTest;
 import com.cegeka.application.Role;
-import com.cegeka.domain.bookloans.BookLoanEntity;
-import com.cegeka.domain.bookloans.BookLoanRepository;
 import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.books.BookRepository;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
-import org.fest.assertions.Index;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.jpa.domain.Specification;
@@ -88,7 +85,7 @@ public class BookLoanRepositoryIntegrationTest extends IntegrationTest {
         bookLoanRepository.saveAndFlush(bookLoan3);
 
         List<BookLoanEntity> allHamletLoans = bookLoanRepository.findAll(where(bookIs(hamlet)).and(userIs(romeo)));
-        assertThat(allHamletLoans.size()).equals(1);
+        assertThat(allHamletLoans.size()).isEqualTo(1);
     }
 
     private Specification<BookLoanEntity> userIs(final UserEntity userEntity) {
