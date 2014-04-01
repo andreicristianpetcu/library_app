@@ -1,15 +1,11 @@
 package com.cegeka.domain.books;
 
-import com.cegeka.application.Role;
-import com.cegeka.domain.users.UserProfileEntity;
-import com.google.common.collect.Sets;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import java.util.Locale;
-import java.util.Set;
-
-import static javax.persistence.CascadeType.ALL;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "BOOKS")
@@ -20,12 +16,12 @@ public class BookEntity {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
-    String title;
+    private String title;
 
-    String author;
+    private String author;
 
     //TODO: make unique and use it as natural key
-    String isbn;
+    private String isbn;
 
     public BookEntity() {
     }
