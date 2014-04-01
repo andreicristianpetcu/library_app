@@ -40,37 +40,37 @@
                                 <exec executable="cmd" dir="${project.basedir}" osfamily="windows" failonerror="true">
                                     <arg line="/c npm config set color false" />
                                 </exec>
-                                <!--<exec executable="npm" dir="${project.basedir}" osfamily="unix" failonerror="true">-->
-                                    <!--<arg line="config set color false" />-->
-                                <!--</exec>-->
+                                <exec executable="npm" dir="${project.basedir}" osfamily="unix" failonerror="true">
+                                    <arg line="config set color false" />
+                                </exec>
                                 <exec executable="cmd" dir="${project.basedir}" osfamily="windows" failonerror="true">
                                     <arg line="/c npm install -g bower grunt-cli" />
                                 </exec>
-                                <!--<exec executable="npm" dir="${project.basedir}" osfamily="unix" failonerror="true">-->
-                                    <!--<arg line="install -g bower grunt-cli" />-->
-                                <!--</exec>-->
+                                <exec executable="npm" dir="${project.basedir}" osfamily="unix" failonerror="true">
+                                    <arg line="install -g bower grunt-cli" />
+                                </exec>
                                 <exec executable="cmd" dir="${project.basedir}" osfamily="windows" failonerror="true">
                                     <arg line="/c npm install" />
                                 </exec>
-                                <!--<exec executable="npm" dir="${project.basedir}" osfamily="unix" failonerror="true">-->
-                                    <!--<arg line="install" />-->
-                                <!--</exec>-->
+                                <exec executable="npm" dir="${project.basedir}" osfamily="unix" failonerror="true">
+                                    <arg line="install" />
+                                </exec>
 
                                 <echo>Starting bower install ...</echo>
                                 <exec executable="cmd" dir="${project.basedir}" osfamily="windows" failonerror="true">
                                     <arg line="/c bower install --no-color" />
                                 </exec>
-                                <!--<exec executable="bower" dir="${project.basedir}" osfamily="unix" failonerror="true">-->
-                                    <!--<arg line="install - -no-color" />-->
-                                <!--</exec>-->
+                                <exec executable="bower" dir="${project.basedir}" osfamily="unix" failonerror="true">
+                                    <arg line="install --no-color" />
+                                </exec>
 
                                 <echo>Starting grunt ...</echo>
                                 <exec executable="cmd" dir="${project.basedir}" osfamily="windows" failonerror="true">
                                     <arg line="/c grunt --no-color " />
                                 </exec>
-                                <!--<exec executable="grunt" dir="${project.basedir}" osfamily="unix" failonerror="true">-->
-                                    <!--<arg line="- -no-color" />-->
-                                <!--</exec>-->
+                                <exec executable="grunt" dir="${project.basedir}" osfamily="unix" failonerror="true">
+                                    <arg line="--no-color" />
+                                </exec>
                             </target>
                         </configuration>
                         <goals>
