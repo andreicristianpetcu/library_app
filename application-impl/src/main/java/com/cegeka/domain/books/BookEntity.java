@@ -24,8 +24,8 @@ public class BookEntity {
 
     String author;
 
+    //TODO: make unique and use it as natural key
     String isbn;
-
 
     public BookEntity() {
     }
@@ -71,15 +71,23 @@ public class BookEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BookEntity that = (BookEntity) o;
-        return !(id != null ? !id.equals(that.id) : that.id != null);
+        if (!(o instanceof BookEntity)) return false;
 
+        BookEntity that = (BookEntity) o;
+
+        if (author != null ? !author.equals(that.author) : that.author != null) return false;
+        if (isbn != null ? !isbn.equals(that.isbn) : that.isbn != null) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        int result = title != null ? title.hashCode() : 0;
+        result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (isbn != null ? isbn.hashCode() : 0);
+        return result;
     }
 }
 
