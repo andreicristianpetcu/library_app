@@ -3,23 +3,22 @@ package com.cegeka.application;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.Locale;
-import java.util.Set;
-
 public class BookTo {
     private String id;
     private String title;
     private String author;
     private String isbn;
+    private String username;
 
     public BookTo() {
     }
 
-    public BookTo(String id, String title, String author, String isbn) {
+    public BookTo(String id, String title, String author, String isbn, String username) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this.username = username;
     }
 
     public String getId() {
@@ -52,6 +51,14 @@ public class BookTo {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

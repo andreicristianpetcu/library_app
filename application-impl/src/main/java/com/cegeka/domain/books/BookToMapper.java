@@ -1,7 +1,6 @@
 package com.cegeka.domain.books;
 
 import com.cegeka.application.BookTo;
-import com.cegeka.application.UserTo;
 import com.cegeka.domain.users.UserEntity;
 import com.google.common.base.Function;
 import org.springframework.context.annotation.Scope;
@@ -17,7 +16,9 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Scope(value = SCOPE_SINGLETON)
 public class BookToMapper {
     public BookTo toTo(BookEntity bookEntity) {
-        BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn());
+        UserEntity borrower = bookEntity.getBorrower();
+        String username = borrower != null ? borrower.getProfile().getFullName() : null;
+        BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn(), username);
         return bookTo;
     }
 
@@ -39,13 +40,4 @@ public class BookToMapper {
         };
     }
 
-    //TODO remove me
-    public void toExistingEntity(UserEntity userEntity, UserTo userTo) {
-        userEntity.setEmail(userTo.getEmail());
-        userEntity.getProfile().setFirstName(userTo.getFirstName());
-        userEntity.getProfile().setLastName(userTo.getLastName());
-        userEntity.setConfirmed(userTo.getConfirmed());
-        userEntity.getRoles().clear();
-        userEntity.getRoles().addAll(userTo.getRoles());
-    }
 }
