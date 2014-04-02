@@ -27,7 +27,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = Sets.newHashSet();
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Transient
@@ -94,15 +94,18 @@ public class UserEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserEntity that = (UserEntity) o;
-        return !(id != null ? !id.equals(that.id) : that.id != null);
+        if (!(o instanceof UserEntity)) return false;
 
+        UserEntity that = (UserEntity) o;
+
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return email != null ? email.hashCode() : 0;
     }
 }
 

@@ -45,9 +45,12 @@ public class BookFacadeImpl implements BookFacade {
     }
 
     @Override
+    @Transactional
     public void borrowBook(String bookId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findByEmail("admin@mailinator.com");
+        book.setBorrower(user);
+        bookRepository.flush();
     }
 
     public void setBookRepository(BookRepository bookRepository) {

@@ -1,6 +1,8 @@
 package com.cegeka.domain.books;
 
 import com.cegeka.IntegrationTest;
+import com.cegeka.domain.users.UserEntity;
+import com.cegeka.domain.users.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,6 +10,8 @@ import javax.annotation.Resource;
 import java.util.List;
 
 import static com.cegeka.domain.books.BookEntityTestFixture.hamletBook;
+import static com.cegeka.domain.books.BookEntityTestFixture.macbethBook;
+import static com.cegeka.domain.user.UserEntityTestFixture.romeoUser;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class BookRepositoryIntegrationTest extends IntegrationTest {
@@ -17,24 +21,41 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Resource
     private BookRepository bookRepository;
 
-    private BookEntity hamlet;
+    @Resource
+    private UserRepository userRepository;
+
+    private BookEntity hamlet, macbeth;
+    private UserEntity romeo;
 
     @Before
     public void setUp() {
         hamlet = bookRepository.saveAndFlush(hamletBook());
+        macbeth = bookRepository.saveAndFlush(macbethBook());
+        romeo = userRepository.saveAndFlush(romeoUser());
+        hamlet.setBorrower(romeo);
+        bookRepository.flush();
     }
 
     @Test
     public void canRetrieveAll() {
         List<BookEntity> all = bookRepository.findAll();
-        assertThat(all.size()).isEqualTo(1);
+        assertThat(all.size()).isEqualTo(2);
         assertThat(all).contains(hamletBook());
+        assertThat(all).contains(macbethBook());
     }
 
     @Test
     public void canRetrieveOne() {
+        BookEntity one = bookRepository.findOne(macbeth.getId());
+        assertThat(one).isEqualTo(macbethBook());
+    }
+
+    @Test
+    public void canRetrieveOneBorrowed() {
         BookEntity one = bookRepository.findOne(hamlet.getId());
         assertThat(one).isEqualTo(hamletBook());
+        assertThat(one.getBorrower()).isNotNull();
+        assertThat(one.getBorrower()).isEqualTo(romeoUser());
     }
 
     @Test
@@ -51,7 +72,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
         assertThat(bookEntityReturned).isSameAs(bookEntity);
 
         List<BookEntity> all = bookRepository.findAll();
-        assertThat(all.size()).isEqualTo(2);
+        assertThat(all.size()).isEqualTo(3);
         assertThat(all).contains(hamletBook());
         assertThat(all).contains(bookEntity);
     }

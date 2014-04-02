@@ -1,11 +1,9 @@
 package com.cegeka.domain.books;
 
+import com.cegeka.domain.users.UserEntity;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "BOOKS")
@@ -22,6 +20,9 @@ public class BookEntity {
 
     //TODO: make unique and use it as natural key
     private String isbn;
+
+    @ManyToOne
+    private UserEntity borrower;
 
     public BookEntity() {
     }
@@ -62,6 +63,14 @@ public class BookEntity {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public UserEntity getBorrower() {
+        return borrower;
+    }
+
+    public void setBorrower(UserEntity borrower) {
+        this.borrower = borrower;
     }
 
     @Override
