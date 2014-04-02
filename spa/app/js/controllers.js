@@ -97,12 +97,8 @@ function BooksController(Books, $scope, $location, Alerts) {
             })
     }
 
-    $scope.borrowBook = function (bookId) {
-        Books.borrowBook(bookId)
-            .then(function () {
-                $location.path('/books');
-            }, function error() {
-            })
+    $scope.borrowBook = function (book) {
+        Books.borrowBook(book);
     }
 }
 

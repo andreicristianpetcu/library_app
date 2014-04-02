@@ -42,7 +42,7 @@ public class BookRestService {
     @RequestMapping(value = "/book", method = PUT)
     @ResponseBody
     public ResponseEntity borrowBook(@RequestBody String bookId) {
-        bookFacade.borrowBook(bookId);
-        return new ResponseEntity<String>("success", HttpStatus.OK);
+        BookTo bookTo = bookFacade.borrowBook(bookId);
+        return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
     }
 }

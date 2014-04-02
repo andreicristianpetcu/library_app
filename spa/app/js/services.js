@@ -63,8 +63,11 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
         }
 
         //TODO: test me pls
-        function borrowBook(bookId) {
-            return $http.put(REST_URLS.BOOK, bookId);
+        function borrowBook(book) {
+            return $http.put(REST_URLS.BOOK, book.id)
+                .success(function (response) {
+                    angular.copy(response, book);
+                });
         }
 
         return {

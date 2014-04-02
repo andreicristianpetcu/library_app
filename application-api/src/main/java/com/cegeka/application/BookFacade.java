@@ -10,5 +10,5 @@ public interface BookFacade {
 
     BookTo saveBook(BookTo newBook);
 
-    void borrowBook(String bookId);
+    BookTo borrowBook(String bookId);
 }

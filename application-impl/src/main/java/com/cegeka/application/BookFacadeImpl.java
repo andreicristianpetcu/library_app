@@ -40,17 +40,18 @@ public class BookFacadeImpl implements BookFacade {
     @Transactional
     public BookTo saveBook(BookTo newBook) {
         BookEntity bookEntity = bookToMapper.toNewEntity(newBook);
-        BookEntity bookEntity1 = bookRepository.saveAndFlush(bookEntity);
-        return bookToMapper.toTo(bookEntity1);
+        bookEntity = bookRepository.saveAndFlush(bookEntity);
+        return bookToMapper.toTo(bookEntity);
     }
 
     @Override
     @Transactional
-    public void borrowBook(String bookId) {
+    public BookTo borrowBook(String bookId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findByEmail("admin@mailinator.com");
         book.setBorrower(user);
         bookRepository.flush();
+        return bookToMapper.toTo(book);
     }
 
     public void setBookRepository(BookRepository bookRepository) {
