@@ -62,10 +62,16 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
             return $http.post(REST_URLS.BOOK, book);
         }
 
+        //TODO: test me pls
+        function borrowBook(bookId) {
+            return $http.post(REST_URLS.BOOK_LOAN, bookId);
+        }
+
         return {
             getBooks: getBooks,
             getBook: getBook,
-            addBook: addBook
+            addBook: addBook,
+            borrowBook: borrowBook
         };
     }])
 
@@ -165,6 +171,7 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
     USERS: 'http://libraryapp.cegeka.com:8080/backend/rest/users',
     USER: 'http://libraryapp.cegeka.com:8080/backend/rest/user',
     BOOKS: 'http://libraryapp.cegeka.com:8080/backend/rest/books',
-    BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book'
+    BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book',
+    BOOK_LOAN: 'http://libraryapp.cegeka.com:8080/backend/rest/bookloan'
   });
 

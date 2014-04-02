@@ -58,4 +58,12 @@ public class BookLoanFacadeImpl implements BookLoanFacade {
         return bookLoanToMapper.toTo(bookLoanRepository.saveAndFlush(bookLoan));
 
     }
+
+    @Override
+    public BookLoanTo borrowBook(String bookId) {
+        BookEntity book = bookRepository.findOne(bookId);
+        UserEntity user = userRepository.findByEmail("admin@mailinator.com");
+        BookLoanEntity bookLoanEntity = new BookLoanEntity(book, user);
+        return bookLoanToMapper.toTo(bookLoanRepository.saveAndFlush(bookLoanEntity));
+    }
 }

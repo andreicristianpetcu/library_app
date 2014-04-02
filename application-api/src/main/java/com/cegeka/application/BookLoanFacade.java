@@ -7,4 +7,6 @@ public interface BookLoanFacade {
     List<BookLoanTo> getBookLoans();
 
     BookLoanTo saveBookLoan(BookLoanTo newBookLoan);
+
+    BookLoanTo borrowBook(String bookId);
 }

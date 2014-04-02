@@ -23,6 +23,8 @@
             <th>Title</th>
             <th>Author</th>
             <th>ISBN</th>
+            <th>Status</th>
+            <th>Borrow/Return</th>
         </tr>
         </thead>
         <tbody>
@@ -30,6 +32,10 @@
             <td>{{book.title}}</td>
             <td>{{book.author}}</td>
             <td>{{book.isbn}}</td>
+            <td>Available</td>
+            <td>
+                <a ng-click="borrowBook(book.id)" class="btn btn-primary">Borrow</a>
+            </td>
         </tr>
 
         </tbody>

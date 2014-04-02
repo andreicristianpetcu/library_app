@@ -28,16 +28,16 @@ public class BookLoanRestService {
     @Autowired
     private BookLoanFacade bookLoanFacade;
 
-    @RequestMapping("/books")
+    @RequestMapping("/bookloans")
     @ResponseBody
     public List<BookLoanTo> getBooks(){
         return bookLoanFacade.getBookLoans();
     }
 
-    @RequestMapping(value = "/bookLoan", method = POST)
+    @RequestMapping(value = "/bookloan", method = POST)
     @ResponseBody
-    public ResponseEntity saveBook(@RequestBody BookLoanTo bookLoanTo) {
-        BookLoanTo result = bookLoanFacade.saveBookLoan(bookLoanTo);
+    public ResponseEntity borrowBook(@RequestBody String bookId) {
+        BookLoanTo result = bookLoanFacade.borrowBook(bookId);
         return new ResponseEntity<BookLoanTo>(result, HttpStatus.OK);
     }
 }
