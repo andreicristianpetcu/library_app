@@ -36,7 +36,7 @@ public class UserEntityTestFixture {
     }
 
     public static final String ROMEO_ID = UUID.randomUUID().toString();
-    public static final String ROMEO_EMAIL = "test@mailinator.com";
+    public static final String ROMEO_EMAIL = "romeo@mailinator.com";
     public static final Role ROMEO_ROLE = Role.USER;
     public static final String ROMEO_PASSWORD = "testPassword";
 
