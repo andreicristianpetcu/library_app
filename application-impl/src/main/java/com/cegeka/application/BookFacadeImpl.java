@@ -46,9 +46,9 @@ public class BookFacadeImpl implements BookFacade {
 
     @Override
     @Transactional
-    public BookTo borrowBook(String bookId) {
+    public BookTo borrowBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
-        UserEntity user = userRepository.findByEmail("admin@mailinator.com");
+        UserEntity user = userRepository.findOne(userId);
         book.setBorrower(user);
         bookRepository.flush();
         return bookToMapper.toTo(book);
