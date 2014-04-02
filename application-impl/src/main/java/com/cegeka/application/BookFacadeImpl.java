@@ -48,7 +48,6 @@ public class BookFacadeImpl implements BookFacade {
     public void borrowBook(String bookId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findByEmail("admin@mailinator.com");
-        return null;
     }
 
     public void setBookRepository(BookRepository bookRepository) {
