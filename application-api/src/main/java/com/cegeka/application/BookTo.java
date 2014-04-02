@@ -9,17 +9,19 @@ public class BookTo {
     private String author;
     private String isbn;
     private String username;
+    private String userId;
     private boolean available;
 
     public BookTo() {
     }
 
-    public BookTo(String id, String title, String author, String isbn, String username) {
+    public BookTo(String id, String title, String author, String isbn, String username, String userId) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.username = username;
+        this.userId = userId;
     }
 
     public String getId() {
@@ -68,6 +70,14 @@ public class BookTo {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override

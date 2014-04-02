@@ -8,7 +8,7 @@ angular.module('userAdmin.controllers', [])
   .controller('LoginController', ['$scope', '$location', LoginController])
   .controller('LoginDirectiveController', ['$rootScope', '$scope', 'Auth', '$location', LoginDirectiveController])
   .controller('UsersController', ['$rootScope', 'Users', '$scope','$location','Alerts', UsersController])
-  .controller('BooksController', ['Books', '$scope', '$location', 'Alerts', BooksController])
+  .controller('BooksController', ['Books', '$scope', '$location', 'Auth', 'Alerts', BooksController])
   .controller('UserCtrl', [function () {
   }]);
 
@@ -67,7 +67,7 @@ function UsersController($rootScope, Users, $scope, $location, Alerts) {
     }
 }
 
-function BooksController(Books, $scope, $location, Alerts) {
+function BooksController(Books, $scope, $location, Auth, Alerts) {
     Books.getBooks(
         function success(responseData) {
             $scope.books = responseData;
@@ -99,6 +99,12 @@ function BooksController(Books, $scope, $location, Alerts) {
 
     $scope.borrowBook = function (book) {
         Books.borrowBook(book);
+    }
+
+    $scope.bookStatus = function (book) {
+        if (book.userId === null) return "Available";
+        if (book.userId == Auth.getAuthenticatedUser().userId) return "Borrowed by you";
+        return "Borrowed by " + book.username;
     }
 }
 

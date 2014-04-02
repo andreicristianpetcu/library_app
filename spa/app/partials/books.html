@@ -32,7 +32,7 @@
             <td>{{book.title}}</td>
             <td>{{book.author}}</td>
             <td>{{book.isbn}}</td>
-            <td>{{book.username}}</td>
+            <td>{{bookStatus(book)}}</td>
             <td>
                 <a ng-click="borrowBook(book)" ng-show="book.available" class="btn btn-primary">Borrow</a>
             </td>

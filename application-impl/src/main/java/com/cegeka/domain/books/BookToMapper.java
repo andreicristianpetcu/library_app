@@ -18,7 +18,8 @@ public class BookToMapper {
     public BookTo toTo(BookEntity bookEntity) {
         UserEntity borrower = bookEntity.getBorrower();
         String username = borrower != null ? borrower.getProfile().getFullName() : null;
-        BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn(), username);
+        String userId = borrower != null ? borrower.getId() : null;
+        BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn(), username, userId);
         bookTo.setAvailable(bookTo.getUsername() == null);
         return bookTo;
     }
