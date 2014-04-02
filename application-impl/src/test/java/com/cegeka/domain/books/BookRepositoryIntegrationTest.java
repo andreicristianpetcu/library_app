@@ -1,21 +1,13 @@
 package com.cegeka.domain.books;
 
 import com.cegeka.IntegrationTest;
-import com.cegeka.application.Role;
-import com.cegeka.domain.user.UserEntityTestFixture;
-import com.cegeka.domain.users.UserEntity;
-import com.cegeka.domain.users.UserRepository;
-import org.fest.assertions.Assertions;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.annotation.Resource;
-import javax.persistence.PersistenceException;
-
 import java.util.List;
 
-import static com.cegeka.domain.user.UserEntityTestFixture.aUserEntity;
+import static com.cegeka.domain.books.BookEntityTestFixture.hamletBook;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class BookRepositoryIntegrationTest extends IntegrationTest {
@@ -29,7 +21,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
 
     @Before
     public void setUp() {
-        aBookEntity = new BookEntity("An introduction to TDD", "Andrei Petcu", "123");
+        aBookEntity = hamletBook();
         bookRepository.saveAndFlush(aBookEntity);
     }
 
@@ -54,7 +46,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     public void canSaveOneItem () {
-        BookEntity bookEntity = new BookEntity("New book", "New author", "ISBN");
+        BookEntity bookEntity = hamletBook();
         BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
         assertThat(bookEntity.getId()).isNotNull();
         assertThat(bookEntityReturned).isSameAs(bookEntity);
