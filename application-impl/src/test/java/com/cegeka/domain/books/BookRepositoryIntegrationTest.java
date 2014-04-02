@@ -17,25 +17,24 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Resource
     private BookRepository bookRepository;
 
-    BookEntity aBookEntity;
+    private BookEntity hamlet;
 
     @Before
     public void setUp() {
-        aBookEntity = hamletBook();
-        bookRepository.saveAndFlush(aBookEntity);
+        hamlet = bookRepository.saveAndFlush(hamletBook());
     }
 
     @Test
     public void canRetrieveAll() {
         List<BookEntity> all = bookRepository.findAll();
         assertThat(all.size()).isEqualTo(1);
-        assertThat(all).contains(aBookEntity);
+        assertThat(all).contains(hamletBook());
     }
 
     @Test
     public void canRetrieveOne() {
-        BookEntity one = bookRepository.findOne(aBookEntity.getId());
-        assertThat(one).isEqualTo(aBookEntity);
+        BookEntity one = bookRepository.findOne(hamlet.getId());
+        assertThat(one).isEqualTo(hamletBook());
     }
 
     @Test
@@ -46,14 +45,14 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     public void canSaveOneItem () {
-        BookEntity bookEntity = hamletBook();
+        BookEntity bookEntity = new BookEntity("One", "Two", "Three");
         BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
         assertThat(bookEntity.getId()).isNotNull();
         assertThat(bookEntityReturned).isSameAs(bookEntity);
 
         List<BookEntity> all = bookRepository.findAll();
         assertThat(all.size()).isEqualTo(2);
-        assertThat(all).contains(aBookEntity);
+        assertThat(all).contains(hamletBook());
         assertThat(all).contains(bookEntity);
     }
 

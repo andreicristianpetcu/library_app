@@ -17,8 +17,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-import static com.cegeka.domain.books.BookEntityTestFixture.hamletBook;
-import static com.cegeka.domain.books.BookEntityTestFixture.macbethBook;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Index.atIndex;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -52,8 +50,8 @@ public class BookLoanRepositoryIntegrationTest extends IntegrationTest {
         juliet.addRole(Role.USER);
         juliet.setConfirmed(true);
 
-        hamlet = hamletBook();
-        macbeth = macbethBook();
+        hamlet = new BookEntity("Hamlet", "Shakespeare", "123");
+        macbeth = new BookEntity("Macbeth", "Shakespeare", "123");
 
         userRepository.saveAndFlush(romeo);
         userRepository.saveAndFlush(juliet);
