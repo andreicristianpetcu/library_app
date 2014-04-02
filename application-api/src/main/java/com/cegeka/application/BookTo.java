@@ -9,6 +9,7 @@ public class BookTo {
     private String author;
     private String isbn;
     private String username;
+    private boolean available;
 
     public BookTo() {
     }
@@ -59,6 +60,14 @@ public class BookTo {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     @Override
