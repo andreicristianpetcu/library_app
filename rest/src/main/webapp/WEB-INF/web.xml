@@ -20,7 +20,7 @@
         <filter-class>com.cegeka.application.security.CrossDomainRequestFilter</filter-class>
         <init-param>
             <param-name>allow-origin</param-name>
-            <param-value>http://localhost:8000;http://localhost:9876</param-value>
+            <param-value>http://localhost:8000;http://localhost:9876;http://libraryapp.cegeka.com:8000;http://libraryapp.cegeka.com:9876</param-value>
         </init-param>
     </filter>
     <filter-mapping>

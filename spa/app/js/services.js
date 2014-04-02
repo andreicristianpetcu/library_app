@@ -160,11 +160,11 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
         }
     }])
   .constant('REST_URLS', {
-    LOGIN: 'http://localhost:8080/backend/j_spring_security_check',
-    LOGOUT: 'http://localhost:8080/backend/j_spring_security_logout',
-    USERS: 'http://localhost:8080/backend/rest/users',
-    USER: 'http://localhost:8080/backend/rest/user',
-    BOOKS: 'http://localhost:8080/backend/rest/books',
-    BOOK: 'http://localhost:8080/backend/rest/book'
+    LOGIN: 'http://libraryapp.cegeka.com:8080/backend/j_spring_security_check',
+    LOGOUT: 'http://libraryapp.cegeka.com:8080/backend/j_spring_security_logout',
+    USERS: 'http://libraryapp.cegeka.com:8080/backend/rest/users',
+    USER: 'http://libraryapp.cegeka.com:8080/backend/rest/user',
+    BOOKS: 'http://libraryapp.cegeka.com:8080/backend/rest/books',
+    BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book'
   });
 

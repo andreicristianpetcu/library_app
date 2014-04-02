@@ -21,7 +21,7 @@ module.exports = function (config) {
     singleRun: false,
 
     proxies: {
-      '/app/': 'http://localhost:8000/'
+      '/app/': 'http://libraryapp.cegeka.com:8000/'
     },
 
     plugins: [
