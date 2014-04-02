@@ -172,6 +172,6 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
     USER: 'http://libraryapp.cegeka.com:8080/backend/rest/user',
     BOOKS: 'http://libraryapp.cegeka.com:8080/backend/rest/books',
     BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book',
-    BOOK_LOAN: 'http://libraryapp.cegeka.com:8080/backend/rest/bookloan'
+    BOOK_LOAN: 'http://libraryapp.cegeka.com:8080/backend/rest/bookstatus'
   });
 

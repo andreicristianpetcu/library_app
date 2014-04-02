@@ -84,7 +84,7 @@ public class BookLoanRepositoryIntegrationTest extends IntegrationTest {
         bookLoanRepository.saveAndFlush(bookLoan2);
         bookLoanRepository.saveAndFlush(bookLoan3);
 
-        List<BookLoanEntity> allHamletLoans = bookLoanRepository.findAll(where(bookIs(hamlet)).and(userIs(romeo)));
+        List<BookLoanEntity> allHamletLoans = bookLoanRepository.findAll(where(bookIs(hamlet)).and(userIs(romeo)).and(bookIsNotReturned()));
         assertThat(allHamletLoans.size()).isEqualTo(1);
     }
 
@@ -102,6 +102,15 @@ public class BookLoanRepositoryIntegrationTest extends IntegrationTest {
             @Override
             public Predicate toPredicate(Root<BookLoanEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 return cb.equal(root.get("book"), bookEntity);
+            }
+        };
+    }
+
+    private Specification<BookLoanEntity> bookIsNotReturned() {
+        return new Specification<BookLoanEntity>() {
+            @Override
+            public Predicate toPredicate(Root<BookLoanEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                return cb.isNull(root.get("endDate"));
             }
         };
     }

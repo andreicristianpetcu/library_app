@@ -21,20 +21,20 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 
 @Controller
-public class BookLoanRestService {
+public class BookStatusRestService {
 
-    private Logger logger = LoggerFactory.getLogger(BookLoanRestService.class);
+    private Logger logger = LoggerFactory.getLogger(BookStatusRestService.class);
 
     @Autowired
     private BookLoanFacade bookLoanFacade;
 
-    @RequestMapping("/bookloans")
+    @RequestMapping("/bookstatus")
     @ResponseBody
     public List<BookLoanTo> getBooks(){
         return bookLoanFacade.getBookLoans();
     }
 
-    @RequestMapping(value = "/bookloan", method = POST)
+    @RequestMapping(value = "/bookstatus", method = POST)
     @ResponseBody
     public ResponseEntity borrowBook(@RequestBody String bookId) {
         BookLoanTo result = bookLoanFacade.borrowBook(bookId);
