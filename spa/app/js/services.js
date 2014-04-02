@@ -64,7 +64,7 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
 
         //TODO: test me pls
         function borrowBook(bookId) {
-            return $http.post(REST_URLS.BOOK_LOAN, bookId);
+            return $http.put(REST_URLS.BOOK, bookId);
         }
 
         return {
@@ -171,7 +171,6 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
     USERS: 'http://libraryapp.cegeka.com:8080/backend/rest/users',
     USER: 'http://libraryapp.cegeka.com:8080/backend/rest/user',
     BOOKS: 'http://libraryapp.cegeka.com:8080/backend/rest/books',
-    BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book',
-    BOOK_LOAN: 'http://libraryapp.cegeka.com:8080/backend/rest/bookstatus'
+    BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book'
   });
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
 public class BookRestService {
@@ -35,6 +36,13 @@ public class BookRestService {
     @ResponseBody
     public ResponseEntity saveBook(@RequestBody BookTo bookTo) {
         bookFacade.saveBook(bookTo);
+        return new ResponseEntity<String>("success", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/book", method = PUT)
+    @ResponseBody
+    public ResponseEntity borrowBook(@RequestBody String bookId) {
+        bookFacade.borrowBook(bookId);
         return new ResponseEntity<String>("success", HttpStatus.OK);
     }
 }

@@ -3,6 +3,8 @@ package com.cegeka.application;
 import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.books.BookRepository;
 import com.cegeka.domain.books.BookToMapper;
+import com.cegeka.domain.users.UserEntity;
+import com.cegeka.domain.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class BookFacadeImpl implements BookFacade {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private BookToMapper bookToMapper;
@@ -37,6 +42,13 @@ public class BookFacadeImpl implements BookFacade {
         BookEntity bookEntity = bookToMapper.toNewEntity(newBook);
         BookEntity bookEntity1 = bookRepository.saveAndFlush(bookEntity);
         return bookToMapper.toTo(bookEntity1);
+    }
+
+    @Override
+    public void borrowBook(String bookId) {
+        BookEntity book = bookRepository.findOne(bookId);
+        UserEntity user = userRepository.findByEmail("admin@mailinator.com");
+        return null;
     }
 
     public void setBookRepository(BookRepository bookRepository) {
