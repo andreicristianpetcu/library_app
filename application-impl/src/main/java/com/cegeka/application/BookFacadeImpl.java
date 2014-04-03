@@ -54,6 +54,18 @@ public class BookFacadeImpl implements BookFacade {
         return bookToMapper.toTo(book);
     }
 
+    @Override
+    @Transactional
+    public BookTo returnBook(String bookId, String userId) {
+        BookEntity book = bookRepository.findOne(bookId);
+        UserEntity user = userRepository.findOne(userId);
+        if(book.getBorrower().equals(user)) {
+            book.setBorrower(null);
+            bookRepository.flush();
+        }
+        return bookToMapper.toTo(book);
+    }
+
     public void setBookRepository(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }

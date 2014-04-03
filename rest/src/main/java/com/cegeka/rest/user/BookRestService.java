@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
 public class BookRestService {
@@ -34,7 +33,6 @@ public class BookRestService {
         return bookFacade.getBooks();
     }
 
-    //TODO: HATEOAS? return location as well?
     @RequestMapping(value = "/book", method = POST)
     @ResponseBody
     public ResponseEntity saveBook(@RequestBody BookTo bookTo) {
@@ -42,7 +40,7 @@ public class BookRestService {
         return new ResponseEntity<String>("success", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/book", method = PUT)
+    @RequestMapping(value = "/borrow", method = POST)
     @ResponseBody
     public ResponseEntity borrowBook(@RequestBody String bookId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -52,6 +50,19 @@ public class BookRestService {
             user = (CustomUserDetails) principal;
         }
         BookTo bookTo = bookFacade.borrowBook(bookId, user.getUserId());
+        return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/return", method = POST)
+    @ResponseBody
+    public ResponseEntity returnBook(@RequestBody String bookId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        CustomUserDetails user = null;
+        if (principal instanceof CustomUserDetails) {
+            user = (CustomUserDetails) principal;
+        }
+        BookTo bookTo = bookFacade.returnBook(bookId, user.getUserId());
         return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
     }
 }

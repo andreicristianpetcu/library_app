@@ -101,6 +101,10 @@ function BooksController(Books, $scope, $location, Auth, Alerts) {
         Books.borrowBook(book);
     }
 
+    $scope.returnBook = function (book) {
+        Books.returnBook(book);
+    }
+
     $scope.bookStatus = function (book) {
         if (book.userId === null) return "Available";
         if (book.userId == Auth.getAuthenticatedUser().userId) return "Borrowed by you";
