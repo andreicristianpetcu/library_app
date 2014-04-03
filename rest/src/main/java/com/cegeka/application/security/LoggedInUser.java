@@ -10,10 +10,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
- public class LoggedInUser {
+public class LoggedInUser {
 
     public UserDetailsTO getLoggedInUserToBeSentToGUI() {
-        return UserDetailsTO.createToFrom(getCustomUserDetails()); //TODO: does this service really need to map this TO?
+        return UserDetailsTO.createToFrom(getCustomUserDetails());
     }
 
     public CustomUserDetails getCustomUserDetails() {

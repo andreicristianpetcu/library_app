@@ -18,7 +18,7 @@ public class BookEntity {
 
     private String author;
 
-    //TODO: make unique and use it as natural key
+    @Column(nullable = false, unique = true)
     private String isbn;
 
     @ManyToOne
@@ -80,19 +80,14 @@ public class BookEntity {
 
         BookEntity that = (BookEntity) o;
 
-        if (author != null ? !author.equals(that.author) : that.author != null) return false;
         if (isbn != null ? !isbn.equals(that.isbn) : that.isbn != null) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = title != null ? title.hashCode() : 0;
-        result = 31 * result + (author != null ? author.hashCode() : 0);
-        result = 31 * result + (isbn != null ? isbn.hashCode() : 0);
-        return result;
+        return isbn != null ? isbn.hashCode() : 0;
     }
 }
 
