@@ -44,7 +44,7 @@ describe('controllers', function () {
 
 
     describe('BooksController', function () {
-        var alertsMock, booksMock, BooksController;
+        var alertsMock, booksMock, authMock, BooksController;
 
         beforeEach(function () {
             module(function ($provide) {
@@ -53,12 +53,27 @@ describe('controllers', function () {
 
             inject(function ($controller, $rootScope) {
                 scope = $rootScope.$new();
-                booksMock = jasmine.createSpyObj('Books', ['getBooks']);
+                booksMock = jasmine.createSpyObj('Books', ['getBooks', 'addBook', 'borrowBook']);
                 alertsMock = jasmine.createSpyObj('Alerts',['handler']);
+                authMock = jasmine.createSpyObj('Auth',['handler']);
 
-                BooksController = $controller('BooksController', {$scope: scope, Books: booksMock, Alerts: alertsMock});
+                BooksController = $controller('BooksController', {$scope: scope, Books: booksMock, Alerts: alertsMock, Auth: authMock});
             });
 
+        });
+
+        it('should get books from Books factory', function () {
+            expect(booksMock.getBooks).toHaveBeenCalled();
+        });
+
+        it('should call addBooks from Books factory', function () {
+            scope.addBook({});
+            expect(booksMock.addBook).toHaveBeenCalled();
+        });
+
+        it('should call borrowBooks from Books factory', function () {
+            scope.borrowBook({});
+            expect(booksMock.borrowBook).toHaveBeenCalled();
         });
 
     });

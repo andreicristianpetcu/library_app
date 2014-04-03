@@ -91,20 +91,25 @@ function BooksController(Books, $scope, $location, Auth, Alerts) {
 
     $scope.addBook = function () {
         Books.addBook($scope.book)
-            .then(function () {
-                $location.path('/books');
-            }, function error() {
-            })
+            .then(navigateTo('/books'), Alerts.handler)
     }
 
     $scope.borrowBook = function (book) {
-        Books.borrowBook(book);
+        Books.borrowBook(book)
+            .then(doNothing(), Alerts.handle);
     }
 
     $scope.bookStatus = function (book) {
         if (book.userId === null) return "Available";
         if (book.userId == Auth.getAuthenticatedUser().userId) return "Borrowed by you";
         return "Borrowed by " + book.username;
+    }
+
+    function navigateTo(newPath) {
+        $location.path(newPath);
+    }
+
+    function doNothing() {
     }
 }
 
