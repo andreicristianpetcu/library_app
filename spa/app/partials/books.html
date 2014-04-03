@@ -35,6 +35,7 @@
             <td>{{bookStatus(book)}}</td>
             <td>
                 <a ng-click="borrowBook(book)" ng-show="book.available" class="btn btn-primary">Borrow</a>
+                <a ng-click="returnBook(book)" ng-show="userHasACopy(book)" class="btn btn-default">Return</a>
             </td>
         </tr>
 
