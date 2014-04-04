@@ -53,12 +53,12 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
                 .error(errorCallback);
         }
 
-        //TODO: test me pls
-        function borrowBook(book) {
+        function borrowBook(book, successCallback, errorCallback) {
             return $http.post(REST_URLS.BORROW, book.id)
-                .success(function (response) {
-                    angular.copy(response, book);
-                });
+                .success(function (data) {
+                    successCallback(data);
+                })
+                .error(errorCallback);
         }
 
         //TODO: test me pls

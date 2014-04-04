@@ -72,15 +72,16 @@ describe('service', function () {
             expect(callbacks.success).toHaveBeenCalledWith(book1);
         }));
 
-//        it('can get all books given a success rest call', inject(function (Books, $httpBackend, REST_URLS) {
-//            var callbacks = jasmine.createSpyObj('callbacks', ['success', 'error']);
-//            $httpBackend.expectGET(REST_URLS.BOOKS).respond(200, books);
-//
-//            Books.getBooks(callbacks.success, callbacks.error);
-//            $httpBackend.flush();
-//
-//            expect(callbacks.success).toHaveBeenCalledWith(books);
-//        }));
+        it('can borrow a book given a success rest call', inject(function (Books, $httpBackend, REST_URLS) {
+            var callbacks = jasmine.createSpyObj('callbacks', ['success', 'error']);
+            $httpBackend.expectPOST(REST_URLS.BORROW).respond(200, book1);
+
+            Books.borrowBook(book1, callbacks.success, callbacks.error);
+            $httpBackend.flush();
+
+            expect(callbacks.success).toHaveBeenCalledWith(book1);
+        }));
+
     });
 
 
