@@ -7,14 +7,14 @@
 <div class="row">
     <div class="col-lg-6">
         <div class="well">
-            <form class="form-horizontal">
+            <form id="addBookForm" class="form-horizontal">
                 <fieldset>
                     <legend>Add new book</legend>
                     <div class="form-group">
                         <label for="inputTitle" class="col-lg-2 control-label">Title</label>
 
                         <div class="col-lg-10">
-                            <input type="text" class="form-control" id="inputTitle" placeholder="Title"
+                            <input id="inputTitle" type="text" class="form-control"  placeholder="Title"
                                    ng-model="book.title">
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                         <label for="inputAuthor" class="col-lg-2 control-label">Author</label>
 
                         <div class="col-lg-10">
-                            <input type="text" class="form-control" id="inputAuthor" placeholder="Author"
+                            <input id="inputAuthor" type="text" class="form-control"  placeholder="Author"
                                    ng-model="book.author">
                         </div>
                     </div>
@@ -30,15 +30,15 @@
                         <label for="inputIsbn" class="col-lg-2 control-label">ISBN</label>
 
                         <div class="col-lg-10">
-                            <input type="text" class="form-control" id="inputIsbn" placeholder="First Name"
+                            <input id="inputIsbn" type="text" class="form-control"  placeholder="ISBN"
                                    ng-model="book.isbn">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-lg-10 col-lg-offset-2">
-                            <a class="btn btn-default" href="#/books">Cancel</a>
-                            <button type="submit" class="btn btn-primary" ng-click="addBook()">Save</button>
+                            <a id="addBookCancel"class="btn btn-default" href="#/books">Cancel</a>
+                            <button id="addBookSubmit" type="submit" class="btn btn-primary" ng-click="addBook()">Save</button>
                         </div>
                     </div>
                 </fieldset>
