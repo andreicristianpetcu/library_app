@@ -15,8 +15,9 @@ describe('service', function () {
 
   describe('Users factory', function () {
 
+    var user = {id: 1, name: 'user'};
     var users = [
-      {id: 1, name: 'user'}
+      user
     ];
 
     it('can get all users given a success rest call', inject(function (Users, $httpBackend, REST_URLS) {
@@ -28,7 +29,6 @@ describe('service', function () {
 
       expect(callbacks.success).toHaveBeenCalledWith(users);
     }));
-
 
 //    it('can get all users given a success rest call', inject(function (Users, $httpBackend, REST_URLS) {
 //      var callbacks = jasmine.createSpyObj('callbacks', ['success', 'error']);
@@ -43,6 +43,45 @@ describe('service', function () {
 
 
   });
+
+    describe('Book factory', function () {
+
+        var book1 = {"id":1, "title": "Implementing Domain-Driven Design", "author": "Vaughn Vernon", "isbn": "978-0321834577"};
+        var book2 = {"id":2, "title": "Domain-driven Design", "author": "Eric Evans", "isbn": "9780321125217"};
+        var books = [
+            book1, book2
+        ];
+
+        it('can get all books given a success rest call', inject(function (Books, $httpBackend, REST_URLS) {
+            var callbacks = jasmine.createSpyObj('callbacks', ['success', 'error']);
+            $httpBackend.expectGET(REST_URLS.BOOKS).respond(200, books);
+
+            Books.getBooks(callbacks.success, callbacks.error);
+            $httpBackend.flush();
+
+            expect(callbacks.success).toHaveBeenCalledWith(books);
+        }));
+
+        it('can add a new book given a success rest call', inject(function (Books, $httpBackend, REST_URLS) {
+            var callbacks = jasmine.createSpyObj('callbacks', ['success', 'error']);
+            $httpBackend.expectPOST(REST_URLS.BOOK).respond(200, book1);
+
+            var result = Books.addBook(book1, callbacks.success, callbacks.error);
+            $httpBackend.flush();
+
+            expect(callbacks.success).toHaveBeenCalledWith(book1);
+        }));
+
+//        it('can get all books given a success rest call', inject(function (Books, $httpBackend, REST_URLS) {
+//            var callbacks = jasmine.createSpyObj('callbacks', ['success', 'error']);
+//            $httpBackend.expectGET(REST_URLS.BOOKS).respond(200, books);
+//
+//            Books.getBooks(callbacks.success, callbacks.error);
+//            $httpBackend.flush();
+//
+//            expect(callbacks.success).toHaveBeenCalledWith(books);
+//        }));
+    });
 
 
   describe('Auth service', function () {

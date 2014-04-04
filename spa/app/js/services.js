@@ -11,10 +11,9 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
         .success(function (data) {
           successCallback(data);
         })
-                .error(errorCallback);
-        }
+        .error(errorCallback);
+    }
 
-    //TODO: test me pls
     function getUser(userId, successCallback, errorCallback) {
       $http.get(REST_URLS.USER + '/' + userId)
         .success(function (data) {
@@ -39,27 +38,19 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
 
     .factory('Books', ['$http', 'REST_URLS', function ($http, REST_URLS) {
         function getBooks(successCallback, errorCallback) {
-            $http.post(REST_URLS.BOOKS)
+            $http.get(REST_URLS.BOOKS)
                 .success(function (data) {
                     successCallback(data);
                 })
                 .error(errorCallback);
         }
 
-        //TODO: test me pls
-        function getBook(bookId, successCallback, errorCallback) {
-            $http.get(REST_URLS.USER + '/' + bookId)
+        function addBook(book, successCallback, errorCallback) {
+            return $http.post(REST_URLS.BOOK, book)
                 .success(function (data) {
                     successCallback(data);
                 })
-                .error(function (error) {
-                    errorCallback(error);
-                });
-        }
-
-        //TODO: test me pls
-        function addBook(book) {
-            return $http.post(REST_URLS.BOOK, book);
+                .error(errorCallback);
         }
 
         //TODO: test me pls
@@ -80,7 +71,6 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
 
         return {
             getBooks: getBooks,
-            getBook: getBook,
             addBook: addBook,
             borrowBook: borrowBook,
             returnBook: returnBook

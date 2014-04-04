@@ -66,11 +66,6 @@ describe('controllers', function () {
             expect(booksMock.getBooks).toHaveBeenCalled();
         });
 
-        it('should call addBooks from Books factory', function () {
-            scope.addBook({});
-            expect(booksMock.addBook).toHaveBeenCalled();
-        });
-
         it('should call borrowBooks from Books factory', function () {
             scope.borrowBook({});
             expect(booksMock.borrowBook).toHaveBeenCalled();
