@@ -13,20 +13,23 @@ describe('Library app', function () {
     });
 
     describe('home page', function () {
+
         beforeEach(function () {
             browser().navigateTo('#/');
             if(element('#logout')) {
                 element('#logout').click();
+                console.log("Logged out!")
             }
         });
 
         it('renders "Welcome" and login form', function () {
             expect(element('[ng-view] h1:first').text()).toMatch(/Welcome/);
             expect(element('#username').text()).not().toBe(null);
-            expect(element('#username').text()).not().toBe(null);
+            expect(element('#password').text()).not().toBe(null);
             expect(element('#login').text()).toBe('Login');
-            expect(element('#logout').text()).toBeNull();
-
+            expect(element('#login:visible').count()).toBe(1);
+            expect(element('#logout').text()).toBe('Logout');
+            expect(element('#logout:visible').count()).toBe(0);
         });
 
         it('redirects to /books after successful login', function () {
