@@ -12,6 +12,7 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static com.cegeka.domain.books.BookEntityTestFixture.*;
+import static com.cegeka.domain.user.UserEntityTestFixture.aUserEntity;
 import static com.cegeka.domain.user.UserEntityTestFixture.romeoUser;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -28,12 +29,15 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
 
     private BookEntity hamlet, macbeth;
     private UserEntity romeo;
+    private UserEntity juliet;
 
     @Before
     public void setUp() {
         hamlet = bookRepository.saveAndFlush(hamletBook());
         macbeth = bookRepository.saveAndFlush(macbethBook());
         romeo = userRepository.saveAndFlush(romeoUser());
+        juliet = userRepository.saveAndFlush(aUserEntity());
+
         hamlet.lendTo(romeo);
         bookRepository.flush();
     }
@@ -66,7 +70,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void canSaveOneItem () {
+    public void canSaveOneItem() {
         BookEntity bookEntity = newValidBook();
         BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
         assertThat(bookEntity.getId()).isNotNull();
@@ -79,7 +83,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void emptyTitleThrowsError () {
+    public void emptyTitleThrowsError() {
         try {
             BookEntity bookEntity = newValidBook();
             bookEntity.setTitle(null);
@@ -91,7 +95,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
 
 
     @Test
-    public void emptyAuthorThrowsError () {
+    public void emptyAuthorThrowsError() {
         try {
             BookEntity bookEntity = newValidBook();
             bookEntity.setAuthor(null);
@@ -102,7 +106,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void emptyIsbnThrowsError () {
+    public void emptyIsbnThrowsError() {
         try {
             BookEntity bookEntity = newValidBook();
             bookEntity.setIsbn(null);
@@ -113,7 +117,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void emptyCopiesThrowsError () {
+    public void emptyCopiesThrowsError() {
         try {
             BookEntity bookEntity = newValidBook();
             bookEntity.setCopies(null);
@@ -124,7 +128,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void zeroCopiesThrowsError () {
+    public void zeroCopiesThrowsError() {
         try {
             BookEntity bookEntity = newValidBook();
             bookEntity.setCopies(0);
@@ -135,7 +139,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void uniqueISBN () {
+    public void uniqueISBN() {
         try {
             BookEntity bookEntity1 = newValidBook();
             BookEntity bookEntity2 = newValidBook();
@@ -144,6 +148,31 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
             bookRepository.saveAndFlush(bookEntity2);
             fail("Saved two books with same isbn");
         } catch (PersistenceException e) {
+        }
+    }
+
+    @Test
+    public void borrowTwice() {
+        BookEntity book = newValidBook();
+        book.setCopies(2);
+        book.lendTo(romeo);
+        book.lendTo(juliet);
+
+        bookRepository.saveAndFlush(book);
+
+        assertThat(book.isLendTo(romeo)).isTrue();
+        assertThat(book.isLendTo(juliet)).isTrue();
+    }
+
+    @Test
+    public void checkLimit() {
+        try {
+            BookEntity book = newValidBook();
+            book.setCopies(1);
+            book.lendTo(romeo);
+            book.lendTo(juliet);
+            fail("Overborrowed!");
+        } catch (ConstraintViolationException e) {
         }
     }
 }

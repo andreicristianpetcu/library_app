@@ -4,8 +4,12 @@ import com.cegeka.domain.users.UserEntity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "BOOKS")
@@ -30,8 +34,10 @@ public class BookEntity {
     @NotNull
     private String isbn;
 
-    @ManyToOne
-    private UserEntity borrower;
+    @ManyToMany
+    @JoinTable(name = "BOOK_BORROWER",
+            joinColumns = {@JoinColumn(name = "BOOK_ID", nullable = false, updatable = false)})
+    private List<UserEntity> borrowers = new ArrayList<UserEntity>();
 
     public BookEntity() {
     }
@@ -74,12 +80,12 @@ public class BookEntity {
         this.isbn = isbn;
     }
 
-    public UserEntity getBorrower() {
-        return borrower;
+    public List<UserEntity> getBorrowers() {
+        return borrowers;
     }
 
-    public void setBorrower(UserEntity borrower) {
-        this.borrower = borrower;
+    public void setBorrowers(List<UserEntity> borrowers) {
+        this.borrowers = borrowers;
     }
 
     public Integer getCopies() {
@@ -108,15 +114,17 @@ public class BookEntity {
     }
 
     public void lendTo(UserEntity userEntity) {
-        borrower = userEntity;
+        if (getBorrowers().size() < copies) {
+            getBorrowers().add(userEntity);
+        } else throw new ConstraintViolationException(Collections.EMPTY_SET);
     }
 
     public boolean isLendTo(UserEntity userEntity) {
-        return borrower != null && borrower.equals(userEntity);
+        return getBorrowers().contains(userEntity);
     }
 
     public void returnFrom(UserEntity user) {
-        borrower = null;
+        getBorrowers().remove(user);
     }
 }
 

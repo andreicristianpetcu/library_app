@@ -1,7 +1,6 @@
 package com.cegeka.domain.books;
 
 import com.cegeka.application.BookTo;
-import com.cegeka.domain.users.UserEntity;
 import com.google.common.base.Function;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -16,10 +15,11 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Scope(value = SCOPE_SINGLETON)
 public class BookToMapper {
     public BookTo toTo(BookEntity bookEntity) {
-        UserEntity borrower = bookEntity.getBorrower();
-        String username = borrower != null ? borrower.getProfile().getFullName() : null;
-        String userId = borrower != null ? borrower.getId() : null;
-        BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn(), username, userId);
+//        UserEntity borrower = bookEntity.getBorrower();
+//        String username = borrower != null ? borrower.getProfile().getFullName() : null;
+//        String userId = borrower != null ? borrower.getId() : null;
+//        BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn(), username, userId);
+        BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn(), null, null);
         bookTo.setAvailable(bookTo.getUsername() == null);
         bookTo.setCopies(bookEntity.getCopies());
         return bookTo;
