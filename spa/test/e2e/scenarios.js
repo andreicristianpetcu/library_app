@@ -113,9 +113,6 @@ describe('Library app', function () {
             console.log("poc");
         });
 
-        it('should post to /book on submit button click', function () {
-            //TODO
-        });
     });
 
 });
