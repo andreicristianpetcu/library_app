@@ -83,7 +83,7 @@ describe('Library app', function () {
 
     });
 
-    describe('add book view', function () {
+    describe('Add book view', function () {
 
         beforeEach(function () {
             browser().navigateTo('#/add_book');
