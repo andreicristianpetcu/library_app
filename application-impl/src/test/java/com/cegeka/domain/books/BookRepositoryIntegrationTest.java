@@ -7,12 +7,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.annotation.Resource;
+import javax.persistence.PersistenceException;
 import java.util.List;
 
 import static com.cegeka.domain.books.BookEntityTestFixture.hamletBook;
 import static com.cegeka.domain.books.BookEntityTestFixture.macbethBook;
 import static com.cegeka.domain.user.UserEntityTestFixture.romeoUser;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 public class BookRepositoryIntegrationTest extends IntegrationTest {
 
@@ -67,6 +69,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Test
     public void canSaveOneItem () {
         BookEntity bookEntity = new BookEntity("One", "Two", "Three");
+        bookEntity.setCopies(2);
         BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
         assertThat(bookEntity.getId()).isNotNull();
         assertThat(bookEntityReturned).isSameAs(bookEntity);
@@ -75,6 +78,16 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
         assertThat(all.size()).isEqualTo(3);
         assertThat(all).contains(hamletBook());
         assertThat(all).contains(bookEntity);
+    }
+
+    @Test
+    public void emptyTitleThrowsError () {
+        try {
+            BookEntity bookEntity = new BookEntity(null, "Two", "Three");
+            BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
+            fail("Saved book with null title");
+        } catch (PersistenceException e) {
+        }
     }
 
 }

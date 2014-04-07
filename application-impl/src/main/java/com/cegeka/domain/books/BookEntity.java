@@ -14,10 +14,13 @@ public class BookEntity {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String author;
 
+    @Column(nullable = false)
     private Integer copies;
 
     @Column(nullable = false, unique = true)

@@ -21,6 +21,7 @@ public class BookEntityTestFixture {
     public static BookEntity hamletBook() {
         BookEntity entity = new BookEntity(HAMLET_TITLE, HAMLET_AUTHOR, HAMLET_ISBN);
         entity.setId(HAMLET_ID);
+        entity.setCopies(new Integer((int) (Math.random()*10 + 1)));
         return entity;
     }
 
@@ -31,6 +32,7 @@ public class BookEntityTestFixture {
     public static BookEntity macbethBook() {
         BookEntity entity = new BookEntity(MACBETH_TITLE, MACBETH_AUTHOR, MACBETH_ISBN);
         entity.setId(MACBETH_ID);
+        entity.setCopies(new Integer((int) (Math.random()*10 + 1)));
         return entity;
     }
 
