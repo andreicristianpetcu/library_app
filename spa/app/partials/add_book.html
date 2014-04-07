@@ -36,6 +36,15 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="inputCopies" class="col-lg-2 control-label">Copies</label>
+
+                        <div class="col-lg-10">
+                            <input id="inputCopies" type="text" class="form-control"  placeholder="Copies"
+                                   ng-model="book.isbn">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <div class="col-lg-10 col-lg-offset-2">
                             <a id="addBookCancel"class="btn btn-default" href="#/books">Cancel</a>
                             <button id="addBookSubmit" type="submit" class="btn btn-primary" ng-click="addBook()">Save</button>

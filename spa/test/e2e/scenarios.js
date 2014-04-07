@@ -90,11 +90,12 @@ describe('Library app', function () {
             browser().navigateTo('#/add_book');
         });
 
-        it('should display a form with title, author and isbn inputs and cancel/addbook buttons', function () {
+        it('should display a form with title, author, isbn, number of copies inputs and cancel/addbook buttons', function () {
             expect(element('#addBookForm').text()).not().toBeNull();
             expect(element('#inputTitle').text()).not().toBeNull();
             expect(element('#inputAuthor').text()).not().toBeNull();
             expect(element('#inputIsbn').text()).not().toBeNull();
+            expect(element('#inputCopies').text()).not().toBeNull();
             expect(element('#addBookSubmit').text()).toEqual("Save");
             expect(element('#addBookCancel').text()).toEqual("Cancel");
         });
