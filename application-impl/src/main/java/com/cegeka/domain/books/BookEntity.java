@@ -4,6 +4,8 @@ import com.cegeka.domain.users.UserEntity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "BOOKS")
@@ -14,16 +16,18 @@ public class BookEntity {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
-    @Column(nullable = false)
+    @NotNull
     private String title;
 
-    @Column(nullable = false)
+    @NotNull
     private String author;
 
-    @Column(nullable = false)
+    @NotNull
+    @Min(1)
     private Integer copies;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
+    @NotNull
     private String isbn;
 
     @ManyToOne

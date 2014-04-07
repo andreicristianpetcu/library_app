@@ -36,6 +36,12 @@ public class BookEntityTestFixture {
         return entity;
     }
 
+    public static BookEntity newValidBook() {
+        BookEntity entity = new BookEntity("Othello", MACBETH_AUTHOR, newRandomISBN());
+        entity.setCopies(new Integer((int) (Math.random()*10 + 1)));
+        return entity;
+    }
+
     public static BookTo hamletTo() {
         return new BookToMapper().toTo(hamletBook());
     }

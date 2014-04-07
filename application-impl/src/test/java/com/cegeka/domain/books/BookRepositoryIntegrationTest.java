@@ -8,10 +8,10 @@ import org.junit.Test;
 
 import javax.annotation.Resource;
 import javax.persistence.PersistenceException;
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
-import static com.cegeka.domain.books.BookEntityTestFixture.hamletBook;
-import static com.cegeka.domain.books.BookEntityTestFixture.macbethBook;
+import static com.cegeka.domain.books.BookEntityTestFixture.*;
 import static com.cegeka.domain.user.UserEntityTestFixture.romeoUser;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -68,8 +68,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     public void canSaveOneItem () {
-        BookEntity bookEntity = new BookEntity("One", "Two", "Three");
-        bookEntity.setCopies(2);
+        BookEntity bookEntity = newValidBook();
         BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
         assertThat(bookEntity.getId()).isNotNull();
         assertThat(bookEntityReturned).isSameAs(bookEntity);
@@ -83,11 +82,70 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Test
     public void emptyTitleThrowsError () {
         try {
-            BookEntity bookEntity = new BookEntity(null, "Two", "Three");
+            BookEntity bookEntity = newValidBook();
+            bookEntity.setTitle(null);
             BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
             fail("Saved book with null title");
-        } catch (PersistenceException e) {
+        } catch (ConstraintViolationException e) {
         }
     }
 
+
+    @Test
+    public void emptyAuthorThrowsError () {
+        try {
+            BookEntity bookEntity = newValidBook();
+            bookEntity.setAuthor(null);
+            BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
+            fail("Saved book with null author");
+        } catch (ConstraintViolationException e) {
+        }
+    }
+
+    @Test
+    public void emptyIsbnThrowsError () {
+        try {
+            BookEntity bookEntity = newValidBook();
+            bookEntity.setIsbn(null);
+            BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
+            fail("Saved book with null ISBN");
+        } catch (ConstraintViolationException e) {
+        }
+    }
+
+    @Test
+    public void emptyCopiesThrowsError () {
+        try {
+            BookEntity bookEntity = newValidBook();
+            bookEntity.setCopies(null);
+            BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
+            fail("Saved book with null copies");
+        } catch (ConstraintViolationException e) {
+        }
+    }
+
+    @Test
+    public void zeroCopiesThrowsError () {
+        try {
+            BookEntity bookEntity = newValidBook();
+            bookEntity.setCopies(0);
+            BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
+            fail("Saved book with null copies");
+        } catch (ConstraintViolationException e) {
+        }
+    }
+
+    @Test
+    public void uniqueISBN () {
+        try {
+            BookEntity bookEntity1 = newValidBook();
+            bookEntity1.setIsbn("123");
+            BookEntity bookEntity2 = newValidBook();
+            bookEntity2.setIsbn("123");
+            bookRepository.saveAndFlush(bookEntity1);
+            bookRepository.saveAndFlush(bookEntity2);
+            fail("Saved two books with same isbn");
+        } catch (PersistenceException e) {
+        }
+    }
 }
