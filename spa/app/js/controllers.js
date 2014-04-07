@@ -105,14 +105,11 @@ function BooksController(Books, $scope, $location, Auth, Alerts) {
         Books.returnBook(book);
     }
 
-    $scope.bookStatus = function (book) {
-        if (book.userId === null) return "Available";
-        if (book.userId == Auth.getAuthenticatedUser().userId) return "Borrowed by you";
-        return "Borrowed by " + book.username;
-    }
-
     $scope.userHasACopy = function (book) {
-        return book.userId == Auth.getAuthenticatedUser().userId;
+        console.log(Auth.getAuthenticatedUser().userId);
+        console.log(book.userIds[0]);
+//        console.log(Auth.getAuthenticatedUser().userId==book.userIds[0]);
+        return book.userIds.indexOf(Auth.getAuthenticatedUser().userId) >= 0;
     }
 
     function navigateTo(newPath) {

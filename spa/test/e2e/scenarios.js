@@ -100,7 +100,7 @@ describe('Library app', function () {
             input('book.title').enter('testTitle');
             input('book.author').enter('testAuthor');
             input('book.isbn').enter(newIsbn);
-            input('book.copies').enter(1);
+            input('book.availableCopies').enter(1);
 
             element("#addBookSubmit").click();
 
@@ -145,13 +145,12 @@ describe('Library app', function () {
             input('book.title').enter('testTitle');
             input('book.author').enter('testAuthor');
             input('book.isbn').enter(newIsbn);
-            input('book.copies').enter(copies);
+            input('book.availableCopies').enter(copies);
             element("#addBookSubmit").click();
             expect(browser().location().url()).toBe("/books");
             expect(element('[ng-view] table tr:last').text()).toContain(newIsbn);
             expect(element('[ng-view] table tr:last').text()).toContain('testTitle');
             expect(element('[ng-view] table tr:last').text()).toContain('testAuthor');
-            expect(element('[ng-view] table tr:last').text()).toContain('Available');
             expect(element('[ng-view] table tr:last').text()).toContain(copies);
             expect(element('[ng-view] table tr:last').text()).toContain('Borrow');
         });
@@ -162,7 +161,7 @@ describe('Library app', function () {
             input('book.title').enter('testTitle');
             input('book.author').enter('testAuthor');
             input('book.isbn').enter(newIsbn);
-            input('book.copies').enter(copies);
+            input('book.availableCopies').enter(copies);
             element("#addBookSubmit").click();
             expect(browser().location().url()).toBe("/add_book");
         });
