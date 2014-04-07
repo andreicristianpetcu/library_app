@@ -106,5 +106,17 @@ public class BookEntity {
     public int hashCode() {
         return isbn != null ? isbn.hashCode() : 0;
     }
+
+    public void lendTo(UserEntity userEntity) {
+        borrower = userEntity;
+    }
+
+    public boolean isLendTo(UserEntity userEntity) {
+        return borrower != null && borrower.equals(userEntity);
+    }
+
+    public void returnFrom(UserEntity user) {
+        borrower = null;
+    }
 }
 

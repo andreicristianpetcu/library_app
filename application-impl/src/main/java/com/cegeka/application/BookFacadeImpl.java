@@ -49,7 +49,7 @@ public class BookFacadeImpl implements BookFacade {
     public BookTo borrowBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
-        book.setBorrower(user);
+        book.lendTo(user);
         bookRepository.flush();
         return bookToMapper.toTo(book);
     }
@@ -59,8 +59,8 @@ public class BookFacadeImpl implements BookFacade {
     public BookTo returnBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
-        if(book.getBorrower().equals(user)) {
-            book.setBorrower(null);
+        if(book.isLendTo(user)) {
+            book.returnFrom(user);
             bookRepository.flush();
         }
         return bookToMapper.toTo(book);

@@ -34,7 +34,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
         hamlet = bookRepository.saveAndFlush(hamletBook());
         macbeth = bookRepository.saveAndFlush(macbethBook());
         romeo = userRepository.saveAndFlush(romeoUser());
-        hamlet.setBorrower(romeo);
+        hamlet.lendTo(romeo);
         bookRepository.flush();
     }
 
@@ -56,8 +56,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     public void canRetrieveOneBorrowed() {
         BookEntity one = bookRepository.findOne(hamlet.getId());
         assertThat(one).isEqualTo(hamletBook());
-        assertThat(one.getBorrower()).isNotNull();
-        assertThat(one.getBorrower()).isEqualTo(romeoUser());
+        assertThat(one.isLendTo(romeoUser()));
     }
 
     @Test
@@ -139,9 +138,8 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     public void uniqueISBN () {
         try {
             BookEntity bookEntity1 = newValidBook();
-            bookEntity1.setIsbn("123");
             BookEntity bookEntity2 = newValidBook();
-            bookEntity2.setIsbn("123");
+            bookEntity2.setIsbn(bookEntity1.getIsbn());
             bookRepository.saveAndFlush(bookEntity1);
             bookRepository.saveAndFlush(bookEntity2);
             fail("Saved two books with same isbn");
