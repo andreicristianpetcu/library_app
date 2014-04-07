@@ -56,8 +56,8 @@ public class BookFacadeImplTest {
 
     @Test
     public void saveBookCallsMapperAndRepositorySaveAndFlush () {
-        BookTo bookTo = new BookTo(null, "One", "Two", "Three", null, null);
-        BookTo expected = new BookTo("123", "One", "Two", "Three", null, null);
+        BookTo bookTo = new BookTo(null, "One", "Two", "Three");
+        BookTo expected = new BookTo("123", "One", "Two", "Three");
 
         BookEntity bookEntity = hamletBook();
 

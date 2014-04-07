@@ -3,26 +3,24 @@ package com.cegeka.application;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.util.List;
+
 public class BookTo {
     private String id;
     private String title;
     private String author;
     private String isbn;
-    private String username;
-    private String userId;
-    private boolean available;
-    private Integer copies;
+    private List<String> userIds;
+    private Integer availableCopies;
 
     public BookTo() {
     }
 
-    public BookTo(String id, String title, String author, String isbn, String username, String userId) {
+    public BookTo(String id, String title, String author, String isbn) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
-        this.username = username;
-        this.userId = userId;
     }
 
     public String getId() {
@@ -57,36 +55,20 @@ public class BookTo {
         this.isbn = isbn;
     }
 
-    public String getUsername() {
-        return username;
+    public List<String> getUserIds() {
+        return userIds;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserIds(List<String> userIds) {
+        this.userIds = userIds;
     }
 
-    public boolean isAvailable() {
-        return available;
+    public Integer getAvailableCopies() {
+        return availableCopies;
     }
 
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Integer getCopies() {
-        return copies;
-    }
-
-    public void setCopies(Integer copies) {
-        this.copies = copies;
+    public void setAvailableCopies(Integer availableCopies) {
+        this.availableCopies = availableCopies;
     }
 
     @Override
