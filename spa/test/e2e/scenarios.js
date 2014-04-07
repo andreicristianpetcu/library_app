@@ -50,6 +50,7 @@ describe('Library app', function () {
             expect(element('[ng-view] h1:first').text()).toMatch(/Users/);
         });
 
+
         it('should contain a table', function () {
             expect(element('[ng-view] table th').text()).toMatch("#NameEmailRoleEdit");
         });
