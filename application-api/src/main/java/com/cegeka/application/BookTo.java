@@ -11,6 +11,7 @@ public class BookTo {
     private String username;
     private String userId;
     private boolean available;
+    private Integer copies;
 
     public BookTo() {
     }
@@ -78,6 +79,14 @@ public class BookTo {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Integer getCopies() {
+        return copies;
+    }
+
+    public void setCopies(Integer copies) {
+        this.copies = copies;
     }
 
     @Override

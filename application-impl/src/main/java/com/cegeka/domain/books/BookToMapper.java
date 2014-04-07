@@ -21,11 +21,13 @@ public class BookToMapper {
         String userId = borrower != null ? borrower.getId() : null;
         BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn(), username, userId);
         bookTo.setAvailable(bookTo.getUsername() == null);
+        bookTo.setCopies(bookEntity.getCopies());
         return bookTo;
     }
 
     public BookEntity toNewEntity(BookTo bookTo) {
         BookEntity bookEntity = new BookEntity(bookTo.getTitle(), bookTo.getAuthor(), bookTo.getIsbn());
+        bookEntity.setCopies(bookTo.getCopies());
         return bookEntity;
     }
 

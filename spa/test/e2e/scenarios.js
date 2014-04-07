@@ -102,19 +102,32 @@ describe('Library app', function () {
 
         it('should allow adding a book that is available and can be borrowed', function () {
             var newIsbn = Math.random() * 1234567890|0;
+            var copies = (Math.random() * 10|0) + 1;
             input('book.title').enter('testTitle');
             input('book.author').enter('testAuthor');
             input('book.isbn').enter(newIsbn);
+            input('book.copies').enter(copies);
             element("#addBookSubmit").click();
             expect(browser().location().url()).toBe("/books");
             expect(element('[ng-view] table tr:last').text()).toContain(newIsbn);
             expect(element('[ng-view] table tr:last').text()).toContain('testTitle');
             expect(element('[ng-view] table tr:last').text()).toContain('testAuthor');
             expect(element('[ng-view] table tr:last').text()).toContain('Available');
+            expect(element('[ng-view] table tr:last').text()).toContain(copies);
             expect(element('[ng-view] table tr:last').text()).toContain('Borrow');
-            console.log("poc");
         });
 
+        it('should not allow to add a book that has no copies', function () {
+            var newIsbn = Math.random() * 1234567890|0;
+            var copies = "";
+            input('book.title').enter('testTitle');
+            input('book.author').enter('testAuthor');
+            input('book.isbn').enter(newIsbn);
+            input('book.copies').enter(copies);
+            element("#addBookSubmit").click();
+            expect(browser().location().url()).toBe("#/add_book");
+            expect(element('alert.msg').text()).toContain('Please insert number of copies!');
+        });
     });
 
 });

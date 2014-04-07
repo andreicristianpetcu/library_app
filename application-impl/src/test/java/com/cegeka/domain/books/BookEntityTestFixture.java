@@ -8,12 +8,12 @@ public class BookEntityTestFixture {
     public static final String HAMLET_ID = UUID.randomUUID().toString();
     private static final String HAMLET_TITLE = "Hamlet";
     private static final String HAMLET_AUTHOR = "Shakespeare";
-    private static final String HAMLET_ISBN = "123456789";
+    private static final String HAMLET_ISBN = newRandomISBN();
 
     public static final String MACBETH_ID = UUID.randomUUID().toString();
     private static final String MACBETH_TITLE = "Macbeth";
     private static final String MACBETH_AUTHOR = "Shakespeare";
-    private static final String MACBETH_ISBN = "123456789";
+    private static final String MACBETH_ISBN = newRandomISBN();
 
     private BookEntityTestFixture() {
     }
@@ -22,6 +22,10 @@ public class BookEntityTestFixture {
         BookEntity entity = new BookEntity(HAMLET_TITLE, HAMLET_AUTHOR, HAMLET_ISBN);
         entity.setId(HAMLET_ID);
         return entity;
+    }
+
+    private static String newRandomISBN() {
+        return "" + Math.round(Math.random() * 123456789);
     }
 
     public static BookEntity macbethBook() {

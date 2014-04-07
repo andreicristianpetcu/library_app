@@ -18,6 +18,8 @@ public class BookEntity {
 
     private String author;
 
+    private Integer copies;
+
     @Column(nullable = false, unique = true)
     private String isbn;
 
@@ -71,6 +73,14 @@ public class BookEntity {
 
     public void setBorrower(UserEntity borrower) {
         this.borrower = borrower;
+    }
+
+    public Integer getCopies() {
+        return copies;
+    }
+
+    public void setCopies(Integer copies) {
+        this.copies = copies;
     }
 
     @Override
