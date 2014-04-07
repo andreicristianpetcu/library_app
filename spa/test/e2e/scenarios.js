@@ -74,6 +74,12 @@ describe('Library app', function () {
             expect(element('[ng-view] table th').text()).toContain("ISBN");
         });
 
+        it('should contain a table with Title Author ISBN', function () {
+            expect(element('[ng-view] table th').text()).toContain("Title");
+            expect(element('[ng-view] table th').text()).toContain("Author");
+            expect(element('[ng-view] table th').text()).toContain("ISBN");
+        });
+
         it('should contain an add book button when user has admin role', function () {
             expect(element('[ng-view] #btnAddBook').text()).toMatch("add book");
         });
@@ -81,6 +87,39 @@ describe('Library app', function () {
         it('should not contain an add book button when user does not have admin role', function () {
 //            TODO implement
         });
+
+    });
+
+    describe('Book loan scenarios', function () {
+
+
+        it('add a book with 1 available copy, then borrow it', function () {
+            browser().navigateTo('#/add_book');
+
+            var newIsbn = Math.random() * 1234567890|0;
+            input('book.title').enter('testTitle');
+            input('book.author').enter('testAuthor');
+            input('book.isbn').enter(newIsbn);
+            input('book.copies').enter(1);
+
+            element("#addBookSubmit").click();
+
+            expect(browser().location().url()).toBe("/books");
+
+            input('query').enter(newIsbn);
+            expect(repeater('#books tr').count()).toEqual(1);
+
+            expect(element('[ng-view] table tr:last').text()).toContain(newIsbn, 'testTitle', 'testAuthor', '1');
+            expect(element('#borrowButton:visible').count()).toBe(1);
+            expect(element('#returnButton:visible').count()).toBe(0);
+
+            element("#borrowButton").click();
+
+            expect(element('[ng-view] table tr:last').text()).toContain(newIsbn, 'testTitle', 'testAuthor', '0');
+            expect(element('#borrowButton:visible').count()).toBe(0);
+            expect(element('#returnButton:visible').count()).toBe(1);
+        });
+
 
     });
 

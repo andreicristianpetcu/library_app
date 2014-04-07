@@ -3,7 +3,7 @@
         <h1 id="tables">Books</h1>
 
         <div class="left-inner-addon">
-            <input type="text" class="form-control" placeholder="Search" ng-model="query">
+            <input id="searchInput" type="text" class="form-control" placeholder="Search" ng-model="query">
         </div>
     </div>
 
@@ -23,12 +23,12 @@
             <th>Title</th>
             <th>Author</th>
             <th>ISBN</th>
-            <th>Status</th>
             <th>Copies</th>
+            <th>Status</th>
             <th>Borrow/Return</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="books">
         <tr ng-repeat="book in books  | filter:query">
             <td>{{book.title}}</td>
             <td>{{book.author}}</td>
@@ -36,8 +36,8 @@
             <td>{{book.copies}}</td>
             <td>{{bookStatus(book)}}</td>
             <td>
-                <a ng-click="borrowBook(book)" ng-show="book.available" class="btn btn-primary">Borrow</a>
-                <a ng-click="returnBook(book)" ng-show="userHasACopy(book)" class="btn btn-default">Return</a>
+                <a id="borrowButton" ng-click="borrowBook(book)" ng-show="book.available" class="btn btn-primary">Borrow</a>
+                <a id="returnButton" ng-click="returnBook(book)" ng-show="userHasACopy(book)" class="btn btn-default">Return</a>
             </td>
         </tr>
 
