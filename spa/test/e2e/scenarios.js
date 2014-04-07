@@ -53,7 +53,6 @@ describe('Library app', function () {
         it('should contain a table', function () {
             expect(element('[ng-view] table th').text()).toMatch("#NameEmailRoleEdit");
         });
-
     });
 
     describe('books view', function () {
