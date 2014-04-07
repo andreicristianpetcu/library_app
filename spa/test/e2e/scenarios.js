@@ -125,8 +125,7 @@ describe('Library app', function () {
             input('book.isbn').enter(newIsbn);
             input('book.copies').enter(copies);
             element("#addBookSubmit").click();
-            expect(browser().location().url()).toBe("#/add_book");
-            expect(element('alert.msg').text()).toContain('Please insert number of copies!');
+            expect(browser().location().url()).toBe("/add_book");
         });
     });
 

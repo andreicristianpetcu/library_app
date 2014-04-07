@@ -7,15 +7,15 @@
 <div class="row">
     <div class="col-lg-6">
         <div class="well">
-            <form id="addBookForm" class="form-horizontal">
+            <form id="addBookForm" class="form-horizontal" name="addBookForm" ng-submit="addBook()">
                 <fieldset>
                     <legend>Add new book</legend>
                     <div class="form-group">
                         <label for="inputTitle" class="col-lg-2 control-label">Title</label>
 
                         <div class="col-lg-10">
-                            <input id="inputTitle" type="text" class="form-control"  placeholder="Title"
-                                   ng-model="book.title">
+                            <input id="inputTitle" name="inputTitle" type="text" class="form-control"  placeholder="Title"
+                                   ng-model="book.title" required/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -23,7 +23,7 @@
 
                         <div class="col-lg-10">
                             <input id="inputAuthor" type="text" class="form-control"  placeholder="Author"
-                                   ng-model="book.author">
+                                   ng-model="book.author"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -31,7 +31,7 @@
 
                         <div class="col-lg-10">
                             <input id="inputIsbn" type="text" class="form-control"  placeholder="ISBN"
-                                   ng-model="book.isbn">
+                                   ng-model="book.isbn"/>
                         </div>
                     </div>
 
@@ -39,15 +39,15 @@
                         <label for="inputCopies" class="col-lg-2 control-label">Copies</label>
 
                         <div class="col-lg-10">
-                            <input id="inputCopies" type="text" class="form-control"  placeholder="Copies"
-                                   ng-model="book.copies" required>
+                            <input id="inputCopies" name="inputCopies" type="number" class="form-control"  placeholder="Copies"
+                                   ng-model="book.copies" required min="1">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-lg-10 col-lg-offset-2">
                             <a id="addBookCancel"class="btn btn-default" href="#/books">Cancel</a>
-                            <button id="addBookSubmit" type="submit" class="btn btn-primary" ng-click="addBook()">Save</button>
+                            <button id="addBookSubmit" type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                 </fieldset>
