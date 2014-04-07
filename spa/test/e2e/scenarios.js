@@ -96,6 +96,7 @@ describe('Library app', function () {
             expect(element('#inputIsbn').text()).not().toBeNull();
             expect(element('#addBookSubmit').text()).toEqual("Save");
             expect(element('#addBookCancel').text()).toEqual("Cancel");
+
         });
 
         it('should allow adding a book that is available and can be borrowed', function () {
