@@ -47,7 +47,7 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
         }
 
         function lookUpBookByIsbn(bookIsbn, successCallback, errorCallback) {
-            $http.jsonp(REST_URLS.BOOKS_BY_ISBN + bookIsbn)
+            $http.jsonp(REST_URLS.BOOKS_BY_ISBN_GOOGLE + bookIsbn)
                 .success(function (data) {
                     successCallback(data);
                 })
@@ -197,6 +197,6 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
     BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book',
     BORROW: 'http://libraryapp.cegeka.com:8080/backend/rest/borrow',
     RETURN: 'http://libraryapp.cegeka.com:8080/backend/rest/return',
-    BOOKS_BY_ISBN: 'https://openlibrary.org/api/books?callback=JSON_CALLBACK&jscmd=data&bibkeys=ISBN:'
+    BOOKS_BY_ISBN_GOOGLE: 'https://www.googleapis.com/books/v1/volumes?callback=JSON_CALLBACK&q=isbn:'
   });
 

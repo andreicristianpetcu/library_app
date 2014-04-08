@@ -171,7 +171,7 @@ describe('Library app', function () {
             input('book.isbn').enter(hamletIsbn);
             element("#isbnLookupLink").click();
 
-            expect(element('#inputTitle').val()).toEqual('Hamlet (Folger Shakespeare Library)');
+            expect(element('#inputTitle').val()).toEqual('Hamlet');
             expect(element('#inputAuthor').val()).toEqual('William Shakespeare');
         });
     });
