@@ -43,10 +43,10 @@ public class BookEntityTestFixture {
     }
 
     public static BookTo hamletTo() {
-        return new BookToMapper().toTo(hamletBook());
+        return new BookToMapper().toTo(hamletBook(), null);
     }
 
     public static BookTo macbethTo() {
-        return new BookToMapper().toTo(macbethBook());
+        return new BookToMapper().toTo(macbethBook(), null);
     }
 }

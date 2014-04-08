@@ -31,39 +31,37 @@ public class BookRestService {
     @RequestMapping("/books")
     @ResponseBody
     public List<BookTo> getBooks(){
-        return bookFacade.getBooks();
+        return bookFacade.getBooks(getCurrentUserId());
     }
 
     @RequestMapping(value = "/book", method = POST)
     @ResponseBody
     public ResponseEntity saveBook(@RequestBody BookTo bookTo) {
-        bookFacade.saveBook(bookTo);
+        bookFacade.saveBook(bookTo, getCurrentUserId());
         return new ResponseEntity<String>("success", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/borrow", method = POST)
     @ResponseBody
     public ResponseEntity borrowBook(@RequestBody String bookId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-        CustomUserDetails user = null;
-        if (principal instanceof CustomUserDetails) {
-            user = (CustomUserDetails) principal;
-        }
-        BookTo bookTo = bookFacade.borrowBook(bookId, user.getUserId());
+        BookTo bookTo = bookFacade.borrowBook(bookId, getCurrentUserId());
         return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/return", method = POST)
     @ResponseBody
     public ResponseEntity returnBook(@RequestBody String bookId) {
+        BookTo bookTo = bookFacade.returnBook(bookId, getCurrentUserId());
+        return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
+    }
+
+    private String getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
-        CustomUserDetails user = null;
+        String userId = null;
         if (principal instanceof CustomUserDetails) {
-            user = (CustomUserDetails) principal;
+            userId = ((CustomUserDetails) principal).getUserId();
         }
-        BookTo bookTo = bookFacade.returnBook(bookId, user.getUserId());
-        return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
+        return userId;
     }
 }

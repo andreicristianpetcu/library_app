@@ -17,7 +17,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Scope(value = SCOPE_SINGLETON)
 public class BookToMapper {
 
-    public BookTo toTo(BookEntity bookEntity) {
+    public BookTo toTo(BookEntity bookEntity, String userId) {
         BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn());
 
         List<String> borrowerIds = new ArrayList<String>();
@@ -28,6 +28,7 @@ public class BookToMapper {
         bookTo.setUserIds(borrowerIds);
 
         bookTo.setAvailableCopies(bookEntity.getCopies() - bookEntity.getBorrowers().size());
+        bookTo.setBorrowedByCurrentUser(borrowerIds.contains(userId));
         return bookTo;
     }
 
@@ -37,15 +38,15 @@ public class BookToMapper {
         return bookEntity;
     }
 
-    public List<BookTo> from(List<BookEntity> all) {
-        return newArrayList(transform(all, bookEntityToBookToTransform()));
+    public List<BookTo> from(List<BookEntity> all, String userId) {
+        return newArrayList(transform(all, bookEntityToBookToTransform(userId)));
     }
 
-    private Function<? super BookEntity, BookTo> bookEntityToBookToTransform() {
+    private Function<? super BookEntity, BookTo> bookEntityToBookToTransform(final String userId) {
         return new Function<BookEntity, BookTo>() {
             @Override
             public BookTo apply(BookEntity input) {
-                return toTo(input);
+                return toTo(input, userId);
             }
         };
     }

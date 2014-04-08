@@ -27,21 +27,16 @@ public class BookFacadeImpl implements BookFacade {
 
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
-    public List<BookTo> getBooks() {
-        return bookToMapper.from(bookRepository.findAll());
-    }
-
-    @Override
-    public BookTo getBook(String bookId) {
-        return bookToMapper.toTo(bookRepository.findOne(bookId));
+    public List<BookTo> getBooks(String userId) {
+        return bookToMapper.from(bookRepository.findAll(), userId);
     }
 
     @Override
     @Transactional
-    public BookTo saveBook(BookTo newBook) {
+    public BookTo saveBook(BookTo newBook, String userId) {
         BookEntity bookEntity = bookToMapper.toNewEntity(newBook);
         bookEntity = bookRepository.saveAndFlush(bookEntity);
-        return bookToMapper.toTo(bookEntity);
+        return bookToMapper.toTo(bookEntity, userId);
     }
 
     @Override
@@ -51,7 +46,7 @@ public class BookFacadeImpl implements BookFacade {
         UserEntity user = userRepository.findOne(userId);
         book.lendTo(user);
         bookRepository.flush();
-        return bookToMapper.toTo(book);
+        return bookToMapper.toTo(book, user.getId());
     }
 
     @Override
@@ -63,7 +58,7 @@ public class BookFacadeImpl implements BookFacade {
             book.returnFrom(user);
             bookRepository.flush();
         }
-        return bookToMapper.toTo(book);
+        return bookToMapper.toTo(book, userId);
     }
 
     public void setBookRepository(BookRepository bookRepository) {

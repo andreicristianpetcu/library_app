@@ -37,21 +37,9 @@ public class BookFacadeImplTest {
     public void getBooksCallsRepositoryFindAll () {
         when(bookRepositoryMock.findAll()).thenReturn(Collections.<BookEntity>emptyList());
 
-        List<BookTo> books = bookFacade.getBooks();
+        List<BookTo> books = bookFacade.getBooks(null);
 
         verify(bookRepositoryMock).findAll();
-    }
-
-    @Test
-    public void getBookCallsRepositoryFindOne () {
-        BookEntity bookEntity = hamletBook();
-        bookEntity.setId("123");
-
-        when(bookRepositoryMock.findOne("123")).thenReturn(bookEntity);
-
-        bookFacade.getBook("123");
-
-        verify(bookRepositoryMock).findOne("123");
     }
 
     @Test
@@ -63,13 +51,13 @@ public class BookFacadeImplTest {
 
         when(bookToMapperMock.toNewEntity(bookTo)).thenReturn(bookEntity);
         when(bookRepositoryMock.saveAndFlush(bookEntity)).thenReturn(bookEntity);
-        when(bookToMapperMock.toTo(bookEntity)).thenReturn(expected);
+        when(bookToMapperMock.toTo(bookEntity, null)).thenReturn(expected);
 
-        BookTo result = bookFacade.saveBook(bookTo);
+        BookTo result = bookFacade.saveBook(bookTo, null);
 
         verify(bookToMapperMock).toNewEntity(bookTo);
         verify(bookRepositoryMock).saveAndFlush(bookEntity);
-        verify(bookToMapperMock).toTo(bookEntity);
+        verify(bookToMapperMock).toTo(bookEntity, null);
 
         assertThat(result).isSameAs(expected);
     }

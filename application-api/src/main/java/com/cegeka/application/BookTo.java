@@ -12,6 +12,7 @@ public class BookTo {
     private String isbn;
     private List<String> userIds;
     private Integer availableCopies;
+    private boolean borrowedByCurrentUser;
 
     public BookTo() {
     }
@@ -71,6 +72,14 @@ public class BookTo {
         this.availableCopies = availableCopies;
     }
 
+    public boolean isBorrowedByCurrentUser() {
+        return borrowedByCurrentUser;
+    }
+
+    public void setBorrowedByCurrentUser(boolean borrowedByCurrentUser) {
+        this.borrowedByCurrentUser = borrowedByCurrentUser;
+    }
+
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
@@ -80,4 +89,5 @@ public class BookTo {
     public boolean equals(Object that) {
         return EqualsBuilder.reflectionEquals(this, that);
     }
+
 }
