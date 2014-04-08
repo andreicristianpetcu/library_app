@@ -105,19 +105,6 @@ function BooksController(Books, $scope, $location, Auth, Alerts) {
         Books.returnBook(book);
     }
 
-    $scope.userHasACopy = function (book) {
-        console.log(Auth.getAuthenticatedUser().userId);
-        console.log(book.userIds[0]);
-//        console.log(Auth.getAuthenticatedUser().userId==book.userIds[0]);
-        return book.userIds.indexOf(Auth.getAuthenticatedUser().userId) >= 0;
-    }
-
-    function navigateTo(newPath) {
-        $location.path(newPath);
-    }
-
-    function doNothing() {
-    }
 }
 
 
