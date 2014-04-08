@@ -37,4 +37,51 @@ public class BookToMapperTest {
         assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(true);
 
     }
+
+    @Test
+    public void testToToForNullUser () {
+        BookEntity book = newValidBook();
+        book.setId("book_id");
+        book.setCopies(2);
+
+        UserEntity romeo = romeoUser();
+        romeo.setId("romeo_id");
+
+        book.lendTo(romeo);
+
+        BookTo bookTo = bookToMapper.toTo(book, null);
+
+        assertThat(bookTo.getId()).isEqualTo(book.getId());
+        assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
+        assertThat(bookTo.getTitle()).isEqualTo(book.getTitle());
+        assertThat(bookTo.getAvailableCopies()).isEqualTo(1);
+        assertThat(bookTo.getUserIds().size()).isEqualTo(1);
+        assertThat(bookTo.getUserIds()).contains(romeo.getId());
+        assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(false);
+
+    }
+
+    @Test
+    public void testToToForMultipleBorrowers () {
+        BookEntity book = newValidBook();
+        book.setId("book_id");
+        book.setCopies(3);
+
+        UserEntity romeo = romeoUser();
+        romeo.setId("romeo_id");
+
+        book.lendTo(romeo);
+        book.lendTo(romeo);
+
+        BookTo bookTo = bookToMapper.toTo(book, "random_user_id");
+
+        assertThat(bookTo.getId()).isEqualTo(book.getId());
+        assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
+        assertThat(bookTo.getTitle()).isEqualTo(book.getTitle());
+        assertThat(bookTo.getAvailableCopies()).isEqualTo(1);
+        assertThat(bookTo.getUserIds().size()).isEqualTo(2);
+        assertThat(bookTo.getUserIds()).contains(romeo.getId());
+        assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(false);
+
+    }
 }
