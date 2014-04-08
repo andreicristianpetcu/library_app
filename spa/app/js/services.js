@@ -64,18 +64,12 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
 
         //TODO: test me pls
         function borrowBook(book) {
-            return $http.post(REST_URLS.BORROW, book.id)
-                .success(function (response) {
-                    angular.copy(response, book);
-                });
+            return $http.post(REST_URLS.BORROW, book.id);
         }
 
         //TODO: test me pls
         function returnBook(book) {
-            return $http.post(REST_URLS.RETURN, book.id)
-                .success(function (response) {
-                    angular.copy(response, book);
-                });
+            return $http.post(REST_URLS.RETURN, book.id);
         }
 
         return {
@@ -161,20 +155,28 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
   }])
 
     .factory('Alerts', ['$rootScope', function($rootScope){
-        function genericErrorHandler(data, status, headers, config) {
+        function genericErrorHandler(response) {
+            var status = response.status;
+            var headers = response.headers;
+            var config = response.config;
+            var data = response.data;
+
             var errorMessage;
             if (status === 0) {
                 errorMessage = 'Timeout while accessing ' + config.url;
-
             } else {
                 errorMessage = 'Accessing ' + config.url + ' returned with status code: ' + status + " \r\n" + data;
-
             }
             $rootScope.alerts.push({msg: errorMessage, type: "danger" });
         }
 
+        function successHandler(message) {
+            $rootScope.alerts.push({msg: message, type: "success" });
+        }
+
         return {
-            handler : genericErrorHandler
+            handler : genericErrorHandler,
+            successHandler : successHandler
         }
     }])
   .constant('REST_URLS', {

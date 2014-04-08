@@ -98,11 +98,21 @@ function BooksController(Books, $scope, $location, Auth, Alerts) {
     }
 
     $scope.borrowBook = function (book) {
-        Books.borrowBook(book);
+        Books.borrowBook(book)
+            .then(function(response) {
+                angular.copy(response.data, book);
+                Alerts.successHandler("Happy reading!")
+            },
+            Alerts.handler);
     }
 
     $scope.returnBook = function (book) {
-        Books.returnBook(book);
+        Books.returnBook(book)
+            .then(function(response) {
+                angular.copy(response.data, book);
+                Alerts.successHandler("Thanks for returning the book!")
+            },
+            Alerts.handler);
     }
 
 }
