@@ -27,7 +27,6 @@ public class BookRestService {
     @Autowired
     private BookFacade bookFacade;
 
-
     @RequestMapping("/books")
     @ResponseBody
     public List<BookTo> getBooks(){
