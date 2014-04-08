@@ -115,6 +115,21 @@ function BooksController(Books, $scope, $location, Auth, Alerts) {
             Alerts.handler);
     }
 
+
+    $scope.lookUpByIsbn = function (isbn) {
+        Books.lookUpBookByIsbn(isbn,
+            function success(responseData) {
+                var bookData = responseData["ISBN:" + isbn];
+                $scope.book = {};
+                $scope.temp = {};
+                $scope.book.isbn = isbn;
+                $scope.book.title = bookData.title;
+                $scope.book.author = bookData.authors[0].name;
+                $scope.temp.cover = bookData.cover.medium;
+            },
+            Alerts.handler
+        );
+    }
 }
 
 

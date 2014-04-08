@@ -46,6 +46,14 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
                 .error(errorCallback);
         }
 
+        function lookUpBookByIsbn(bookIsbn, successCallback, errorCallback) {
+            $http.jsonp(REST_URLS.BOOKS_BY_ISBN + bookIsbn)
+                .success(function (data) {
+                    successCallback(data);
+                })
+                .error(errorCallback);
+        }
+
         //TODO: test me pls
         function getBook(bookId, successCallback, errorCallback) {
             $http.get(REST_URLS.USER + '/' + bookId)
@@ -77,7 +85,8 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
             getBook: getBook,
             addBook: addBook,
             borrowBook: borrowBook,
-            returnBook: returnBook
+            returnBook: returnBook,
+            lookUpBookByIsbn: lookUpBookByIsbn
         };
     }])
 
@@ -187,6 +196,7 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
     BOOKS: 'http://libraryapp.cegeka.com:8080/backend/rest/books',
     BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book',
     BORROW: 'http://libraryapp.cegeka.com:8080/backend/rest/borrow',
-    RETURN: 'http://libraryapp.cegeka.com:8080/backend/rest/return'
+    RETURN: 'http://libraryapp.cegeka.com:8080/backend/rest/return',
+    BOOKS_BY_ISBN: 'https://openlibrary.org/api/books?callback=JSON_CALLBACK&jscmd=data&bibkeys=ISBN:'
   });
 
