@@ -165,6 +165,15 @@ describe('Library app', function () {
             element("#addBookSubmit").click();
             expect(browser().location().url()).toBe("/add_book");
         });
+
+        it('should get book details by isbn', function () {
+            var hamletIsbn = "074347712X";
+            input('book.isbn').enter(hamletIsbn);
+            element("#isbnLookupLink").click();
+
+            expect(element('#inputTitle').val()).toEqual('Hamlet (Folger Shakespeare Library)');
+            expect(element('#inputAuthor').val()).toEqual('William Shakespeare');
+        });
     });
 
 });
