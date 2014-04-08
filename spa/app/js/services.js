@@ -70,10 +70,22 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
             return $http.post(REST_URLS.BOOK, book);
         }
 
+        //TODO: test me pls
+        function borrowBook(book) {
+            return $http.post(REST_URLS.BORROW, book.id);
+        }
+
+        //TODO: test me pls
+        function returnBook(book) {
+            return $http.post(REST_URLS.RETURN, book.id);
+        }
+
         return {
             getBooks: getBooks,
             getBook: getBook,
             addBook: addBook,
+            borrowBook: borrowBook,
+            returnBook: returnBook,
             lookUpBookByIsbn: lookUpBookByIsbn
         };
     }])
@@ -152,29 +164,39 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
   }])
 
     .factory('Alerts', ['$rootScope', function($rootScope){
-        function genericErrorHandler(data, status, headers, config) {
+        function genericErrorHandler(response) {
+            var status = response.status;
+            var headers = response.headers;
+            var config = response.config;
+            var data = response.data;
+
             var errorMessage;
             if (status === 0) {
                 errorMessage = 'Timeout while accessing ' + config.url;
-
             } else {
                 errorMessage = 'Accessing ' + config.url + ' returned with status code: ' + status + " \r\n" + data;
-
             }
             $rootScope.alerts.push({msg: errorMessage, type: "danger" });
         }
 
+        function successHandler(message) {
+            $rootScope.alerts.push({msg: message, type: "success" });
+        }
+
         return {
-            handler : genericErrorHandler
+            handler : genericErrorHandler,
+            successHandler : successHandler
         }
     }])
   .constant('REST_URLS', {
-    LOGIN: 'http://localhost:8080/backend/j_spring_security_check',
-    LOGOUT: 'http://localhost:8080/backend/j_spring_security_logout',
-    USERS: 'http://localhost:8080/backend/rest/users',
-    USER: 'http://localhost:8080/backend/rest/user',
-    BOOKS: 'http://localhost:8080/backend/rest/books',
-    BOOK: 'http://localhost:8080/backend/rest/book',
+    LOGIN: 'http://libraryapp.cegeka.com:8080/backend/j_spring_security_check',
+    LOGOUT: 'http://libraryapp.cegeka.com:8080/backend/j_spring_security_logout',
+    USERS: 'http://libraryapp.cegeka.com:8080/backend/rest/users',
+    USER: 'http://libraryapp.cegeka.com:8080/backend/rest/user',
+    BOOKS: 'http://libraryapp.cegeka.com:8080/backend/rest/books',
+    BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book',
+    BORROW: 'http://libraryapp.cegeka.com:8080/backend/rest/borrow',
+    RETURN: 'http://libraryapp.cegeka.com:8080/backend/rest/return',
     BOOKS_BY_ISBN: 'https://openlibrary.org/api/books?callback=JSON_CALLBACK&jscmd=data&bibkeys=ISBN:'
   });
 

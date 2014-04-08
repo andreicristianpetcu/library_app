@@ -44,8 +44,21 @@ describe('service', function () {
 
   });
 
+    describe('Alerts', function () {
 
-  describe('Auth service', function () {
+        it('shoould show a success message', inject(function (Alerts, $rootScope) {
+            $rootScope.alerts = [];
+            expect($rootScope.alerts.length).toEqual(0);
+            Alerts.successHandler('Happy message')
+            expect($rootScope.alerts.length).toEqual(1);
+        }));
+
+
+    });
+
+
+
+    describe('Auth service', function () {
     var credentials = {
       username: 'username',
       password: 'password'

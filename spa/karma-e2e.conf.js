@@ -12,16 +12,16 @@ module.exports = function (config) {
       'app/js/*.js': 'coverage'
     },
 
-    autoWatch: false,
+    autoWatch: true,
 
     browsers: ['Chrome'],
 
     frameworks: ['ng-scenario'],
 
-    singleRun: true,
+    singleRun: false,
 
     proxies: {
-      '/': 'http://localhost:8000/'
+      '/app/': 'http://libraryapp.cegeka.com:8000/'
     },
 
     plugins: [

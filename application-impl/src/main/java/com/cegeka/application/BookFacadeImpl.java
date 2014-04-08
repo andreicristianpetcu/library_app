@@ -2,21 +2,15 @@ package com.cegeka.application;
 
 import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.books.BookRepository;
-import com.cegeka.domain.confirmation.ConfirmationService;
-import com.cegeka.domain.users.*;
+import com.cegeka.domain.books.BookToMapper;
+import com.cegeka.domain.users.UserEntity;
+import com.cegeka.domain.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
-
-import static com.cegeka.application.Role.USER;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,25 +20,45 @@ public class BookFacadeImpl implements BookFacade {
     private BookRepository bookRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private BookToMapper bookToMapper;
 
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
-    public List<BookTo> getBooks() {
-        return bookToMapper.from(bookRepository.findAll());
-    }
-
-    @Override
-    public BookTo getBook(String bookId) {
-        return bookToMapper.toTo(bookRepository.findOne(bookId));
+    public List<BookTo> getBooks(String userId) {
+        return bookToMapper.from(bookRepository.findAll(), userId);
     }
 
     @Override
     @Transactional
-    public BookTo saveBook(BookTo newBook) {
+    public BookTo saveBook(BookTo newBook, String userId) {
         BookEntity bookEntity = bookToMapper.toNewEntity(newBook);
-        BookEntity bookEntity1 = bookRepository.saveAndFlush(bookEntity);
-        return bookToMapper.toTo(bookEntity1);
+        bookEntity = bookRepository.saveAndFlush(bookEntity);
+        return bookToMapper.toTo(bookEntity, userId);
+    }
+
+    @Override
+    @Transactional
+    public BookTo borrowBook(String bookId, String userId) {
+        BookEntity book = bookRepository.findOne(bookId);
+        UserEntity user = userRepository.findOne(userId);
+        book.lendTo(user);
+        bookRepository.flush();
+        return bookToMapper.toTo(book, user.getId());
+    }
+
+    @Override
+    @Transactional
+    public BookTo returnBook(String bookId, String userId) {
+        BookEntity book = bookRepository.findOne(bookId);
+        UserEntity user = userRepository.findOne(userId);
+        if(book.isLendTo(user)) {
+            book.returnFrom(user);
+            bookRepository.flush();
+        }
+        return bookToMapper.toTo(book, userId);
     }
 
     public void setBookRepository(BookRepository bookRepository) {

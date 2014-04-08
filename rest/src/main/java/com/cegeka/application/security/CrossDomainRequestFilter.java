@@ -22,27 +22,29 @@ public class CrossDomainRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (clientChecksIfPathIsAccessibleViaCors(request)) {
-            replyThatCorsIsEnabled(response);
+            replyThatCorsIsEnabled(response, request.getHeader("Origin"));
             return;
         }else if(regularCorsCall(request)){
-            allowCredentialsFromOrigin(response);
+            allowCredentialsFromOrigin(response, request.getHeader("Origin"));
         }
         filterChain.doFilter(request, response);
 
     }
 
-    private void replyThatCorsIsEnabled(HttpServletResponse response) {
+    private void replyThatCorsIsEnabled(HttpServletResponse response, String origin) {
         // CORS "pre-flight" request
-        allowCredentialsFromOrigin(response);
+        allowCredentialsFromOrigin(response, origin);
         response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         response.addHeader("Access-Control-Allow-Headers", "Content-Type");
         response.addHeader("Access-Control-Max-Age", "1");// 30 min
         response.setStatus(200);
     }
 
-    private void allowCredentialsFromOrigin(HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", allowOrigin);
-        response.addHeader("Access-Control-Allow-Credentials","true");
+    private void allowCredentialsFromOrigin(HttpServletResponse response, String origin) {
+        if (allowOrigin.contains(origin)) {
+            response.addHeader("Access-Control-Allow-Origin", origin);
+            response.addHeader("Access-Control-Allow-Credentials", "true");
+        }
     }
 
     private boolean regularCorsCall(HttpServletRequest request) {

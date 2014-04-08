@@ -23,4 +23,4 @@ OR
 spa\app > node ..\scripts\web-server.js
 
 Test your app at:
-http://localhost:8000/index.html
+http://libraryapp.cegeka.com:8000/index.html

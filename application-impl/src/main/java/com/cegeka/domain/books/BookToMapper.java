@@ -1,14 +1,12 @@
-package com.cegeka.domain.users;
+package com.cegeka.domain.books;
 
 import com.cegeka.application.BookTo;
-import com.cegeka.application.Role;
-import com.cegeka.application.UserTo;
-import com.cegeka.domain.books.BookEntity;
+import com.cegeka.domain.users.UserEntity;
 import com.google.common.base.Function;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Collections2.transform;
@@ -18,36 +16,39 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Service
 @Scope(value = SCOPE_SINGLETON)
 public class BookToMapper {
-    public BookTo toTo(BookEntity bookEntity) {
+
+    public BookTo toTo(BookEntity bookEntity, String userId) {
         BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn());
+
+        List<String> borrowerIds = new ArrayList<String>();
+        List<UserEntity> borrowers = bookEntity.getBorrowers();
+        for (UserEntity borrower : borrowers) {
+            borrowerIds.add(borrower.getId());
+        }
+        bookTo.setUserIds(borrowerIds);
+
+        bookTo.setAvailableCopies(bookEntity.getCopies() - bookEntity.getBorrowers().size());
+        bookTo.setBorrowedByCurrentUser(borrowerIds.contains(userId));
         return bookTo;
     }
 
     public BookEntity toNewEntity(BookTo bookTo) {
         BookEntity bookEntity = new BookEntity(bookTo.getTitle(), bookTo.getAuthor(), bookTo.getIsbn());
+        bookEntity.setCopies(bookTo.getAvailableCopies());
         return bookEntity;
     }
 
-    public List<BookTo> from(List<BookEntity> all) {
-        return newArrayList(transform(all, bookEntityToBookToTransform()));
+    public List<BookTo> from(List<BookEntity> all, String userId) {
+        return newArrayList(transform(all, bookEntityToBookToTransform(userId)));
     }
 
-    private Function<? super BookEntity, BookTo> bookEntityToBookToTransform() {
+    private Function<? super BookEntity, BookTo> bookEntityToBookToTransform(final String userId) {
         return new Function<BookEntity, BookTo>() {
             @Override
             public BookTo apply(BookEntity input) {
-                return toTo(input);
+                return toTo(input, userId);
             }
         };
     }
 
-    //TODO remove me
-    public void toExistingEntity(UserEntity userEntity, UserTo userTo) {
-        userEntity.setEmail(userTo.getEmail());
-        userEntity.getProfile().setFirstName(userTo.getFirstName());
-        userEntity.getProfile().setLastName(userTo.getLastName());
-        userEntity.setConfirmed(userTo.getConfirmed());
-        userEntity.getRoles().clear();
-        userEntity.getRoles().addAll(userTo.getRoles());
-    }
 }

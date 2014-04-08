@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.annotation.Resource;
-// TODO: should be merged with LoggedInService
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     @Resource

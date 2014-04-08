@@ -1,15 +1,15 @@
 package com.cegeka.domain.books;
 
-import com.cegeka.application.Role;
-import com.cegeka.domain.users.UserProfileEntity;
-import com.google.common.collect.Sets;
+import com.cegeka.domain.users.UserEntity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Locale;
-import java.util.Set;
-
-import static javax.persistence.CascadeType.ALL;
+import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "BOOKS")
@@ -20,12 +20,24 @@ public class BookEntity {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
-    String title;
+    @NotNull
+    private String title;
 
-    String author;
+    @NotNull
+    private String author;
 
-    String isbn;
+    @NotNull
+    @Min(1)
+    private Integer copies;
 
+    @Column(unique = true)
+    @NotNull
+    private String isbn;
+
+    @ManyToMany
+    @JoinTable(name = "BOOK_BORROWER",
+            joinColumns = {@JoinColumn(name = "BOOK_ID", nullable = false, updatable = false)})
+    private List<UserEntity> borrowers = new ArrayList<UserEntity>();
 
     public BookEntity() {
     }
@@ -68,18 +80,51 @@ public class BookEntity {
         this.isbn = isbn;
     }
 
+    public List<UserEntity> getBorrowers() {
+        return borrowers;
+    }
+
+    public void setBorrowers(List<UserEntity> borrowers) {
+        this.borrowers = borrowers;
+    }
+
+    public Integer getCopies() {
+        return copies;
+    }
+
+    public void setCopies(Integer copies) {
+        this.copies = copies;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BookEntity that = (BookEntity) o;
-        return !(id != null ? !id.equals(that.id) : that.id != null);
+        if (!(o instanceof BookEntity)) return false;
 
+        BookEntity that = (BookEntity) o;
+
+        if (isbn != null ? !isbn.equals(that.isbn) : that.isbn != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return isbn != null ? isbn.hashCode() : 0;
+    }
+
+    public void lendTo(UserEntity userEntity) {
+        if (getBorrowers().size() < copies) {
+            getBorrowers().add(userEntity);
+        } else throw new ConstraintViolationException(Collections.EMPTY_SET);
+    }
+
+    public boolean isLendTo(UserEntity userEntity) {
+        return getBorrowers().contains(userEntity);
+    }
+
+    public void returnFrom(UserEntity user) {
+        getBorrowers().remove(user);
     }
 }
 

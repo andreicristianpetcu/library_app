@@ -3,14 +3,16 @@ package com.cegeka.application;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.Locale;
-import java.util.Set;
+import java.util.List;
 
 public class BookTo {
     private String id;
     private String title;
     private String author;
     private String isbn;
+    private List<String> userIds;
+    private Integer availableCopies;
+    private boolean borrowedByCurrentUser;
 
     public BookTo() {
     }
@@ -54,6 +56,30 @@ public class BookTo {
         this.isbn = isbn;
     }
 
+    public List<String> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(List<String> userIds) {
+        this.userIds = userIds;
+    }
+
+    public Integer getAvailableCopies() {
+        return availableCopies;
+    }
+
+    public void setAvailableCopies(Integer availableCopies) {
+        this.availableCopies = availableCopies;
+    }
+
+    public boolean isBorrowedByCurrentUser() {
+        return borrowedByCurrentUser;
+    }
+
+    public void setBorrowedByCurrentUser(boolean borrowedByCurrentUser) {
+        this.borrowedByCurrentUser = borrowedByCurrentUser;
+    }
+
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
@@ -63,4 +89,5 @@ public class BookTo {
     public boolean equals(Object that) {
         return EqualsBuilder.reflectionEquals(this, that);
     }
+
 }

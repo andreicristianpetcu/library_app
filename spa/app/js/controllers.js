@@ -67,7 +67,7 @@ function UsersController($rootScope, Users, $scope, $location, Alerts) {
     }
 }
 
-function BooksController(Books, $scope, $location, Alerts) {
+function BooksController(Books, $scope, $location, Auth, Alerts) {
     Books.getBooks(
         function success(responseData) {
             $scope.books = responseData;
@@ -96,6 +96,25 @@ function BooksController(Books, $scope, $location, Alerts) {
             }, function error() {
             })
     }
+
+    $scope.borrowBook = function (book) {
+        Books.borrowBook(book)
+            .then(function(response) {
+                angular.copy(response.data, book);
+                Alerts.successHandler("Happy reading!")
+            },
+            Alerts.handler);
+    }
+
+    $scope.returnBook = function (book) {
+        Books.returnBook(book)
+            .then(function(response) {
+                angular.copy(response.data, book);
+                Alerts.successHandler("Thanks for returning the book!")
+            },
+            Alerts.handler);
+    }
+
 
     $scope.lookUpByIsbn = function (isbn) {
         Books.lookUpBookByIsbn(isbn,

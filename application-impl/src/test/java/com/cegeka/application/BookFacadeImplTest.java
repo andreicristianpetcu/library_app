@@ -2,23 +2,17 @@ package com.cegeka.application;
 
 import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.books.BookRepository;
-import com.cegeka.domain.users.BookToMapper;
-import com.cegeka.domain.users.UserEntity;
-import com.cegeka.domain.users.UserToMapper;
-import com.google.common.collect.Lists;
+import com.cegeka.domain.books.BookToMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collections;
 import java.util.List;
 
-import static com.cegeka.domain.user.UserEntityTestFixture.*;
+import static com.cegeka.domain.books.BookEntityTestFixture.hamletBook;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,21 +37,9 @@ public class BookFacadeImplTest {
     public void getBooksCallsRepositoryFindAll () {
         when(bookRepositoryMock.findAll()).thenReturn(Collections.<BookEntity>emptyList());
 
-        List<BookTo> books = bookFacade.getBooks();
+        List<BookTo> books = bookFacade.getBooks(null);
 
         verify(bookRepositoryMock).findAll();
-    }
-
-    @Test
-    public void getBookCallsRepositoryFindOne () {
-        BookEntity bookEntity = aBookEntity();
-        bookEntity.setId("123");
-
-        when(bookRepositoryMock.findOne("123")).thenReturn(bookEntity);
-
-        bookFacade.getBook("123");
-
-        verify(bookRepositoryMock).findOne("123");
     }
 
     @Test
@@ -65,22 +47,19 @@ public class BookFacadeImplTest {
         BookTo bookTo = new BookTo(null, "One", "Two", "Three");
         BookTo expected = new BookTo("123", "One", "Two", "Three");
 
-        BookEntity bookEntity = aBookEntity();
+        BookEntity bookEntity = hamletBook();
 
         when(bookToMapperMock.toNewEntity(bookTo)).thenReturn(bookEntity);
         when(bookRepositoryMock.saveAndFlush(bookEntity)).thenReturn(bookEntity);
-        when(bookToMapperMock.toTo(bookEntity)).thenReturn(expected);
+        when(bookToMapperMock.toTo(bookEntity, null)).thenReturn(expected);
 
-        BookTo result = bookFacade.saveBook(bookTo);
+        BookTo result = bookFacade.saveBook(bookTo, null);
 
         verify(bookToMapperMock).toNewEntity(bookTo);
         verify(bookRepositoryMock).saveAndFlush(bookEntity);
-        verify(bookToMapperMock).toTo(bookEntity);
+        verify(bookToMapperMock).toTo(bookEntity, null);
 
         assertThat(result).isSameAs(expected);
     }
 
-    private static BookEntity aBookEntity() {
-        return new BookEntity("One", "Two", "Three");
-    }
 }

@@ -4,9 +4,11 @@ import java.util.List;
 
 public interface BookFacade {
 
-    List<BookTo> getBooks();
+    List<BookTo> getBooks(String userId);
 
-    BookTo getBook(String userId);
+    BookTo saveBook(BookTo newBook, String userId);
 
-    BookTo saveBook(BookTo newBook);
+    BookTo borrowBook(String bookId, String userId);
+
+    BookTo returnBook(String bookId, String userId);
 }

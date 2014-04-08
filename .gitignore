@@ -5,3 +5,5 @@ spa/coverage/
 spa/node_modules/
 spa/dist/
 spa/logs/
+spa/app/bower_components/
+application-api/npm-debug.log

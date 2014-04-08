@@ -34,4 +34,23 @@ public class UserEntityTestFixture {
     public static UserTo asUserTO() {
         return new UserToMapper().toTo(aUserEntity());
     }
+
+    public static final String ROMEO_ID = UUID.randomUUID().toString();
+    public static final String ROMEO_EMAIL = "romeo@mailinator.com";
+    public static final Role ROMEO_ROLE = Role.USER;
+    public static final String ROMEO_PASSWORD = "testPassword";
+
+
+    public static UserEntity romeoUser() {
+        UserEntity entity = new UserEntity();
+        entity.setPassword(ROMEO_PASSWORD);
+        entity.setEmail(ROMEO_EMAIL);
+        entity.addRole(ROMEO_ROLE);
+        entity.setConfirmed(true);
+        return entity;
+    }
+
+    public static UserTo romeoUserTo() {
+        return new UserToMapper().toTo(romeoUser());
+    }
 }
