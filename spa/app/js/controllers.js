@@ -115,17 +115,21 @@ function BooksController(Books, $scope, $location, Auth, Alerts) {
             Alerts.handler);
     }
 
-
     $scope.lookUpByIsbn = function (isbn) {
         Books.lookUpBookByIsbn(isbn,
             function success(responseData) {
-                var bookData = responseData.items[0];
-                $scope.book = {};
                 $scope.temp = {};
-                $scope.book.isbn = isbn;
-                $scope.book.title = bookData.volumeInfo.title;
-                $scope.book.author = bookData.volumeInfo.authors[0];
-                $scope.temp.cover = bookData.volumeInfo.imageLinks.thumbnail;
+                if(responseData.totalItems > 0){
+                    var bookData = responseData.items[0];
+                    $scope.book = {};
+                    $scope.temp.found = true;
+                    $scope.book.isbn = isbn;
+                    $scope.book.title = bookData.volumeInfo.title;
+                    $scope.book.author = bookData.volumeInfo.authors[0];
+                    $scope.temp.cover = bookData.volumeInfo.imageLinks.thumbnail;
+                } else {
+                    $scope.temp.found = false;
+                }
             },
             Alerts.handler
         );

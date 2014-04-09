@@ -26,7 +26,11 @@
                         </div>
 
                         <div class="col-lg-3">
-                            <a id="isbnLookupLink" class="btn btn-default form-control" ng-click="lookUpByIsbn(book.isbn)">Lookup</a>
+                            <button type="button" id="isbnLookupLink"  class="btn btn-default form-control" ng-click="lookUpByIsbn(book.isbn)" ng-disabled="!book.isbn">
+                                Lookup
+                                <span class="glyphicon glyphicon-ok-sign" ng-show="temp.found"></span>
+                                <span class="glyphicon glyphicon-remove-sign" ng-show="temp.found===false"></span>
+                            </button>
                         </div>
 
                     </div>
