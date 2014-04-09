@@ -125,7 +125,7 @@ function BooksController(Books, $scope, $location, Auth, Alerts) {
                     $scope.temp.found = true;
                     $scope.book.isbn = isbn;
                     $scope.book.title = bookData.volumeInfo.title;
-                    $scope.book.author = bookData.volumeInfo.authors[0];
+                    $scope.book.author = bookData.volumeInfo.authors.join(", ");
                     $scope.temp.cover = bookData.volumeInfo.imageLinks.thumbnail;
                 } else {
                     $scope.temp.found = false;
