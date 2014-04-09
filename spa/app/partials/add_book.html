@@ -10,6 +10,9 @@
     </div>
 
     <div class="col-lg-8">
+
+        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+
         <div class="well">
             <form id="addBookForm" class="form-horizontal" name="addBookForm" ng-submit="addBook()">
                 <fieldset>

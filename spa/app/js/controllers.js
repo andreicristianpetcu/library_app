@@ -93,8 +93,8 @@ function BooksController(Books, $scope, $location, Auth, Alerts) {
         Books.addBook($scope.book)
             .then(function () {
                 $location.path('/books');
-            }, function error() {
-            })
+            },
+            Alerts.handler);
     }
 
     $scope.borrowBook = function (book) {
