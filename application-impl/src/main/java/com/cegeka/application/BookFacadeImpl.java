@@ -32,6 +32,12 @@ public class BookFacadeImpl implements BookFacade {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
+    public BookTo getBook(String bookId, String currentUserId) {
+        return bookToMapper.toTo(bookRepository.findOne(bookId), currentUserId);
+    }
+
+    @Override
     @Transactional
     public BookTo saveBook(BookTo newBook, String userId) {
         BookEntity bookEntity = bookToMapper.toNewEntity(newBook);

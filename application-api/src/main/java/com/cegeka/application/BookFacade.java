@@ -11,4 +11,6 @@ public interface BookFacade {
     BookTo borrowBook(String bookId, String userId);
 
     BookTo returnBook(String bookId, String userId);
+
+    BookTo getBook(String bookId, String currentUserId);
 }

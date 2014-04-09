@@ -37,59 +37,6 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
     };
   }])
 
-    .factory('Books', ['$http', 'REST_URLS', function ($http, REST_URLS) {
-        function getBooks(successCallback, errorCallback) {
-            $http.post(REST_URLS.BOOKS)
-                .success(function (data) {
-                    successCallback(data);
-                })
-                .error(errorCallback);
-        }
-
-        function lookUpBookByIsbn(bookIsbn, successCallback, errorCallback) {
-            $http.jsonp(REST_URLS.BOOKS_BY_ISBN_GOOGLE + bookIsbn)
-                .success(function (data) {
-                    successCallback(data);
-                })
-                .error(errorCallback);
-        }
-
-        //TODO: test me pls
-        function getBook(bookId, successCallback, errorCallback) {
-            $http.get(REST_URLS.USER + '/' + bookId)
-                .success(function (data) {
-                    successCallback(data);
-                })
-                .error(function (error) {
-                    errorCallback(error);
-                });
-        }
-
-        //TODO: test me pls
-        function addBook(book) {
-            return $http.post(REST_URLS.BOOK, book);
-        }
-
-        //TODO: test me pls
-        function borrowBook(book) {
-            return $http.post(REST_URLS.BORROW, book.id);
-        }
-
-        //TODO: test me pls
-        function returnBook(book) {
-            return $http.post(REST_URLS.RETURN, book.id);
-        }
-
-        return {
-            getBooks: getBooks,
-            getBook: getBook,
-            addBook: addBook,
-            borrowBook: borrowBook,
-            returnBook: returnBook,
-            lookUpBookByIsbn: lookUpBookByIsbn
-        };
-    }])
-
   .factory('Auth', ['$http', 'REST_URLS', '$cookieStore', function ($http, REST_URLS, $cookieStore) {
     var user = {userId: '', roles: []};
 

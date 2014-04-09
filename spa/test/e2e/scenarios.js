@@ -35,8 +35,11 @@ describe('Library app', function () {
         it('redirects to /books after successful login', function () {
             input('username').enter('admin@mailinator.com');
             input('password').enter('test');
+            pause();
             element("#login").click();
+            pause();
             expect(browser().location().url()).toBe("/books");
+            pause();
         });
 
     });

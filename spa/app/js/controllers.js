@@ -8,7 +8,7 @@ angular.module('userAdmin.controllers', [])
   .controller('LoginController', ['$scope', '$location', LoginController])
   .controller('LoginDirectiveController', ['$rootScope', '$scope', 'Auth', '$location', LoginDirectiveController])
   .controller('UsersController', ['$rootScope', 'Users', '$scope','$location','Alerts', UsersController])
-  .controller('BooksController', ['Books', '$scope', '$location', 'Auth', 'Alerts', BooksController])
+  .controller('BooksController', ['Books', '$scope', '$location', 'Auth', 'Alerts', '$routeParams', BooksController])
   .controller('UserCtrl', [function () {
   }]);
 
@@ -67,7 +67,14 @@ function UsersController($rootScope, Users, $scope, $location, Alerts) {
     }
 }
 
-function BooksController(Books, $scope, $location, Auth, Alerts) {
+function BooksController(Books, $scope, $location, Auth, Alerts, $routeParams) {
+    $scope.book_id = $routeParams.bookId;
+    Books.getBook($scope.book_id,
+        function success(responseData) {
+            $scope.book = responseData;
+        },
+        Alerts.handler
+    );
     Books.getBooks(
         function success(responseData) {
             $scope.books = responseData;

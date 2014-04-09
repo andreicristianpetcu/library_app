@@ -11,12 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
@@ -28,10 +30,16 @@ public class BookRestService {
     private BookFacade bookFacade;
 
 
-    @RequestMapping("/books")
+    @RequestMapping(value="/books", method = GET)
     @ResponseBody
     public List<BookTo> getBooks(){
         return bookFacade.getBooks(getCurrentUserId());
+    }
+
+    @RequestMapping(value="/book/{id}", method = GET)
+    @ResponseBody
+    public BookTo getBook(@PathVariable("id") String bookId){
+        return bookFacade.getBook(bookId, getCurrentUserId());
     }
 
     @RequestMapping(value = "/book", method = POST)

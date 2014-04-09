@@ -44,7 +44,7 @@ describe('controllers', function () {
 
 
     describe('BooksController', function () {
-        var alertsMock, booksMock, authMock, BooksController;
+        var alertsMock, booksMock, authMock, BooksController, routeParamsMock;
 
         beforeEach(function () {
             module(function ($provide) {
@@ -53,11 +53,11 @@ describe('controllers', function () {
 
             inject(function ($controller, $rootScope) {
                 scope = $rootScope.$new();
-                booksMock = jasmine.createSpyObj('Books', ['getBooks', 'addBook', 'borrowBook']);
+                booksMock = jasmine.createSpyObj('Books', ['getBooks', 'getBook', 'addBook', 'borrowBook']);
                 alertsMock = jasmine.createSpyObj('Alerts',['handler']);
                 authMock = jasmine.createSpyObj('Auth',['handler']);
-
-                BooksController = $controller('BooksController', {$scope: scope, Books: booksMock, Alerts: alertsMock, Auth: authMock});
+                routeParamsMock =  {bookId: "10"};
+                BooksController = $controller('BooksController', {$scope: scope, Books: booksMock, Alerts: alertsMock, Auth: authMock, $routeParams: routeParamsMock});
             });
 
         });
