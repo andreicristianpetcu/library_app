@@ -183,9 +183,14 @@ angular.module('userAdmin.services', ['ngCookies','http-auth-interceptor'])
             $rootScope.alerts.push({msg: message, type: "success" });
         }
 
+        function dangerHandler(message) {
+            $rootScope.alerts.push({msg: message, type: "danger" });
+        }
+
         return {
             handler : genericErrorHandler,
-            successHandler : successHandler
+            successHandler : successHandler,
+            dangerHandler : dangerHandler
         }
     }])
   .constant('REST_URLS', {
