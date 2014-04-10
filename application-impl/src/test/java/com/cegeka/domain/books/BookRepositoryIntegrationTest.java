@@ -175,4 +175,18 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
         } catch (ConstraintViolationException e) {
         }
     }
+
+    @Test
+    public void checkBookWithDetails() {
+        BookEntity book = newValidBook();
+        book.setCopies(1);
+        BookDetailsEntity details = new BookDetailsEntity("2010", "Nemira",
+                "http://sciencelakes.com/data_images/out/13/8811007-funny-dog-face.jpg", "Funny book");
+        book.setDetails(details);
+        bookRepository.saveAndFlush(book);
+
+        BookEntity one = bookRepository.findOne(book.getId());
+        assertThat(one.getDetails()).isEqualTo(details);
+
+    }
 }

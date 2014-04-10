@@ -1,9 +1,23 @@
 package com.cegeka.domain.books;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * Created by monicat on 10/04/2014.
  */
+@Entity
+@Table(name = "BOOK_DETAILS")
 public class BookDetailsEntity {
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    private String id;
+
     private String publishedDate;
     private String publisher;
     private String coverImage;
@@ -17,6 +31,14 @@ public class BookDetailsEntity {
         this.publisher = publisher;
         this.coverImage = coverImage;
         this.description = description;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getPublishedDate() {

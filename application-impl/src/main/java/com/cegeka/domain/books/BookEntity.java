@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
+
 @Entity
 @Table(name = "BOOKS")
 public class BookEntity {
@@ -38,6 +40,9 @@ public class BookEntity {
     @JoinTable(name = "BOOK_BORROWER",
             joinColumns = {@JoinColumn(name = "BOOK_ID", nullable = false, updatable = false)})
     private List<UserEntity> borrowers = new ArrayList<UserEntity>();
+
+    @OneToOne(cascade = ALL)
+    @JoinColumn(referencedColumnName = "ID")
     private BookDetailsEntity details;
 
     public BookEntity() {
