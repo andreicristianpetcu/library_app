@@ -21,7 +21,10 @@ public class BookToMapperTest {
         BookEntity book = newValidBook();
         book.setId("book_id");
         book.setCopies(1);
-
+        BookDetailsEntity bookDetailsEntity = new BookDetailsEntity(
+                "2014", "Nemira",
+                "http://sciencelakes.com/data_images/out/13/8811007-funny-dog-face.jpg", "Odiseea spatiala 2001");
+        book.setDetails(bookDetailsEntity);
         UserEntity romeo = romeoUser();
         romeo.setId("romeo_id");
 
@@ -32,6 +35,11 @@ public class BookToMapperTest {
         assertThat(bookTo.getId()).isEqualTo(book.getId());
         assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
         assertThat(bookTo.getTitle()).isEqualTo(book.getTitle());
+        assertThat(bookTo.getPublishedDate()).isEqualTo(book.getDetails().getPublishedDate());
+        assertThat(bookTo.getPublisher()).isEqualTo(book.getDetails().getPublisher());
+        assertThat(bookTo.getCoverImage()).isEqualTo(book.getDetails().getCoverImage());
+        assertThat(bookTo.getDescription()).isEqualTo(book.getDetails().getDescription());
+
         assertThat(bookTo.getAvailableCopies()).isEqualTo(0);
         assertThat(bookTo.getBorrowers().size()).isEqualTo(1);
         assertThat(bookTo.getBorrowers().get(0).getId()).isEqualTo(romeo.getId());

@@ -38,6 +38,7 @@ public class BookEntity {
     @JoinTable(name = "BOOK_BORROWER",
             joinColumns = {@JoinColumn(name = "BOOK_ID", nullable = false, updatable = false)})
     private List<UserEntity> borrowers = new ArrayList<UserEntity>();
+    private BookDetailsEntity details;
 
     public BookEntity() {
     }
@@ -125,6 +126,14 @@ public class BookEntity {
 
     public void returnFrom(UserEntity user) {
         getBorrowers().remove(user);
+    }
+
+    public BookDetailsEntity getDetails() {
+        return details;
+    }
+
+    public void setDetails(BookDetailsEntity details) {
+        this.details = details;
     }
 }
 

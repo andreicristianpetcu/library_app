@@ -32,8 +32,15 @@ public class BookToMapper {
             }
         }
         bookTo.setBorrowers(borrowerToList);
-
         bookTo.setAvailableCopies(bookEntity.getCopies() - bookEntity.getBorrowers().size());
+
+        BookDetailsEntity details = bookEntity.getDetails();
+        if (details != null) {
+            bookTo.setPublishedDate(details.getPublishedDate());
+            bookTo.setPublisher(details.getPublisher());
+            bookTo.setDescription(details.getDescription());
+            bookTo.setCoverImage(details.getCoverImage());
+        }
         return bookTo;
     }
 

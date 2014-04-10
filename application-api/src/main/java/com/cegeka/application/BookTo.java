@@ -13,6 +13,10 @@ public class BookTo {
     private Integer availableCopies;
     private boolean borrowedByCurrentUser;
     private List<BorrowerTo> borrowers;
+    private String publishedDate;
+    private String publisher;
+    private String coverImage;
+    private String description;
 
     public BookTo() {
     }
@@ -90,4 +94,35 @@ public class BookTo {
         return EqualsBuilder.reflectionEquals(this, that);
     }
 
+    public String getPublishedDate() {
+        return publishedDate;
+    }
+
+    public void setPublishedDate(String publishedDate) {
+        this.publishedDate = publishedDate;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
