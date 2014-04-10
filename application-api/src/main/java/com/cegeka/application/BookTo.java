@@ -13,6 +13,7 @@ public class BookTo {
     private List<String> userIds;
     private Integer availableCopies;
     private boolean borrowedByCurrentUser;
+    private List<String> userNames;
 
     public BookTo() {
     }
@@ -90,4 +91,11 @@ public class BookTo {
         return EqualsBuilder.reflectionEquals(this, that);
     }
 
+    public List<String> getUserNames() {
+        return userNames;
+    }
+
+    public void setUserNames(List<String> userNames) {
+        this.userNames = userNames;
+    }
 }

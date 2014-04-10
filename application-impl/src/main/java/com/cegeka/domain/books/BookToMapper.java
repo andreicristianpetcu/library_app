@@ -21,11 +21,14 @@ public class BookToMapper {
         BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn());
 
         List<String> borrowerIds = new ArrayList<String>();
+        List<String> borrowerNames = new ArrayList<String>();
         List<UserEntity> borrowers = bookEntity.getBorrowers();
         for (UserEntity borrower : borrowers) {
             borrowerIds.add(borrower.getId());
+            borrowerNames.add(borrower.getProfile().getFullName());
         }
         bookTo.setUserIds(borrowerIds);
+        bookTo.setUserNames(borrowerNames);
 
         bookTo.setAvailableCopies(bookEntity.getCopies() - bookEntity.getBorrowers().size());
         bookTo.setBorrowedByCurrentUser(borrowerIds.contains(userId));

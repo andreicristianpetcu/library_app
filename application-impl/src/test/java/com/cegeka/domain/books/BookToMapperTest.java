@@ -34,6 +34,8 @@ public class BookToMapperTest {
         assertThat(bookTo.getAvailableCopies()).isEqualTo(0);
         assertThat(bookTo.getUserIds().size()).isEqualTo(1);
         assertThat(bookTo.getUserIds()).contains(romeo.getId());
+        assertThat(bookTo.getUserNames().size()).isEqualTo(1);
+        assertThat(bookTo.getUserNames()).contains(romeo.getProfile().getFullName());
         assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(true);
 
     }
