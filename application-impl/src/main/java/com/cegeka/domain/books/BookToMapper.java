@@ -27,7 +27,7 @@ public class BookToMapper {
         for (UserEntity borrower : borrowers) {
             BorrowerTo borrowerTo = new BorrowerTo(borrower.getId(), borrower.getProfile().getFullName(), borrower.getEmail());
             borrowerToList.add(borrowerTo);
-            if(borrowerTo.getId().equals(userId)){
+            if (borrowerTo.getId().equals(userId)) {
                 bookTo.setBorrowedByCurrentUser(true);
             }
         }
@@ -47,6 +47,8 @@ public class BookToMapper {
     public BookEntity toNewEntity(BookTo bookTo) {
         BookEntity bookEntity = new BookEntity(bookTo.getTitle(), bookTo.getAuthor(), bookTo.getIsbn());
         bookEntity.setCopies(bookTo.getAvailableCopies());
+        bookEntity.setDetails(new BookDetailsEntity(bookTo.getPublishedDate(), bookTo.getPublisher(),
+                bookTo.getCoverImage(), bookTo.getDescription()));
         return bookEntity;
     }
 

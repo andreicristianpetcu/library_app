@@ -83,6 +83,28 @@ public class BookToMapperTest {
     }
 
     @Test
+    public void testToNewEntity() {
+        BookTo bookTo = new BookTo("7", "Title", "Author", "123");
+        bookTo.setPublishedDate("2006");
+        bookTo.setPublisher("Nemira");
+        bookTo.setDescription("An awesome romance novel");
+        bookTo.setCoverImage("http://sciencelakes.com/data_images/out/13/8811007-funny-dog-face.jpg");
+        BookEntity bookEntity = bookToMapper.toNewEntity(bookTo);
+
+        assertThat(bookTo.getTitle()).isEqualTo(bookEntity.getTitle());
+        assertThat(bookTo.getAuthor()).isEqualTo(bookEntity.getAuthor());
+        assertThat(bookTo.getIsbn()).isEqualTo(bookEntity.getIsbn());
+        assertThat(bookTo.getAvailableCopies()).isEqualTo(bookEntity.getCopies());
+
+        BookDetailsEntity details = bookEntity.getDetails();
+        assertThat(details).isNotNull();
+        assertThat(details.getPublishedDate()).isEqualTo(bookTo.getPublishedDate());
+        assertThat(details.getPublisher()).isEqualTo(bookTo.getPublisher());
+        assertThat(details.getDescription()).isEqualTo(bookTo.getDescription());
+        assertThat(details.getCoverImage()).isEqualTo(bookTo.getCoverImage());
+    }
+
+    @Test
     public void testToToForNoBorrowers () {
         BookEntity book = newValidBook();
         book.setId("book_id");

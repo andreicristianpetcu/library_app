@@ -133,7 +133,10 @@ function BooksController(Books, $scope, $location, Auth, Alerts, $routeParams) {
                     $scope.book.isbn = isbn;
                     $scope.book.title = bookData.volumeInfo.title;
                     $scope.book.author = bookData.volumeInfo.authors.join(", ");
-                    $scope.temp.cover = bookData.volumeInfo.imageLinks.thumbnail;
+                    $scope.book.coverImage = bookData.volumeInfo.imageLinks.thumbnail;
+                    $scope.book.publishedDate = bookData.volumeInfo.publishedDate;
+                    $scope.book.publisher = bookData.volumeInfo.publisher;
+                    $scope.book.description = bookData.volumeInfo.description;
                 } else {
                     $scope.temp.found = false;
                 }
