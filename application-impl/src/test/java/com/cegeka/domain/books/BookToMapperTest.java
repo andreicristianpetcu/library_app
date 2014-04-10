@@ -69,6 +69,20 @@ public class BookToMapperTest {
     }
 
     @Test
+    public void testToToForNullDetails() {
+        BookEntity book = newValidBook();
+        book.setId("book_id");
+        book.setCopies(2);
+        book.setDetails(null);
+        BookTo bookTo = bookToMapper.toTo(book, null);
+
+        assertThat(bookTo.getPublishedDate()).isEqualTo(null);
+        assertThat(bookTo.getPublisher()).isEqualTo(null);
+        assertThat(bookTo.getDescription()).isEqualTo(null);
+        assertThat(bookTo.getCoverImage()).isEqualTo(null);
+    }
+
+    @Test
     public void testToToForNoBorrowers () {
         BookEntity book = newValidBook();
         book.setId("book_id");
