@@ -1,6 +1,7 @@
 package com.cegeka.domain.books;
 
 import com.cegeka.application.BookTo;
+import com.cegeka.application.BorrowerTo;
 import com.cegeka.domain.users.UserEntity;
 import org.junit.Test;
 
@@ -32,12 +33,10 @@ public class BookToMapperTest {
         assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
         assertThat(bookTo.getTitle()).isEqualTo(book.getTitle());
         assertThat(bookTo.getAvailableCopies()).isEqualTo(0);
-        assertThat(bookTo.getUserIds().size()).isEqualTo(1);
-        assertThat(bookTo.getUserIds()).contains(romeo.getId());
-        assertThat(bookTo.getUserNames().size()).isEqualTo(1);
-        assertThat(bookTo.getUserNames()).contains(romeo.getProfile().getFullName());
+        assertThat(bookTo.getBorrowers().size()).isEqualTo(1);
+        assertThat(bookTo.getBorrowers().get(0).getId()).isEqualTo(romeo.getId());
+        assertThat(bookTo.getBorrowers().get(0).getUserName()).isEqualTo(romeo.getProfile().getFullName());
         assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(true);
-
     }
 
     @Test
@@ -57,8 +56,7 @@ public class BookToMapperTest {
         assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
         assertThat(bookTo.getTitle()).isEqualTo(book.getTitle());
         assertThat(bookTo.getAvailableCopies()).isEqualTo(1);
-        assertThat(bookTo.getUserIds().size()).isEqualTo(1);
-        assertThat(bookTo.getUserIds()).contains(romeo.getId());
+        assertThat(bookTo.getBorrowers().size()).isEqualTo(1);
         assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(false);
     }
 
@@ -74,7 +72,7 @@ public class BookToMapperTest {
         assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
         assertThat(bookTo.getTitle()).isEqualTo(book.getTitle());
         assertThat(bookTo.getAvailableCopies()).isEqualTo(2);
-        assertThat(bookTo.getUserIds().size()).isEqualTo(0);
+        assertThat(bookTo.getBorrowers().size()).isEqualTo(0);
         assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(false);
     }
 
@@ -96,8 +94,9 @@ public class BookToMapperTest {
         assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
         assertThat(bookTo.getTitle()).isEqualTo(book.getTitle());
         assertThat(bookTo.getAvailableCopies()).isEqualTo(1);
-        assertThat(bookTo.getUserIds().size()).isEqualTo(2);
-        assertThat(bookTo.getUserIds()).contains(romeo.getId());
+        assertThat(bookTo.getBorrowers().size()).isEqualTo(2);
+        BorrowerTo borrowerTo = new BorrowerTo(romeo.getId(), romeo.getProfile().getFullName(), romeo.getEmail());
+        assertThat(bookTo.getBorrowers()).contains(borrowerTo);
         assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(false);
 
     }

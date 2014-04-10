@@ -1,6 +1,7 @@
 package com.cegeka.domain.books;
 
 import com.cegeka.application.BookTo;
+import com.cegeka.application.BorrowerTo;
 import com.cegeka.domain.users.UserEntity;
 import com.google.common.base.Function;
 import org.springframework.context.annotation.Scope;
@@ -19,19 +20,20 @@ public class BookToMapper {
 
     public BookTo toTo(BookEntity bookEntity, String userId) {
         BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn());
+        bookTo.setBorrowedByCurrentUser(false);
 
-        List<String> borrowerIds = new ArrayList<String>();
-        List<String> borrowerNames = new ArrayList<String>();
+        List<BorrowerTo> borrowerToList = new ArrayList<BorrowerTo>();
         List<UserEntity> borrowers = bookEntity.getBorrowers();
         for (UserEntity borrower : borrowers) {
-            borrowerIds.add(borrower.getId());
-            borrowerNames.add(borrower.getProfile().getFullName());
+            BorrowerTo borrowerTo = new BorrowerTo(borrower.getId(), borrower.getProfile().getFullName(), borrower.getEmail());
+            borrowerToList.add(borrowerTo);
+            if(borrowerTo.getId().equals(userId)){
+                bookTo.setBorrowedByCurrentUser(true);
+            }
         }
-        bookTo.setUserIds(borrowerIds);
-        bookTo.setUserNames(borrowerNames);
+        bookTo.setBorrowers(borrowerToList);
 
         bookTo.setAvailableCopies(bookEntity.getCopies() - bookEntity.getBorrowers().size());
-        bookTo.setBorrowedByCurrentUser(borrowerIds.contains(userId));
         return bookTo;
     }
 

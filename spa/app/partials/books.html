@@ -29,7 +29,7 @@
         </thead>
         <tbody id="books">
         <tr ng-repeat="book in books  | filter:query">
-            <td>{{book.title}}</td>
+            <td><a ng-href="#/book/{{book.id}}" class="bookTitleLink">{{book.title}}</a></td>
             <td>{{book.author}}</td>
             <td>{{book.isbn}}</td>
             <td>

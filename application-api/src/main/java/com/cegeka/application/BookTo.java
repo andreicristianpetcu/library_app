@@ -10,10 +10,9 @@ public class BookTo {
     private String title;
     private String author;
     private String isbn;
-    private List<String> userIds;
     private Integer availableCopies;
     private boolean borrowedByCurrentUser;
-    private List<String> userNames;
+    private List<BorrowerTo> borrowers;
 
     public BookTo() {
     }
@@ -57,14 +56,6 @@ public class BookTo {
         this.isbn = isbn;
     }
 
-    public List<String> getUserIds() {
-        return userIds;
-    }
-
-    public void setUserIds(List<String> userIds) {
-        this.userIds = userIds;
-    }
-
     public Integer getAvailableCopies() {
         return availableCopies;
     }
@@ -81,6 +72,14 @@ public class BookTo {
         this.borrowedByCurrentUser = borrowedByCurrentUser;
     }
 
+    public List<BorrowerTo> getBorrowers() {
+        return borrowers;
+    }
+
+    public void setBorrowers(List<BorrowerTo> borrowers) {
+        this.borrowers = borrowers;
+    }
+
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
@@ -91,11 +90,4 @@ public class BookTo {
         return EqualsBuilder.reflectionEquals(this, that);
     }
 
-    public List<String> getUserNames() {
-        return userNames;
-    }
-
-    public void setUserNames(List<String> userNames) {
-        this.userNames = userNames;
-    }
 }

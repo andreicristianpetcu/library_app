@@ -176,4 +176,36 @@ describe('Library app', function () {
         });
     });
 
+
+
+    describe('Show book view', function () {
+        var newIsbn, title, author;
+        beforeEach(function () {
+            browser().navigateTo('#/add_book');
+
+            newIsbn = Math.random() * 1234567890|0;
+            title = 'testTitle' + newIsbn;
+            author = 'testAuthor' + newIsbn;
+            input('book.title').enter(title);
+            input('book.author').enter(author);
+            input('book.isbn').enter(newIsbn);
+            input('book.availableCopies').enter(1);
+
+            element("#addBookSubmit").click();
+        });
+
+        it('clicking title link should show book details', function () {
+            expect(browser().location().url()).toBe("/books");
+            input('query').enter(newIsbn);
+
+            element("a.bookTitleLink").click();
+
+            expect(element('body').text()).toContain(title);
+            expect(element('body').text()).toContain(author);
+            expect(element('body').text()).toContain(newIsbn);
+            expect(browser().location().url()).toContain("/book/");
+        });
+
+    });
+
 });

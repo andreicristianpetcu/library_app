@@ -8,7 +8,7 @@ angular.module('userAdmin', ['ngRoute', 'ui.bootstrap', 'userAdmin.filters', 'us
             .when('/users', {templateUrl: 'partials/users.html', controller: 'UsersController', role: 'ADMIN'})
             .when('/user/:id', {templateUrl: 'partials/user.html', controller: 'UserController', role: 'ADMIN'})
             .when('/books', {templateUrl: 'partials/books.html', controller: 'BooksController', role: 'ADMIN'})
-            .when('/books/:bookId', {templateUrl: 'partials/show_book.html', controller: 'BooksController', role: 'ADMIN'})
+            .when('/book/:bookId', {templateUrl: 'partials/show_book.html', controller: 'BooksController', role: 'ADMIN'})
             .when('/add_book', {templateUrl: 'partials/add_book.html', controller: 'BooksController', role: 'ADMIN'})
             .otherwise({redirectTo: '/'});
     }])
