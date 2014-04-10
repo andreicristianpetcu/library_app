@@ -12,20 +12,20 @@
                 <fieldset>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">ISBN</label>
-                        <span class="col-lg-10">{{book.isbn}}</span>
+                        <span class="col-lg-10 form-group-info">{{book.isbn}}</span>
                     </div>
 
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Title</label>
-                        <span class="col-lg-10 ">{{book.title}}</span>
+                        <span class="col-lg-10 form-group-info">{{book.title}}</span>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Author</label>
-                        <span class="col-lg-10 ">{{book.author}}</span>
+                        <span class="col-lg-10 form-group-info">{{book.author}}</span>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Borrowed by</label>
-                        <div class="col-lg-10">
+                        <div class="col-lg-10 form-group-info">
                             <div ng-repeat="borrower in book.borrowers">
                                 <span>{{borrower.userName}}</span>
                             </div>
