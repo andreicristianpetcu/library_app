@@ -7,7 +7,7 @@ angular.module('userAdmin.bookService', ['ngCookies','http-auth-interceptor'])
 
     .factory('Books', ['$http', 'REST_URLS', function ($http, BOOK_URLS) {
         function getBooks(successCallback, errorCallback) {
-            $http.post(BOOK_URLS.BOOKS)
+            $http.get(BOOK_URLS.BOOKS)
                 .success(function (data) {
                     successCallback(data);
                 })
