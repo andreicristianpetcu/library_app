@@ -1,33 +1,33 @@
 'use strict';
 
-describe('book controller', function () {
-  var scope;
-  beforeEach(function () {
-    module('book.bookController');
-  });
+describe('Books controller', function () {
+    var scope;
 
-    describe('BooksController', function () {
-        var alertsMock, booksMock, authMock, BooksController, routeParamsMock;
+    beforeEach(function () {
+        module('book.bookController');
+    });
 
-        beforeEach(function () {
-            module(function ($provide) {
-                $provide.value('Books', {});
-            });
+    var alertsMock, booksMock, authMock, BooksController, routeParamsMock;
 
-            inject(function ($controller, $rootScope) {
-                scope = $rootScope.$new();
-                booksMock = jasmine.createSpyObj('Books', ['getBooks', 'getBook', 'addBook', 'borrowBook']);
-                alertsMock = jasmine.createSpyObj('Alerts',['handler']);
-                authMock = jasmine.createSpyObj('Auth',['handler']);
-                routeParamsMock =  {bookId: "10"};
-                BooksController = $controller('BooksController', {$scope: scope, Books: booksMock, Alerts: alertsMock, Auth: authMock, $routeParams: routeParamsMock});
-            });
-
+    beforeEach(function () {
+        module(function ($provide) {
+            $provide.value('Books', {});
         });
 
-        it('should get books from Books factory', function () {
-            expect(booksMock.getBooks).toHaveBeenCalled();
+        inject(function ($controller, $rootScope) {
+            scope = $rootScope.$new();
+            booksMock = jasmine.createSpyObj('Books', ['getBooks', 'getBook', 'addBook', 'borrowBook']);
+            alertsMock = jasmine.createSpyObj('Alerts', ['handler']);
+            authMock = jasmine.createSpyObj('Auth', ['handler']);
+            routeParamsMock = {bookId: "10"};
+            BooksController = $controller('BooksController', {$scope: scope, Books: booksMock, Alerts: alertsMock, Auth: authMock, $routeParams: routeParamsMock});
         });
+
+    });
+
+    it('should get books from Books factory', function () {
+        expect(booksMock.getBooks).toHaveBeenCalled();
+    });
 
 //        it('should call addBooks from Books factory', function () {
 //            scope.addBook({});
@@ -39,25 +39,26 @@ describe('book controller', function () {
 //            expect(booksMock.borrowBook).toHaveBeenCalled();
 //        });
 
-        it('should simulate promise', inject(function($q, $rootScope) {
-            var deferred = $q.defer();
-            var promise = deferred.promise;
-            var resolvedValue;
+    it('should simulate promise', inject(function ($q, $rootScope) {
+        var deferred = $q.defer();
+        var promise = deferred.promise;
+        var resolvedValue;
 
-            promise.then(function(value) { resolvedValue = value; });
-            expect(resolvedValue).toBeUndefined();
+        promise.then(function (value) {
+            resolvedValue = value;
+        });
+        expect(resolvedValue).toBeUndefined();
 
-            // Simulate resolving of promise
-            deferred.resolve(123);
-            // Note that the 'then' function does not get called synchronously.
-            // This is because we want the promise API to always be async, whether or not
-            // it got called synchronously or asynchronously.
-            expect(resolvedValue).toBeUndefined();
+        // Simulate resolving of promise
+        deferred.resolve(123);
+        // Note that the 'then' function does not get called synchronously.
+        // This is because we want the promise API to always be async, whether or not
+        // it got called synchronously or asynchronously.
+        expect(resolvedValue).toBeUndefined();
 
-            // Propagate promise resolution to 'then' functions using $apply().
-            $rootScope.$apply();
-            expect(resolvedValue).toEqual(123);
-        }));
-
-    });
+        // Propagate promise resolution to 'then' functions using $apply().
+        $rootScope.$apply();
+        expect(resolvedValue).toEqual(123);
+    }));
 });
+

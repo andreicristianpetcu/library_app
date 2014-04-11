@@ -7,8 +7,8 @@ describe('auth and user management modules', function () {
         module('userAdmin')
 
         module(function ($provide) {
-          locationMock = jasmine.createSpyObj('$location', ['path']);
-          $provide.value('$location', locationMock);
+            locationMock = jasmine.createSpyObj('$location', ['path']);
+            $provide.value('$location', locationMock);
         })
     })
 
@@ -22,14 +22,16 @@ describe('auth and user management modules', function () {
                 $provide.value('Auth', authServiceMock);
             })
 
-          inject(function ($rootScope) {
-            rootScope = $rootScope;
-          })
+            inject(function ($rootScope) {
+                rootScope = $rootScope;
+            })
 
         })
 
         it('should do nothing when user is authorized to access route', function () {
-            authServiceMock.isAuthorizedToAccess.andCallFake(function () {return true; });
+            authServiceMock.isAuthorizedToAccess.andCallFake(function () {
+                return true;
+            });
 
             rootScope.$broadcast('$routeChangeStart');
 
@@ -37,8 +39,12 @@ describe('auth and user management modules', function () {
         })
 
         it('should redirect to home when user is not authorized to access route but is logged in', function () {
-            authServiceMock.isAuthorizedToAccess.andCallFake(function () {return false;});
-            authServiceMock.isAuthenticated.andCallFake(function(){ return true; });
+            authServiceMock.isAuthorizedToAccess.andCallFake(function () {
+                return false;
+            });
+            authServiceMock.isAuthenticated.andCallFake(function () {
+                return true;
+            });
 
             rootScope.$broadcast('$routeChangeStart', nextRoute, currentRoute);
 
@@ -56,24 +62,24 @@ describe('auth and user management modules', function () {
     })
 
     describe('event:auth-loginRequired', function () {
-      var nextRoute = {roles: ""}, currentRoute;
+        var nextRoute = {roles: ""}, currentRoute;
 
-      beforeEach(function () {
-        inject(function ($rootScope) {
-          rootScope = $rootScope;
+        beforeEach(function () {
+            inject(function ($rootScope) {
+                rootScope = $rootScope;
+            })
         })
-      })
 
-      it('should redirect to landing page when event:auth-loginRequired is triggered', function(){
-        var response = {
-          config : {},
-          status : 401
-        }
+        it('should redirect to landing page when event:auth-loginRequired is triggered', function () {
+            var response = {
+                config: {},
+                status: 401
+            }
 
-        rootScope.$broadcast('event:auth-loginRequired', response);
+            rootScope.$broadcast('event:auth-loginRequired', response);
 
-        expect(locationMock.path).toHaveBeenCalledWith('/');
-      })
+            expect(locationMock.path).toHaveBeenCalledWith('/');
+        })
 
     })
 })
