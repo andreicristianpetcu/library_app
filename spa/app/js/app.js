@@ -2,8 +2,7 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('userAdmin', ['ngRoute', 'ui.bootstrap', 'userAdmin.filters', 'userAdmin.services',
-    'userAdmin.directives', 'userAdmin.controllers', 'book.bookService', 'book.bookController', 'user.userService',
-    'user.userController'])
+    'userAdmin.directives', 'userAdmin.controllers', 'book', 'user'])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider
             .when('/', {templateUrl: 'partials/home.html', controller: 'HomeCtrl'})
