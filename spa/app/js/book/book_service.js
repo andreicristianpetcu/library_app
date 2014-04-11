@@ -2,7 +2,7 @@
 
 /* Services */
 
-angular.module('userAdmin.bookService', ['ngCookies','http-auth-interceptor'])
+angular.module('book.bookService', ['ngCookies','http-auth-interceptor'])
   .value('version', '0.1')
 
     .factory('Books', ['$http', 'REST_URLS', function ($http, BOOK_URLS) {
