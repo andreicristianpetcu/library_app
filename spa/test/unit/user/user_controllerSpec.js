@@ -1,6 +1,6 @@
 'use strict';
 
-describe('UsersController', function () {
+describe('Users controller', function () {
     var scope, alertsMock, usersMock, UsersController;
 
     beforeEach(function () {

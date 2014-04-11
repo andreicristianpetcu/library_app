@@ -37,7 +37,7 @@ describe('service', function () {
             cookieStore;
 
         beforeEach(function () {
-            module('userAdmin.services');
+            module('login.service');
             module(function ($provide) {
                 $provide.factory('$cookieStore', function () {
                         cookieStore = jasmine.createSpyObj('$cookieStore', ['get', 'put', 'remove'])
@@ -54,9 +54,9 @@ describe('service', function () {
         });
 
 
-        it('should set cookie with user details when successful login', inject(function ($httpBackend, REST_URLS) {
+        it('should set cookie with user details when successful login', inject(function ($httpBackend, LOGIN_URLS) {
             var user = {user: 'user'};
-            $httpBackend.expectPOST(REST_URLS.LOGIN, $.param(credentials)).respond(200, user);
+            $httpBackend.expectPOST(LOGIN_URLS.LOGIN, $.param(credentials)).respond(200, user);
 
             authService.authenticate(credentials, callbacks.success, callbacks.error);
             $httpBackend.flush();
@@ -64,8 +64,8 @@ describe('service', function () {
             expect(cookieStore.put).toHaveBeenCalledWith('user', user);
         }));
 
-        it('should not set any cookie when login fails', inject(function ($httpBackend, REST_URLS) {
-            $httpBackend.expectPOST(REST_URLS.LOGIN, $.param(credentials)).respond(401, 'error');
+        it('should not set any cookie when login fails', inject(function ($httpBackend, LOGIN_URLS) {
+            $httpBackend.expectPOST(LOGIN_URLS.LOGIN, $.param(credentials)).respond(401, 'error');
 
             authService.authenticate(credentials, callbacks.success, callbacks.error);
             $httpBackend.flush();
@@ -79,16 +79,16 @@ describe('service', function () {
             expect(authService.getAuthenticatedUser().roles).not.toBeUndefined();
         });
 
-        it('should call login url when authenticating', inject(function ($httpBackend, REST_URLS) {
-            $httpBackend.expectPOST(REST_URLS.LOGIN, $.param(credentials)).respond(200, '');
+        it('should call login url when authenticating', inject(function ($httpBackend, LOGIN_URLS) {
+            $httpBackend.expectPOST(LOGIN_URLS.LOGIN, $.param(credentials)).respond(200, '');
 
             authService.authenticate(credentials, callbacks.success, callbacks.error);
 
             $httpBackend.verifyNoOutstandingExpectation();
         }));
 
-        it('should call logout url when logging out', inject(function ($httpBackend, REST_URLS) {
-            $httpBackend.expectPOST(REST_URLS.LOGOUT).respond(200, '');
+        it('should call logout url when logging out', inject(function ($httpBackend, LOGIN_URLS) {
+            $httpBackend.expectPOST(LOGIN_URLS.LOGOUT).respond(200, '');
 
             authService.logout();
 
@@ -96,8 +96,8 @@ describe('service', function () {
         }));
 
 
-        it('should delete the cookie when logout is attempted', inject(function ($httpBackend, REST_URLS) {
-            $httpBackend.expectPOST(REST_URLS.LOGOUT).respond(200, '');
+        it('should delete the cookie when logout is attempted', inject(function ($httpBackend, LOGIN_URLS) {
+            $httpBackend.expectPOST(LOGIN_URLS.LOGOUT).respond(200, '');
 
             authService.logout();
             $httpBackend.verifyNoOutstandingExpectation();
@@ -120,8 +120,8 @@ describe('service', function () {
 //      })
 //    );
 
-        it('should call successCallback on successful authentication ', inject(function ($httpBackend, REST_URLS) {
-            $httpBackend.expectPOST(REST_URLS.LOGIN, $.param(credentials)).respond(200, '');
+        it('should call successCallback on successful authentication ', inject(function ($httpBackend, LOGIN_URLS) {
+            $httpBackend.expectPOST(LOGIN_URLS.LOGIN, $.param(credentials)).respond(200, '');
 
             authService.authenticate(credentials, callbacks.success, callbacks.error);
             $httpBackend.flush();
@@ -129,9 +129,9 @@ describe('service', function () {
             expect(callbacks.success).toHaveBeenCalled();
         }));
 
-        it('should call errorCallback on failed authentication ', inject(function ($httpBackend, REST_URLS) {
+        it('should call errorCallback on failed authentication ', inject(function ($httpBackend, LOGIN_URLS) {
             var responseErrorMessage = 'BAD-CREDENTIALS';
-            $httpBackend.expectPOST(REST_URLS.LOGIN, $.param(credentials)).respond(401, responseErrorMessage);
+            $httpBackend.expectPOST(LOGIN_URLS.LOGIN, $.param(credentials)).respond(401, responseErrorMessage);
 
             authService.authenticate(credentials, callbacks.success, callbacks.error);
             $httpBackend.flush();
@@ -139,9 +139,9 @@ describe('service', function () {
             expect(callbacks.error).toHaveBeenCalledWith(responseErrorMessage);
         }));
 
-        it('should provide a copy of authenticated user rest response, when getAuthenticatedUser is called', inject(function ($httpBackend, REST_URLS) {
+        it('should provide a copy of authenticated user rest response, when getAuthenticatedUser is called', inject(function ($httpBackend, LOGIN_URLS) {
             var user = {userId: 'userId', roles: ['USER']};
-            $httpBackend.expectPOST(REST_URLS.LOGIN, $.param(credentials)).respond(200, user);
+            $httpBackend.expectPOST(LOGIN_URLS.LOGIN, $.param(credentials)).respond(200, user);
 
             authService.authenticate(credentials, callbacks.success, callbacks.error);
             $httpBackend.flush();
@@ -155,18 +155,18 @@ describe('service', function () {
             expect(authService.isAuthorizedToAccess({role: 'ADMIN'})).toBeFalsy();
         });
 
-        it('should return true if user has role for given route', inject(function ($httpBackend, REST_URLS) {
+        it('should return true if user has role for given route', inject(function ($httpBackend, LOGIN_URLS) {
             var user = {userId: 'userId', roles: ['ADMIN']};
-            $httpBackend.expectPOST(REST_URLS.LOGIN, $.param(credentials)).respond(200, user);
+            $httpBackend.expectPOST(LOGIN_URLS.LOGIN, $.param(credentials)).respond(200, user);
             authService.authenticate(credentials, callbacks.success, callbacks.error);
             $httpBackend.flush();
 
             expect(authService.isAuthorizedToAccess({role: 'ADMIN'})).toBeTruthy();
         }));
 
-        it('should return a copy of user when getAuthenticatedUser is called', inject(function ($httpBackend, REST_URLS) {
+        it('should return a copy of user when getAuthenticatedUser is called', inject(function ($httpBackend, LOGIN_URLS) {
             var authenticatedUserBeforeStateChanges = authService.getAuthenticatedUser();
-            $httpBackend.expectPOST(REST_URLS.LOGIN, $.param(credentials)).respond(200, '');
+            $httpBackend.expectPOST(LOGIN_URLS.LOGIN, $.param(credentials)).respond(200, '');
             authService.authenticate(credentials, callbacks.success, callbacks.error);
             $httpBackend.flush();
 
@@ -179,9 +179,9 @@ describe('service', function () {
             expect(authService.isAuthenticated()).toEqual(false);
         });
 
-        it('should return true if the user is authenticated', inject(function ($httpBackend, REST_URLS) {
+        it('should return true if the user is authenticated', inject(function ($httpBackend, LOGIN_URLS) {
             var user = {userId: 'userId', roles: ['USER']};
-            $httpBackend.expectPOST(REST_URLS.LOGIN, $.param(credentials)).respond(200, user);
+            $httpBackend.expectPOST(LOGIN_URLS.LOGIN, $.param(credentials)).respond(200, user);
             authService.authenticate(credentials, callbacks.success, callbacks.error);
             $httpBackend.flush();
 
@@ -189,8 +189,8 @@ describe('service', function () {
         }));
 
         it('should call successCallback on successful logout',
-            inject(function ($httpBackend, REST_URLS) {
-                $httpBackend.expectPOST(REST_URLS.LOGOUT).respond(200, '');
+            inject(function ($httpBackend, LOGIN_URLS) {
+                $httpBackend.expectPOST(LOGIN_URLS.LOGOUT).respond(200, '');
 
                 authService.logout(callbacks.success, callbacks.error);
                 $httpBackend.flush();
@@ -200,8 +200,8 @@ describe('service', function () {
         );
 
         it('should call errorCallback on errors while logging out',
-            inject(function ($httpBackend, REST_URLS) {
-                $httpBackend.expectPOST(REST_URLS.LOGOUT).respond(401, '');
+            inject(function ($httpBackend, LOGIN_URLS) {
+                $httpBackend.expectPOST(LOGIN_URLS.LOGOUT).respond(401, '');
 
                 authService.logout(callbacks.success, callbacks.error);
                 $httpBackend.flush();

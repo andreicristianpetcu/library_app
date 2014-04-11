@@ -3,12 +3,14 @@
 describe('controllers', function () {
     var scope;
 
-    beforeEach(function () {
-        module('userAdmin.controllers');
-    });
+
 
     describe('LoginDirectiveController', function () {
         var url = 'scope-url-value';
+
+        beforeEach(function () {
+            module('login.controller');
+        });
 
         beforeEach(function () {
             module(function ($provide) {
