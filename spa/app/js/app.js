@@ -1,7 +1,9 @@
 'use strict';
 
 // Declare app level module which depends on filters, and services
-angular.module('userAdmin', ['ngRoute', 'ui.bootstrap', 'userAdmin.filters', 'userAdmin.services', 'userAdmin.directives', 'userAdmin.controllers', 'book.bookService', 'book.bookController'])
+angular.module('userAdmin', ['ngRoute', 'ui.bootstrap', 'userAdmin.filters', 'userAdmin.services',
+    'userAdmin.directives', 'userAdmin.controllers', 'book.bookService', 'book.bookController', 'user.userService',
+    'user.userController'])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider
             .when('/', {templateUrl: 'partials/home.html', controller: 'HomeCtrl'})

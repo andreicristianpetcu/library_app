@@ -15,13 +15,15 @@ describe('service', function () {
 
   describe('Users factory', function () {
 
+    beforeEach(module('user.userService'));
+
     var users = [
       {id: 1, name: 'user'}
     ];
 
-    it('can get all users given a success rest call', inject(function (Users, $httpBackend, REST_URLS) {
+    it('can get all users given a success rest call', inject(function (Users, $httpBackend, USER_URLS) {
       var callbacks = jasmine.createSpyObj('callbacks', ['success', 'error']);
-      $httpBackend.expectPOST(REST_URLS.USERS).respond(200, users);
+      $httpBackend.expectPOST(USER_URLS.USERS).respond(200, users);
 
       Users.getUsers(callbacks.success, callbacks.error);
       $httpBackend.flush();

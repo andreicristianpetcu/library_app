@@ -5,7 +5,7 @@
 angular.module('book.bookService', ['ngCookies','http-auth-interceptor'])
   .value('version', '0.1')
 
-    .factory('Books', ['$http', 'REST_URLS', function ($http, BOOK_URLS) {
+    .factory('Books', ['$http', 'BOOK_URLS', function ($http, BOOK_URLS) {
         function getBooks(successCallback, errorCallback) {
             $http.get(BOOK_URLS.BOOKS)
                 .success(function (data) {
