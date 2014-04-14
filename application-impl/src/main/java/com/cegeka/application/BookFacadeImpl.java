@@ -11,7 +11,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
@@ -94,7 +96,11 @@ public class BookFacadeImpl implements BookFacade {
         if ( availableCopiesBeforeReturn == 0 && availableCopiesAfterReturn > 0) {
             //send email to all watchers
             for(UserEntity watcher : book.getWatchers()) {
-                emailComposer.sendEmail(watcher.getEmail(), "?", "?", watcher.getLocale(), null);
+                Map<String, Object> values = new HashMap<String, Object>();
+                values.put("user_name", watcher.getProfile().getFirstName());
+                values.put("book_title", book.getTitle());
+                values.put("book_author", book.getAuthor());
+                emailComposer.sendEmail(watcher.getEmail(), "notify-book-available-subject", "notify-book-available-content", watcher.getLocale(), values);
             }
             book.clearAllWatchers();
         }

@@ -9,12 +9,16 @@ angular.module('book.bookController', [])
 
 function BooksController(Books, $scope, $location, Auth, Alerts, $routeParams) {
     $scope.book_id = $routeParams.bookId;
-    Books.getBook($scope.book_id,
-        function success(responseData) {
-            $scope.book = responseData;
-        },
-        Alerts.handler
-    );
+
+    //TODO: Move this to its own controller and write a test to check no other posts are made
+    if ($routeParams.bookId) {
+        Books.getBook($scope.book_id,
+            function success(responseData) {
+                $scope.book = responseData;
+            },
+            Alerts.handler
+        );
+    }
     Books.getBooks(
         function success(responseData) {
             $scope.books = responseData;
@@ -58,6 +62,24 @@ function BooksController(Books, $scope, $location, Auth, Alerts, $routeParams) {
             .then(function(response) {
                 angular.copy(response.data, book);
                 Alerts.successHandler("Thanks for returning the book!")
+            },
+            Alerts.handler);
+    }
+
+    $scope.watchBook = function (book) {
+        Books.watchBook(book)
+            .then(function(response) {
+                angular.copy(response.data, book);
+                Alerts.successHandler("You will be notified when " + book.title + " becomes available");
+            },
+            Alerts.handler);
+    }
+
+    $scope.unwatchBook = function (book) {
+        Books.unwatchBook(book)
+            .then(function(response) {
+                angular.copy(response.data, book);
+                Alerts.successHandler("You will not receive any notifications about " + book.title);
             },
             Alerts.handler);
     }

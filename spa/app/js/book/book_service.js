@@ -45,12 +45,23 @@ angular.module('book.bookService', ['ngCookies','http-auth-interceptor'])
             return $http.post(BOOK_URLS.RETURN, book.id);
         }
 
+        function watchBook(book) {
+            return $http.post(BOOK_URLS.WATCH, book.id);
+        }
+
+        //TODO: test me pls
+        function unwatchBook(book) {
+            return $http.post(BOOK_URLS.UNWATCH, book.id);
+        }
+
         return {
             getBooks: getBooks,
             getBook: getBook,
             addBook: addBook,
             borrowBook: borrowBook,
             returnBook: returnBook,
+            watchBook: watchBook,
+            unwatchBook: unwatchBook,
             lookUpBookByIsbn: lookUpBookByIsbn
         };
     }])
@@ -60,8 +71,9 @@ angular.module('book.bookService', ['ngCookies','http-auth-interceptor'])
     BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book',
     BORROW: 'http://libraryapp.cegeka.com:8080/backend/rest/borrow',
     RETURN: 'http://libraryapp.cegeka.com:8080/backend/rest/return',
+    WATCH: 'http://libraryapp.cegeka.com:8080/backend/rest/watch',
+    UNWATCH: 'http://libraryapp.cegeka.com:8080/backend/rest/unwatch',
     BOOKS_BY_ISBN_GOOGLE: 'https://www.googleapis.com/books/v1/volumes?callback=JSON_CALLBACK&q=isbn:'
   })
-
 ;
 
