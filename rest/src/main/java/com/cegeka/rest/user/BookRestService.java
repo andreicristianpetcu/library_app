@@ -11,7 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -61,15 +64,17 @@ public class BookRestService {
     }
 
     @RequestMapping(value = "/watch", method = POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void watchBook(@RequestBody String bookId) {
-        bookFacade.watchBook(bookId, getCurrentUserId());
+    @ResponseBody
+    public ResponseEntity watchBook(@RequestBody String bookId) {
+        BookTo bookTo = bookFacade.watchBook(bookId, getCurrentUserId());
+        return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/watch", method = POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void unwatchBook(@RequestBody String bookId) {
-        bookFacade.unwatchBook(bookId, getCurrentUserId());
+    @RequestMapping(value = "/unwatch", method = POST)
+    @ResponseBody
+    public ResponseEntity unwatchBook(@RequestBody String bookId) {
+        BookTo bookTo = bookFacade.unwatchBook(bookId, getCurrentUserId());
+        return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
     }
 
     private String getCurrentUserId() {

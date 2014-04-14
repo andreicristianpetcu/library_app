@@ -43,19 +43,21 @@ public class BookFacadeImpl implements BookFacade {
 
     @Override
     @Transactional
-    public void watchBook(String bookId, String userId) {
+    public BookTo watchBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
         book.addWatcher(user);
         bookRepository.flush();
+        return bookToMapper.toTo(book, userId);
     }
 
     @Override
-    public void unwatchBook(String bookId, String userId) {
+    public BookTo unwatchBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
         book.removeWatcher(user);
         bookRepository.flush();
+        return bookToMapper.toTo(book, userId);
     }
 
     @Override
