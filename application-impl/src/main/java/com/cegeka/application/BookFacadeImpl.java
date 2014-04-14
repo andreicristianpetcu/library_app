@@ -5,6 +5,7 @@ import com.cegeka.domain.books.BookRepository;
 import com.cegeka.domain.books.BookToMapper;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
+import com.cegeka.infrastructure.EmailComposer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class BookFacadeImpl implements BookFacade {
 
     @Autowired
     private BookToMapper bookToMapper;
+
+    @Autowired
+    private EmailComposer emailComposer;
 
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
@@ -60,10 +64,22 @@ public class BookFacadeImpl implements BookFacade {
     public BookTo returnBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
+        int availableCopiesBeforeReturn = book.getAvailableCopies();
+
         if(book.isLendTo(user)) {
             book.returnFrom(user);
             bookRepository.flush();
         }
+
+        int availableCopiesAfterReturn = book.getAvailableCopies();
+        if ( availableCopiesBeforeReturn == 0 && availableCopiesAfterReturn > 0) {
+            //send email to all watchers
+            for(UserEntity watcher : book.getWatchers()) {
+                emailComposer.sendEmail(watcher.getEmail(), "?", "?", watcher.getLocale(), null);
+            }
+            book.clearAllWatchers();
+        }
+
         return bookToMapper.toTo(book, userId);
     }
 

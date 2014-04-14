@@ -45,6 +45,11 @@ public class BookEntity {
     @JoinColumn(referencedColumnName = "ID")
     private BookDetailsEntity details;
 
+    @ManyToMany
+    @JoinTable(name = "BOOK_WATCHER",
+            joinColumns = {@JoinColumn(name = "BOOK_ID", nullable = false, updatable = false)})
+    private List<UserEntity> watchers = new ArrayList<UserEntity>();
+
     public BookEntity() {
     }
 
@@ -140,5 +145,20 @@ public class BookEntity {
     public void setDetails(BookDetailsEntity details) {
         this.details = details;
     }
-}
 
+    public void addWatcher(UserEntity user) {
+        this.watchers.add(user);
+    }
+
+    public List<UserEntity> getWatchers() {
+        return watchers;
+    }
+
+    public void clearAllWatchers() {
+        watchers.clear();
+    }
+
+    public int getAvailableCopies () {
+        return copies - getBorrowers().size();
+    }
+}
