@@ -66,6 +66,12 @@ public class BookRestService {
         bookFacade.watchBook(bookId, getCurrentUserId());
     }
 
+    @RequestMapping(value = "/watch", method = POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void unwatchBook(@RequestBody String bookId) {
+        bookFacade.unwatchBook(bookId, getCurrentUserId());
+    }
+
     private String getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();

@@ -137,5 +137,48 @@ public class BookFacadeImplTest {
         assertThat(hamlet.getWatchers().size()).isEqualTo(1);
     }
 
+    @Test
+    public void whenUnwatchBook_shouldUnwatchBook () {
+        //ARANGE
+        BookEntity hamlet = hamletBook();
+        UserEntity romeo = romeoUser();
+
+        when(bookRepositoryMock.findOne(hamlet.getId())).thenReturn(hamlet);
+        when(userRepositoryMock.findOne(romeo.getId())).thenReturn(romeo);
+
+        when(bookToMapperMock.toTo(hamlet, romeo.getId())).thenReturn(null);
+
+        hamlet.addWatcher(romeo);
+
+        //ACT
+        bookFacade.unwatchBook(hamlet.getId(), romeo.getId());
+
+        //ASSERT
+        assertThat(hamlet.getWatchers().size()).isEqualTo(0);
+    }
+
+    @Test
+    public void whenUnwatchBook_shouldDoNothingIfBookIsNotWatched () {
+        //ARANGE
+        BookEntity hamlet = hamletBook();
+        UserEntity romeo = romeoUser();
+        UserEntity juliet = aUserEntity();
+
+        when(bookRepositoryMock.findOne(hamlet.getId())).thenReturn(hamlet);
+        when(userRepositoryMock.findOne(romeo.getId())).thenReturn(romeo);
+
+        when(bookToMapperMock.toTo(hamlet, romeo.getId())).thenReturn(null);
+
+        hamlet.addWatcher(juliet);
+
+        //ACT
+        bookFacade.unwatchBook(hamlet.getId(), romeo.getId());
+
+        //ASSERT
+        assertThat(hamlet.getWatchers().size()).isEqualTo(1);
+        assertThat(hamlet.getWatchers()).contains(juliet);
+    }
+
+
 
 }

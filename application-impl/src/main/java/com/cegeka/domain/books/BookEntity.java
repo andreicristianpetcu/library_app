@@ -161,4 +161,8 @@ public class BookEntity {
     public int getAvailableCopies () {
         return copies - getBorrowers().size();
     }
+
+    public void removeWatcher(UserEntity user) {
+        this.watchers.remove(user);
+    }
 }
