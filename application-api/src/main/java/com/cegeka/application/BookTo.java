@@ -17,6 +17,7 @@ public class BookTo {
     private String publisher;
     private String coverImage;
     private String description;
+    private boolean watchedByCurrentUser;
 
     public BookTo() {
     }
@@ -124,5 +125,13 @@ public class BookTo {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isWatchedByCurrentUser() {
+        return watchedByCurrentUser;
+    }
+
+    public void setWatchedByCurrentUser(boolean watchedByCurrentUser) {
+        this.watchedByCurrentUser = watchedByCurrentUser;
     }
 }

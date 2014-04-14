@@ -41,6 +41,15 @@ public class BookToMapper {
             bookTo.setDescription(details.getDescription());
             bookTo.setCoverImage(details.getCoverImage());
         }
+
+        bookTo.setWatchedByCurrentUser(false);
+        List<UserEntity> watchers = bookEntity.getWatchers();
+        for (UserEntity watcher : watchers) {
+            if (watcher.getId().equals(userId)) {
+                bookTo.setWatchedByCurrentUser(true);
+            }
+        }
+
         return bookTo;
     }
 
