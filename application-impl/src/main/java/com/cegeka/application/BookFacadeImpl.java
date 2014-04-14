@@ -43,6 +43,15 @@ public class BookFacadeImpl implements BookFacade {
 
     @Override
     @Transactional
+    public void watchBook(String bookId, String userId) {
+        BookEntity book = bookRepository.findOne(bookId);
+        UserEntity user = userRepository.findOne(userId);
+        book.addWatcher(user);
+        bookRepository.flush();
+    }
+
+    @Override
+    @Transactional
     public BookTo saveBook(BookTo newBook, String userId) {
         BookEntity bookEntity = bookToMapper.toNewEntity(newBook);
         bookEntity = bookRepository.saveAndFlush(bookEntity);

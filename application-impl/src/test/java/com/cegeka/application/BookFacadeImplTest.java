@@ -72,7 +72,7 @@ public class BookFacadeImplTest {
     }
 
     @Test
-    public void whenReturnBook_shouldSendEmailToWatchers () {
+    public void whenReturnBook_shouldSendEmailToWatchersAndClearWatchersList () {
         BookEntity hamlet = hamletBook();
         hamlet.setCopies(1);
 
@@ -115,6 +115,26 @@ public class BookFacadeImplTest {
         Assert.assertFalse("return method didn't return the book", hamlet.isLendTo(romeo));
         assertThat(hamlet.getBorrowers().size()).isEqualTo(0);
         verify(bookToMapperMock).toTo(hamlet, romeo.getId());
+    }
+
+
+    @Test
+    public void whenWatchBook_shouldWatchBook () {
+        //ARANGE
+        BookEntity hamlet = hamletBook();
+        UserEntity romeo = romeoUser();
+
+        when(bookRepositoryMock.findOne(hamlet.getId())).thenReturn(hamlet);
+        when(userRepositoryMock.findOne(romeo.getId())).thenReturn(romeo);
+
+        when(bookToMapperMock.toTo(hamlet, romeo.getId())).thenReturn(null);
+
+        //ACT
+        bookFacade.watchBook(hamlet.getId(), romeo.getId());
+
+        //ASSERT
+        assertThat(hamlet.getWatchers()).contains(romeo);
+        assertThat(hamlet.getWatchers().size()).isEqualTo(1);
     }
 
 
