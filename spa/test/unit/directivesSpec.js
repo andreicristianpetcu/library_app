@@ -79,7 +79,7 @@ describe('directives', function () {
 
         beforeEach(module('app/directive/sidebar-actions.html'));
 
-        beforeEach(inject(function ($templateCache, _$compile_, _$rootScope_, $controller, Auth) {
+        beforeEach(inject(function ($templateCache, _$compile_, _$rootScope_, $controller) {
             //assign the template to the expected url called by the directive and put it in the cache
             template = $templateCache.get('app/directive/sidebar-actions.html');
             $templateCache.put('directive/sidebar-actions.html', template);
