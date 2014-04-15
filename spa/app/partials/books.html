@@ -25,6 +25,7 @@
             <th>ISBN</th>
             <th>Copies</th>
             <th>Borrow/Return</th>
+            <th>Watch</th>
         </tr>
         </thead>
         <tbody id="books">
@@ -43,6 +44,14 @@
                 <a id="borrowButton" ng-click="borrowBook(book)" ng-show="book.availableCopies > 0"
                    class="btn btn-primary">Borrow</a>
                 <a id="returnButton" ng-click="returnBook(book)" ng-show="book.borrowedByCurrentUser" class="btn btn-default">Return</a>
+            </td>
+            <td>
+                <a id="watchButton" ng-click="watchBook(book)"
+                   ng-show="book.availableCopies == 0 && !book.borrowedByCurrentUser && !book.watchedByCurrentUser"
+                   ><span class="glyphicon glyphicon-eye-close text-muted"></span></a>
+                <a id="unwatchButton" ng-click="unwatchBook(book)"
+                   ng-show="book.availableCopies == 0 && !book.borrowedByCurrentUser && book.watchedByCurrentUser"
+                   ><span class="glyphicon glyphicon-eye-open text-success"></span></a>
             </td>
         </tr>
 

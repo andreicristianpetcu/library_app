@@ -32,7 +32,7 @@ public class BookFactory {
             }
         }
         bookTo.setBorrowers(borrowerToList);
-        bookTo.setAvailableCopies(bookEntity.getCopies() - bookEntity.getBorrowers().size());
+        bookTo.setAvailableCopies(bookEntity.getAvailableCopies());
 
         BookDetailsEntity details = bookEntity.getDetails();
         if (details != null) {
@@ -41,6 +41,15 @@ public class BookFactory {
             bookTo.setDescription(details.getDescription());
             bookTo.setCoverImage(details.getCoverImage());
         }
+
+        bookTo.setWatchedByCurrentUser(false);
+        List<UserEntity> watchers = bookEntity.getWatchers();
+        for (UserEntity watcher : watchers) {
+            if (watcher.getId().equals(userId)) {
+                bookTo.setWatchedByCurrentUser(true);
+            }
+        }
+
         return bookTo;
     }
 

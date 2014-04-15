@@ -63,6 +63,20 @@ public class BookRestService {
         return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/watch", method = POST)
+    @ResponseBody
+    public ResponseEntity watchBook(@RequestBody String bookId) {
+        BookTo bookTo = bookFacade.watchBook(bookId, getCurrentUserId());
+        return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/unwatch", method = POST)
+    @ResponseBody
+    public ResponseEntity unwatchBook(@RequestBody String bookId) {
+        BookTo bookTo = bookFacade.unwatchBook(bookId, getCurrentUserId());
+        return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
+    }
+
     private String getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();

@@ -2,10 +2,12 @@
 
 /* Services */
 
-angular.module('book.bookService', ['ngCookies','http-auth-interceptor'])
-  .value('version', '0.1')
+angular.module('book.bookService', ['ngCookies', 'http-auth-interceptor'])
+    .value('version', '0.1')
 
     .factory('Books', ['$http', 'BOOK_URLS', function ($http, BOOK_URLS) {
+        //TODO consistency - use successCallback/errorCallback in all methods or in none.
+        //TODO - test me, test me pleaaaase
         function getBooks(successCallback, errorCallback) {
             $http.get(BOOK_URLS.BOOKS)
                 .success(function (data) {
@@ -40,9 +42,17 @@ angular.module('book.bookService', ['ngCookies','http-auth-interceptor'])
             return $http.post(BOOK_URLS.BORROW, book.id);
         }
 
-        //TODO: test me pls
         function returnBook(book) {
             return $http.post(BOOK_URLS.RETURN, book.id);
+        }
+
+        function watchBook(book) {
+            return $http.post(BOOK_URLS.WATCH, book.id);
+        }
+
+
+        function unwatchBook(book) {
+            return $http.post(BOOK_URLS.UNWATCH, book.id);
         }
 
         return {
@@ -51,17 +61,20 @@ angular.module('book.bookService', ['ngCookies','http-auth-interceptor'])
             addBook: addBook,
             borrowBook: borrowBook,
             returnBook: returnBook,
+            watchBook: watchBook,
+            unwatchBook: unwatchBook,
             lookUpBookByIsbn: lookUpBookByIsbn
         };
     }])
 
-  .constant('BOOK_URLS', {
-    BOOKS: 'http://libraryapp.cegeka.com:8080/backend/rest/books',
-    BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book',
-    BORROW: 'http://libraryapp.cegeka.com:8080/backend/rest/borrow',
-    RETURN: 'http://libraryapp.cegeka.com:8080/backend/rest/return',
-    BOOKS_BY_ISBN_GOOGLE: 'https://www.googleapis.com/books/v1/volumes?callback=JSON_CALLBACK&q=isbn:'
-  })
-
+    .constant('BOOK_URLS', {
+        BOOKS: 'http://libraryapp.cegeka.com:8080/backend/rest/books',
+        BOOK: 'http://libraryapp.cegeka.com:8080/backend/rest/book',
+        BORROW: 'http://libraryapp.cegeka.com:8080/backend/rest/borrow',
+        RETURN: 'http://libraryapp.cegeka.com:8080/backend/rest/return',
+        WATCH: 'http://libraryapp.cegeka.com:8080/backend/rest/watch',
+        UNWATCH: 'http://libraryapp.cegeka.com:8080/backend/rest/unwatch',
+        BOOKS_BY_ISBN_GOOGLE: 'https://www.googleapis.com/books/v1/volumes?callback=JSON_CALLBACK&q=isbn:'
+    })
 ;
 

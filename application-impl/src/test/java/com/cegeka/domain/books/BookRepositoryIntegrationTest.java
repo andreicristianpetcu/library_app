@@ -19,8 +19,6 @@ import static org.junit.Assert.fail;
 
 public class BookRepositoryIntegrationTest extends IntegrationTest {
 
-    public static final String PICTURE_URL = "pictureUrl";
-    public static final String TEST_USER_EMAIL_2 = "some_email@email.com";
     @Resource
     private BookRepository bookRepository;
 
@@ -61,6 +59,18 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
         BookEntity one = bookRepository.findOne(hamlet.getId());
         assertThat(one).isEqualTo(hamletBook());
         assertThat(one.isLendTo(romeoUser()));
+    }
+
+    @Test
+    public void canRetrieveOneWatched() {
+        BookEntity othello = newValidBook();
+        othello.addWatcher(romeo);
+        othello.addWatcher(juliet);
+        bookRepository.saveAndFlush(othello);
+
+        BookEntity one = bookRepository.findOne(othello.getId());
+        assertThat(one.getWatchers()).contains(romeo);
+        assertThat(one.getWatchers()).contains(juliet);
     }
 
     @Test

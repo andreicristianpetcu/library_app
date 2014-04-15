@@ -48,6 +48,37 @@ public class BookFactoryTest {
     }
 
     @Test
+    public void whenBookIsWatched_shouldBeWatched () {
+        BookEntity book = newValidBook();
+        book.setId("book_id");
+
+        UserEntity romeo = romeoUser();
+        romeo.setId("romeo_id");
+
+        book.addWatcher(romeo);
+
+        BookTo bookTo = bookToMapper.toTo(book, romeo.getId());
+
+        assertThat(bookTo.isWatchedByCurrentUser()).isEqualTo(true);
+    }
+
+    @Test
+    public void whenBookIsWatchedBySomeOneElse_shouldNotBeWatched () {
+        BookEntity book = newValidBook();
+        book.setId("book_id");
+
+        UserEntity romeo = romeoUser();
+        romeo.setId("romeo_id");
+
+        book.addWatcher(romeo);
+
+        BookTo bookTo = bookToMapper.toTo(book, "juliet_id");
+
+        assertThat(bookTo.isWatchedByCurrentUser()).isEqualTo(false);
+    }
+
+
+    @Test
     public void testToToForNullUser () {
         BookEntity book = newValidBook();
         book.setId("book_id");

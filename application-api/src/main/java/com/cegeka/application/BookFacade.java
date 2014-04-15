@@ -13,4 +13,8 @@ public interface BookFacade {
     BookTo returnBook(String bookId, String userId);
 
     BookTo getBook(String bookId, String currentUserId);
+
+    BookTo watchBook(String bookId, String userId);
+
+    BookTo unwatchBook(String bookId, String userId);
 }

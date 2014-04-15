@@ -4,6 +4,7 @@
 angular.module('userAdmin', ['ngRoute', 'ui.bootstrap', 'userAdmin.filters', 'userAdmin.services',
     'userAdmin.directives', 'login', 'book', 'user'])
     .config(['$routeProvider', function ($routeProvider) {
+        //TODO - config routeProvier in each module? (login/book/user). What about the otherwise?
         $routeProvider
             .when('/', {templateUrl: 'partials/home.html', controller: 'HomeCtrl'})
             .when('/users', {templateUrl: 'partials/users.html', controller: 'UsersController', role: 'ADMIN'})

@@ -5,6 +5,7 @@ import com.cegeka.application.UserTo;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserToMapper;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public class UserEntityTestFixture {
@@ -39,7 +40,7 @@ public class UserEntityTestFixture {
     public static final String ROMEO_EMAIL = "romeo@mailinator.com";
     public static final Role ROMEO_ROLE = Role.USER;
     public static final String ROMEO_PASSWORD = "testPassword";
-
+    public static final Locale ROMEO_LOCALE = Locale.CANADA;
 
     public static UserEntity romeoUser() {
         UserEntity entity = new UserEntity();
@@ -47,6 +48,8 @@ public class UserEntityTestFixture {
         entity.setEmail(ROMEO_EMAIL);
         entity.addRole(ROMEO_ROLE);
         entity.setConfirmed(true);
+        entity.setLocale(ROMEO_LOCALE);
+
         return entity;
     }
 
