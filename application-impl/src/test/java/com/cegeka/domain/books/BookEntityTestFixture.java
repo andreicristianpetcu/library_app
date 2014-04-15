@@ -1,6 +1,7 @@
 package com.cegeka.domain.books;
 
 import com.cegeka.application.BookTo;
+import com.cegeka.application.BookToMapper;
 import org.joda.time.DateTime;
 
 import java.util.UUID;
@@ -52,10 +53,10 @@ public class BookEntityTestFixture {
     }
 
     public static BookTo hamletTo() {
-        return new BookFactory().toTo(hamletBook(), null);
+        return new BookToMapper().toTo(hamletBook(), null);
     }
 
     public static BookTo macbethTo() {
-        return new BookFactory().toTo(macbethBook(), null);
+        return new BookToMapper().toTo(macbethBook(), null);
     }
 }

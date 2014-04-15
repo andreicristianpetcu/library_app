@@ -2,7 +2,6 @@ package com.cegeka.application;
 
 import com.cegeka.domain.books.BookDetailsEntity;
 import com.cegeka.domain.books.BookEntity;
-import com.cegeka.domain.books.BookFactory;
 import com.cegeka.domain.users.UserEntity;
 import org.junit.Test;
 
@@ -13,7 +12,7 @@ import static com.cegeka.domain.user.UserEntityTestFixture.romeoUser;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class BookToMapperTest {
-    BookFactory bookFactory = new BookFactory();
+    BookToMapper bookToMapper = new BookToMapper();
 
     @Test
     public void givenABookWithDetailsAndOneBorrower_WhenMapping_ThenToShouldHaveSameFieldsDetailAndBorrowerList () {
@@ -29,7 +28,7 @@ public class BookToMapperTest {
 
         book.lendTo(romeo);
 
-        BookTo bookTo = bookFactory.toTo(book, romeo.getId());
+        BookTo bookTo = bookToMapper.toTo(book, romeo.getId());
 
         assertThat(bookTo.getId()).isEqualTo(book.getId());
         assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
@@ -53,7 +52,7 @@ public class BookToMapperTest {
         BookEntity book = newValidBook();
         book.lendTo(romeoUser());
 
-        BookTo bookTo = bookFactory.toTo(book, null);
+        BookTo bookTo = bookToMapper.toTo(book, null);
 
         assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(false);
     }
@@ -62,7 +61,7 @@ public class BookToMapperTest {
     public void givenABookWithNoLender_WhenMapping_ThenToIsNotBorrowedByCurrentUser () {
         BookEntity book = newValidBook();
 
-        BookTo bookTo = bookFactory.toTo(book, "currentUserId");
+        BookTo bookTo = bookToMapper.toTo(book, "currentUserId");
 
         assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(false);
     }
@@ -77,7 +76,7 @@ public class BookToMapperTest {
 
         book.lendTo(romeo);
 
-        BookTo bookTo = bookFactory.toTo(book, "romeo_id");
+        BookTo bookTo = bookToMapper.toTo(book, "romeo_id");
 
         assertThat(bookTo.isBorrowedByCurrentUser()).isTrue();
         assertThat(bookTo.getBorrowers().size()).isEqualTo(1);
@@ -89,7 +88,7 @@ public class BookToMapperTest {
         BookEntity book = newValidBook();
         book.setDetails(null);
 
-        BookTo bookTo = bookFactory.toTo(book, null);
+        BookTo bookTo = bookToMapper.toTo(book, null);
 
         assertThat(bookTo.getPublishedDate()).isEqualTo(null);
         assertThat(bookTo.getPublisher()).isEqualTo(null);
@@ -108,10 +107,25 @@ public class BookToMapperTest {
 
         book.addWatcher(romeo);
 
-        BookTo bookTo = bookFactory.toTo(book, "romeo_id");
+        BookTo bookTo = bookToMapper.toTo(book, "romeo_id");
 
         assertThat(bookTo.isBorrowedByCurrentUser()).isFalse();
         assertThat(bookTo.isWatchedByCurrentUser()).isTrue();
+    }
+
+    @Test
+    public void givenABookWatchedByAnotherUser_WhenMapping_ThenToShouldNotBeWatchedByCurrentUser () {
+        BookEntity book = newValidBook();
+        book.setId("book_id");
+
+        UserEntity romeo = romeoUser();
+        romeo.setId("romeo_id");
+
+        book.addWatcher(romeo);
+
+        BookTo bookTo = bookToMapper.toTo(book, "juliet_id");
+
+        assertThat(bookTo.isWatchedByCurrentUser()).isEqualTo(false);
     }
 
     @Test
@@ -120,7 +134,7 @@ public class BookToMapperTest {
         book.setId("book_id");
         book.setCopies(2);
 
-        BookTo bookTo = bookFactory.toTo(book, null);
+        BookTo bookTo = bookToMapper.toTo(book, null);
 
         assertThat(bookTo.getAvailableCopies()).isEqualTo(2);
         assertThat(bookTo.getBorrowers().size()).isEqualTo(0);
@@ -138,7 +152,7 @@ public class BookToMapperTest {
         book.lendTo(romeo);
         book.lendTo(romeo);
 
-        BookTo bookTo = bookFactory.toTo(book, "random_user_id");
+        BookTo bookTo = bookToMapper.toTo(book, "random_user_id");
 
         assertThat(bookTo.getAvailableCopies()).isEqualTo(1);
         assertThat(bookTo.getBorrowers().size()).isEqualTo(2);

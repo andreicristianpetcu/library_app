@@ -29,18 +29,21 @@ public class BookFacadeImpl implements BookFacade {
     private BookFactory bookFactory;
 
     @Autowired
+    private BookToMapper bookToMapper;
+
+    @Autowired
     private EmailComposer emailComposer;
 
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     public List<BookTo> getBooks(String userId) {
-        return bookFactory.from(bookRepository.findAll(), userId);
+        return bookToMapper.from(bookRepository.findAll(), userId);
     }
 
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     public BookTo getBook(String bookId, String currentUserId) {
-        return bookFactory.toTo(bookRepository.findOne(bookId), currentUserId);
+        return bookToMapper.toTo(bookRepository.findOne(bookId), currentUserId);
     }
 
     @Override
@@ -50,7 +53,7 @@ public class BookFacadeImpl implements BookFacade {
         UserEntity user = userRepository.findOne(userId);
         book.addWatcher(user);
         bookRepository.flush();
-        return bookFactory.toTo(book, userId);
+        return bookToMapper.toTo(book, userId);
     }
 
     @Override
@@ -59,7 +62,7 @@ public class BookFacadeImpl implements BookFacade {
         UserEntity user = userRepository.findOne(userId);
         book.removeWatcher(user);
         bookRepository.flush();
-        return bookFactory.toTo(book, userId);
+        return bookToMapper.toTo(book, userId);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class BookFacadeImpl implements BookFacade {
     public BookTo saveBook(BookTo newBook, String userId) {
         BookEntity bookEntity = bookFactory.toNewEntity(newBook);
         bookEntity = bookRepository.saveAndFlush(bookEntity);
-        return bookFactory.toTo(bookEntity, userId);
+        return bookToMapper.toTo(bookEntity, userId);
     }
 
     @Override
@@ -77,7 +80,7 @@ public class BookFacadeImpl implements BookFacade {
         UserEntity user = userRepository.findOne(userId);
         book.lendTo(user);
         bookRepository.flush();
-        return bookFactory.toTo(book, user.getId());
+        return bookToMapper.toTo(book, user.getId());
     }
 
     @Override
@@ -106,6 +109,6 @@ public class BookFacadeImpl implements BookFacade {
             book.clearAllWatchers();
         }
 
-        return bookFactory.toTo(book, userId);
+        return bookToMapper.toTo(book, userId);
     }
 }

@@ -25,6 +25,8 @@ public class BookFacadeImplTest {
     private BookRepository bookRepositoryMock;
     @Mock
     private BookFactory bookFactoryMock;
+    @Mock
+    private BookToMapper bookToMapperMock;
 
     @InjectMocks
     private BookFacadeImpl bookFacade = new BookFacadeImpl();
@@ -48,13 +50,13 @@ public class BookFacadeImplTest {
 
         when(bookFactoryMock.toNewEntity(bookTo)).thenReturn(bookEntity);
         when(bookRepositoryMock.saveAndFlush(bookEntity)).thenReturn(bookEntity);
-        when(bookFactoryMock.toTo(bookEntity, null)).thenReturn(expected);
+        when(bookToMapperMock.toTo(bookEntity, null)).thenReturn(expected);
 
         BookTo result = bookFacade.saveBook(bookTo, null);
 
         verify(bookFactoryMock).toNewEntity(bookTo);
         verify(bookRepositoryMock).saveAndFlush(bookEntity);
-        verify(bookFactoryMock).toTo(bookEntity, null);
+        verify(bookToMapperMock).toTo(bookEntity, null);
 
         assertThat(result).isSameAs(expected);
     }
