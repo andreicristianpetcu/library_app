@@ -1,11 +1,11 @@
 package com.cegeka.application;
 
 import com.cegeka.domain.books.BookEntity;
-import com.cegeka.domain.books.BookRepository;
 import com.cegeka.domain.books.BookFactory;
-import org.junit.Before;
+import com.cegeka.domain.books.BookRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -20,18 +20,15 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class BookFacadeImplTest {
 
-    private BookFacadeImpl bookFacade = new BookFacadeImpl();
 
     @Mock
     private BookRepository bookRepositoryMock;
     @Mock
     private BookFactory bookFactoryMock;
 
-    @Before
-    public void setUp() {
-        bookFacade.setBookRepository(bookRepositoryMock);
-        bookFacade.setBookFactory(bookFactoryMock);
-    }
+    @InjectMocks
+    private BookFacadeImpl bookFacade = new BookFacadeImpl();
+
 
     @Test
     public void getBooksCallsRepositoryFindAll () {

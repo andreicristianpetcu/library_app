@@ -57,7 +57,7 @@ public class BookFactoryTest {
 
         book.addWatcher(romeo);
 
-        BookTo bookTo = bookToMapper.toTo(book, romeo.getId());
+        BookTo bookTo = bookFactory.toTo(book, romeo.getId());
 
         assertThat(bookTo.isWatchedByCurrentUser()).isEqualTo(true);
     }
@@ -72,7 +72,7 @@ public class BookFactoryTest {
 
         book.addWatcher(romeo);
 
-        BookTo bookTo = bookToMapper.toTo(book, "juliet_id");
+        BookTo bookTo = bookFactory.toTo(book, "juliet_id");
 
         assertThat(bookTo.isWatchedByCurrentUser()).isEqualTo(false);
     }

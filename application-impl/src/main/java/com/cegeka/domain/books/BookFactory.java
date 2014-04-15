@@ -45,7 +45,7 @@ public class BookFactory {
         bookTo.setWatchedByCurrentUser(false);
         List<UserEntity> watchers = bookEntity.getWatchers();
         for (UserEntity watcher : watchers) {
-            if (watcher.getId().equals(userId)) {
+            if (watcher.getId().equals(currentUserId)) {
                 bookTo.setWatchedByCurrentUser(true);
             }
         }
