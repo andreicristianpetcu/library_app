@@ -2,7 +2,7 @@ package com.cegeka.application;
 
 import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.books.BookRepository;
-import com.cegeka.domain.books.BookToMapper;
+import com.cegeka.domain.books.BookFactory;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,26 +23,26 @@ public class BookFacadeImpl implements BookFacade {
     private UserRepository userRepository;
 
     @Autowired
-    private BookToMapper bookToMapper;
+    private BookFactory bookFactory;
 
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     public List<BookTo> getBooks(String userId) {
-        return bookToMapper.from(bookRepository.findAll(), userId);
+        return bookFactory.from(bookRepository.findAll(), userId);
     }
 
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     public BookTo getBook(String bookId, String currentUserId) {
-        return bookToMapper.toTo(bookRepository.findOne(bookId), currentUserId);
+        return bookFactory.toTo(bookRepository.findOne(bookId), currentUserId);
     }
 
     @Override
     @Transactional
     public BookTo saveBook(BookTo newBook, String userId) {
-        BookEntity bookEntity = bookToMapper.toNewEntity(newBook);
+        BookEntity bookEntity = bookFactory.toNewEntity(newBook);
         bookEntity = bookRepository.saveAndFlush(bookEntity);
-        return bookToMapper.toTo(bookEntity, userId);
+        return bookFactory.toTo(bookEntity, userId);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class BookFacadeImpl implements BookFacade {
         UserEntity user = userRepository.findOne(userId);
         book.lendTo(user);
         bookRepository.flush();
-        return bookToMapper.toTo(book, user.getId());
+        return bookFactory.toTo(book, user.getId());
     }
 
     @Override
@@ -64,14 +64,14 @@ public class BookFacadeImpl implements BookFacade {
             book.returnFrom(user);
             bookRepository.flush();
         }
-        return bookToMapper.toTo(book, userId);
+        return bookFactory.toTo(book, userId);
     }
 
     public void setBookRepository(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
-    public void setBookToMapper(BookToMapper bookToMapper) {
-        this.bookToMapper = bookToMapper;
+    public void setBookFactory(BookFactory bookFactory) {
+        this.bookFactory = bookFactory;
     }
 }

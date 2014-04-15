@@ -16,7 +16,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 
 @Service
 @Scope(value = SCOPE_SINGLETON)
-public class BookToMapper {
+public class BookFactory {
 
     public BookTo toTo(BookEntity bookEntity, String userId) {
         BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn());

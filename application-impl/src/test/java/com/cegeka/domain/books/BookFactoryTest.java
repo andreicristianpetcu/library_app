@@ -12,9 +12,9 @@ import static org.fest.assertions.Assertions.assertThat;
 /**
  * Created by monicat on 08/04/2014.
  */
-public class BookToMapperTest {
+public class BookFactoryTest {
 
-    BookToMapper bookToMapper = new BookToMapper();
+    BookFactory bookFactory = new BookFactory();
 
     @Test
     public void testToToForLentBook () {
@@ -30,7 +30,7 @@ public class BookToMapperTest {
 
         book.lendTo(romeo);
 
-        BookTo bookTo = bookToMapper.toTo(book, romeo.getId());
+        BookTo bookTo = bookFactory.toTo(book, romeo.getId());
 
         assertThat(bookTo.getId()).isEqualTo(book.getId());
         assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
@@ -58,7 +58,7 @@ public class BookToMapperTest {
 
         book.lendTo(romeo);
 
-        BookTo bookTo = bookToMapper.toTo(book, null);
+        BookTo bookTo = bookFactory.toTo(book, null);
 
         assertThat(bookTo.getId()).isEqualTo(book.getId());
         assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
@@ -74,7 +74,7 @@ public class BookToMapperTest {
         book.setId("book_id");
         book.setCopies(2);
         book.setDetails(null);
-        BookTo bookTo = bookToMapper.toTo(book, null);
+        BookTo bookTo = bookFactory.toTo(book, null);
 
         assertThat(bookTo.getPublishedDate()).isEqualTo(null);
         assertThat(bookTo.getPublisher()).isEqualTo(null);
@@ -89,7 +89,7 @@ public class BookToMapperTest {
         bookTo.setPublisher("Nemira");
         bookTo.setDescription("An awesome romance novel");
         bookTo.setCoverImage("http://sciencelakes.com/data_images/out/13/8811007-funny-dog-face.jpg");
-        BookEntity bookEntity = bookToMapper.toNewEntity(bookTo);
+        BookEntity bookEntity = bookFactory.toNewEntity(bookTo);
 
         assertThat(bookTo.getTitle()).isEqualTo(bookEntity.getTitle());
         assertThat(bookTo.getAuthor()).isEqualTo(bookEntity.getAuthor());
@@ -110,7 +110,7 @@ public class BookToMapperTest {
         book.setId("book_id");
         book.setCopies(2);
 
-        BookTo bookTo = bookToMapper.toTo(book, null);
+        BookTo bookTo = bookFactory.toTo(book, null);
 
         assertThat(bookTo.getId()).isEqualTo(book.getId());
         assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());
@@ -132,7 +132,7 @@ public class BookToMapperTest {
         book.lendTo(romeo);
         book.lendTo(romeo);
 
-        BookTo bookTo = bookToMapper.toTo(book, "random_user_id");
+        BookTo bookTo = bookFactory.toTo(book, "random_user_id");
 
         assertThat(bookTo.getId()).isEqualTo(book.getId());
         assertThat(bookTo.getAuthor()).isEqualTo(book.getAuthor());

@@ -2,7 +2,7 @@ package com.cegeka.application;
 
 import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.books.BookRepository;
-import com.cegeka.domain.books.BookToMapper;
+import com.cegeka.domain.books.BookFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,12 +25,12 @@ public class BookFacadeImplTest {
     @Mock
     private BookRepository bookRepositoryMock;
     @Mock
-    private BookToMapper bookToMapperMock;
+    private BookFactory bookFactoryMock;
 
     @Before
     public void setUp() {
         bookFacade.setBookRepository(bookRepositoryMock);
-        bookFacade.setBookToMapper(bookToMapperMock);
+        bookFacade.setBookFactory(bookFactoryMock);
     }
 
     @Test
@@ -49,15 +49,15 @@ public class BookFacadeImplTest {
 
         BookEntity bookEntity = hamletBook();
 
-        when(bookToMapperMock.toNewEntity(bookTo)).thenReturn(bookEntity);
+        when(bookFactoryMock.toNewEntity(bookTo)).thenReturn(bookEntity);
         when(bookRepositoryMock.saveAndFlush(bookEntity)).thenReturn(bookEntity);
-        when(bookToMapperMock.toTo(bookEntity, null)).thenReturn(expected);
+        when(bookFactoryMock.toTo(bookEntity, null)).thenReturn(expected);
 
         BookTo result = bookFacade.saveBook(bookTo, null);
 
-        verify(bookToMapperMock).toNewEntity(bookTo);
+        verify(bookFactoryMock).toNewEntity(bookTo);
         verify(bookRepositoryMock).saveAndFlush(bookEntity);
-        verify(bookToMapperMock).toTo(bookEntity, null);
+        verify(bookFactoryMock).toTo(bookEntity, null);
 
         assertThat(result).isSameAs(expected);
     }
