@@ -44,6 +44,8 @@ public class BookToMapper {
         return bookTo;
     }
 
+
+    //TODO: this is a Factory method;
     public BookEntity toNewEntity(BookTo bookTo) {
         BookEntity bookEntity = new BookEntity(bookTo.getTitle(), bookTo.getAuthor(), bookTo.getIsbn());
         bookEntity.setCopies(bookTo.getAvailableCopies());
