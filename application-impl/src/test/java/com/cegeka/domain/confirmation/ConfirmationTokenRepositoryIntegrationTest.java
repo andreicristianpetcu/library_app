@@ -24,7 +24,7 @@ public class ConfirmationTokenRepositoryIntegrationTest extends IntegrationTest 
 
     @Before
     public void setup() throws Exception {
-        userEntity = aUserEntity();
+        userEntity = aUserEntity("romeo@mailinator.com");
         userEntity = userRepository.saveAndFlush(userEntity);
 
         confirmationToken = new ConfirmationToken();

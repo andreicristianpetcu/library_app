@@ -2,7 +2,6 @@ package com.cegeka.domain.users;
 
 import com.cegeka.application.Role;
 import com.cegeka.application.UserTo;
-import com.cegeka.application.UserToTestFixture;
 import com.cegeka.domain.user.UserEntityTestFixture;
 import org.junit.Test;
 
@@ -10,8 +9,6 @@ import java.util.Locale;
 
 import static com.cegeka.application.UserToTestFixture.aUserTo;
 import static com.cegeka.domain.user.UserEntityTestFixture.aUserEntity;
-import static com.cegeka.domain.user.UserEntityTestFixture.asUserTO;
-import static com.cegeka.domain.users.UserToMapper.*;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class UserToMapperTest {
@@ -19,7 +16,7 @@ public class UserToMapperTest {
 
     @Test
     public void toToCorrectlyMapsFields() {
-        UserEntity given = aUserEntity();
+        UserEntity given = aUserEntity("romeo@mailinator.com");
 
         UserTo actual = userToMapper.toTo(given);
 
@@ -29,7 +26,7 @@ public class UserToMapperTest {
 
     @Test
     public void toToUsesASafeCopyOfRoles(){
-        UserEntity given = aUserEntity();
+        UserEntity given = aUserEntity("romeo@mailinator.com");
         UserTo actual = userToMapper.toTo(given);
         actual.getRoles().add(Role.ADMIN);
 
@@ -39,7 +36,7 @@ public class UserToMapperTest {
 
     @Test
     public void mapperShouldCopyPasswordTo_whenToToWithPasswordIsCalled() {
-        UserEntity given = aUserEntity();
+        UserEntity given = aUserEntity("romeo@mailinator.com");
 
         UserTo actual = userToMapper.toToWithPassword(given);
 
@@ -60,7 +57,7 @@ public class UserToMapperTest {
 
     @Test
     public void mapToExistingEntity_ShouldMapRoles(){
-        UserEntity userEntity = aUserEntity();
+        UserEntity userEntity = aUserEntity("romeo@mailinator.com");
 
         UserTo userTo = aUserTo();
         userTo.getRoles().remove(Role.USER);

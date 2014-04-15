@@ -23,12 +23,12 @@ public class UserRepositoryIntegrationTest extends IntegrationTest {
 
     @Before
     public void setUp() {
-        userRepository.saveAndFlush(aUserEntity());
+        userRepository.saveAndFlush(aUserEntity(UserEntityTestFixture.EMAIL));
     }
 
     @Test(expected = PersistenceException.class)
     public void emailIsUnique() {
-        userRepository.saveAndFlush(aUserEntity());
+        userRepository.saveAndFlush(aUserEntity(UserEntityTestFixture.EMAIL));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class UserRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     public void testCanAssignAndRetrieve_a_UserProfile() {
-        UserEntity userEntity = aUserEntity();
+        UserEntity userEntity = aUserEntity("romeo@mailinator.com");
         userEntity.setEmail(TEST_USER_EMAIL_2);
         userEntity.getProfile().setPictureUrl(PICTURE_URL);
 

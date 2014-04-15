@@ -9,11 +9,11 @@ import org.junit.Test;
 import javax.annotation.Resource;
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
-import java.util.List;
 
-import static com.cegeka.domain.books.BookEntityTestFixture.*;
+import static com.cegeka.domain.books.BookEntityTestFixture.newValidBook;
+import static com.cegeka.domain.books.BookEntityTestFixture.newValidBookWithoutId;
 import static com.cegeka.domain.user.UserEntityTestFixture.aUserEntity;
-import static com.cegeka.domain.user.UserEntityTestFixture.romeoUser;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
@@ -25,71 +25,32 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Resource
     private UserRepository userRepository;
 
-    private BookEntity hamlet, macbeth;
-    private UserEntity romeo;
-    private UserEntity juliet;
+    UserEntity romeo;
+    UserEntity juliet;
 
     @Before
     public void setUp() {
-        hamlet = bookRepository.saveAndFlush(hamletBook());
-        macbeth = bookRepository.saveAndFlush(macbethBook());
-        romeo = userRepository.saveAndFlush(romeoUser());
-        juliet = userRepository.saveAndFlush(aUserEntity());
+        romeo = aUserEntity("romeo@mailinator.com");
+        juliet = aUserEntity("juliet@mailinator.com");
 
-        hamlet.lendTo(romeo);
-        bookRepository.flush();
+        userRepository.save(newArrayList(romeo, juliet));
     }
 
     @Test
-    public void canRetrieveAll() {
-        List<BookEntity> all = bookRepository.findAll();
-        assertThat(all.size()).isEqualTo(2);
-        assertThat(all).contains(hamletBook());
-        assertThat(all).contains(macbethBook());
+    public void givenANewBookWithoutId_WhenPersisting_ThenIdIsAssigned() {
+        BookEntity macbeth = bookRepository.save(newValidBookWithoutId());
+
+        BookEntity persistedBook = bookRepository.findOne(macbeth.getId());
+
+        assertBook(macbeth, persistedBook);
+        assertBookDetails(macbeth.getDetails(), persistedBook.getDetails());
     }
 
-    @Test
-    public void canRetrieveOne() {
-        BookEntity one = bookRepository.findOne(macbeth.getId());
-        assertThat(one).isEqualTo(macbethBook());
-    }
-
-    @Test
-    public void canRetrieveOneBorrowed() {
-        BookEntity one = bookRepository.findOne(hamlet.getId());
-        assertThat(one).isEqualTo(hamletBook());
-        assertThat(one.isLendTo(romeoUser()));
-    }
-
-    @Test
-    public void canRetrieveOneWatched() {
-        BookEntity othello = newValidBook();
-        othello.addWatcher(romeo);
-        othello.addWatcher(juliet);
-        bookRepository.saveAndFlush(othello);
-
-        BookEntity one = bookRepository.findOne(othello.getId());
-        assertThat(one.getWatchers()).contains(romeo);
-        assertThat(one.getWatchers()).contains(juliet);
-    }
 
     @Test
     public void whenIdDoesNotExistReturnsNull() {
         BookEntity one = bookRepository.findOne("WrongId");
         assertThat(one).isNull();
-    }
-
-    @Test
-    public void canSaveOneItem() {
-        BookEntity bookEntity = newValidBook();
-        BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
-        assertThat(bookEntity.getId()).isNotNull();
-        assertThat(bookEntityReturned).isSameAs(bookEntity);
-
-        List<BookEntity> all = bookRepository.findAll();
-        assertThat(all.size()).isEqualTo(3);
-        assertThat(all).contains(hamletBook());
-        assertThat(all).contains(bookEntity);
     }
 
     @Test
@@ -102,7 +63,6 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
         } catch (ConstraintViolationException e) {
         }
     }
-
 
     @Test
     public void emptyAuthorThrowsError() {
@@ -165,6 +125,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     public void borrowTwice() {
         BookEntity book = newValidBook();
         book.setCopies(2);
+
         book.lendTo(romeo);
         book.lendTo(juliet);
 
@@ -179,24 +140,27 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
         try {
             BookEntity book = newValidBook();
             book.setCopies(1);
-            book.lendTo(romeo);
-            book.lendTo(juliet);
+            book.lendTo(aUserEntity("romeo@mailinator.com"));
+            book.lendTo(aUserEntity("romeo@mailinator.com"));
             fail("Overborrowed!");
         } catch (ConstraintViolationException e) {
         }
     }
 
-    @Test
-    public void checkBookWithDetails() {
-        BookEntity book = newValidBook();
-        book.setCopies(1);
-        BookDetailsEntity details = new BookDetailsEntity("2010", "Nemira",
-                "http://sciencelakes.com/data_images/out/13/8811007-funny-dog-face.jpg", "Funny book");
-        book.setDetails(details);
-        bookRepository.saveAndFlush(book);
-
-        BookEntity one = bookRepository.findOne(book.getId());
-        assertThat(one.getDetails()).isEqualTo(details);
+    private void assertBookDetails(BookDetailsEntity macbethDetails, BookDetailsEntity persistedBookDetails) {
+        assertThat(macbethDetails.getCoverImage()).isEqualTo(persistedBookDetails.getCoverImage());
+        assertThat(macbethDetails.getDescription()).isEqualTo(persistedBookDetails.getDescription());
+        assertThat(macbethDetails.getPublishedDate()).isEqualTo(persistedBookDetails.getPublishedDate());
+        assertThat(macbethDetails.getPublisher()).isEqualTo(persistedBookDetails.getPublisher());
 
     }
+
+    private void assertBook(BookEntity expected, BookEntity actual) {
+        assertThat(actual.getId()).isEqualTo(expected.getId());
+        assertThat(actual.getAvailableCopies()).isEqualTo(expected.getAvailableCopies());
+        assertThat(actual.getIsbn()).isEqualTo(expected.getIsbn());
+        assertThat(actual.getTitle()).isEqualTo(expected.getTitle());
+        assertThat(actual.getAuthor()).isEqualTo(expected.getAuthor());
+    }
+
 }

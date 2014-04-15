@@ -120,6 +120,11 @@ public class BookEntity {
     }
 
     @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    @Override
     public int hashCode() {
         return isbn != null ? isbn.hashCode() : 0;
     }

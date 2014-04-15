@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static com.cegeka.application.UserToTestFixture.*;
+import static com.cegeka.application.UserToTestFixture.aUserTo;
 import static com.cegeka.domain.user.UserEntityTestFixture.*;
 
 public class UserFacadeIntegrationTest extends IntegrationTest {
@@ -72,7 +72,7 @@ public class UserFacadeIntegrationTest extends IntegrationTest {
     @Test(expected = AccessDeniedException.class)
     public void regularUsersCannotEditOtherAccounts(){
         UserEntity loggedInUser = createUserAndAttachToSecurityContext(Role.USER);
-        UserEntity otherUser = aUserEntity();
+        UserEntity otherUser = aUserEntity("romeo@mailinator.com");
         otherUser.setEmail("other@email.com");
         otherUser =  userRepository.saveAndFlush(otherUser);
         UserTo otherUserTo = new UserToMapper().toTo(otherUser);

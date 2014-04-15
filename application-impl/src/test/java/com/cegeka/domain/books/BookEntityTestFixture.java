@@ -1,6 +1,7 @@
 package com.cegeka.domain.books;
 
 import com.cegeka.application.BookTo;
+import org.joda.time.DateTime;
 
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ public class BookEntityTestFixture {
     private static final String MACBETH_TITLE = "Macbeth";
     private static final String MACBETH_AUTHOR = "Shakespeare";
     private static final String MACBETH_ISBN = newRandomISBN();
+    public static final String BOOK_ID = "book_id";
 
     private BookEntityTestFixture() {
     }
@@ -38,7 +40,15 @@ public class BookEntityTestFixture {
 
     public static BookEntity newValidBook() {
         BookEntity entity = new BookEntity("Othello", MACBETH_AUTHOR, newRandomISBN());
-        entity.setCopies(new Integer((int) (Math.random()*10 + 1)));
+        entity.setId(BOOK_ID);
+        entity.setCopies(new Integer((int) (Math.random() * 10 + 1)));
+        return entity;
+    }
+
+    public static BookEntity newValidBookWithoutId() {
+        BookEntity entity = new BookEntity("Othello", MACBETH_AUTHOR, newRandomISBN());
+        entity.setCopies(new Integer((int) (Math.random() * 10 + 1)));
+        entity.setDetails(new BookDetailsEntity(new DateTime().toString(), "publisher", "coverImageUrl", "description"));
         return entity;
     }
 
