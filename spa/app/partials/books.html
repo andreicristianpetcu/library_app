@@ -48,7 +48,7 @@
             <td>
                 <a id="watchButton" ng-click="watchBook(book)"
                    ng-show="book.availableCopies == 0 && !book.borrowedByCurrentUser && !book.watchedByCurrentUser"
-                   ><span class="glyphicon glyphicon-eye-close text-danger"></span></a>
+                   ><span class="glyphicon glyphicon-eye-close text-muted"></span></a>
                 <a id="unwatchButton" ng-click="unwatchBook(book)"
                    ng-show="book.availableCopies == 0 && !book.borrowedByCurrentUser && book.watchedByCurrentUser"
                    ><span class="glyphicon glyphicon-eye-open text-success"></span></a>
