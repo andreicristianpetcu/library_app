@@ -16,7 +16,6 @@ public class BookEntityTestFixture {
     private static final String MACBETH_AUTHOR = "Shakespeare";
     private static final String MACBETH_ISBN = newRandomISBN();
 
-
     private BookEntityTestFixture() {
     }
 

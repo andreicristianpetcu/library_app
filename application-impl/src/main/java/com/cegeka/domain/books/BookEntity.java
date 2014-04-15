@@ -59,6 +59,10 @@ public class BookEntity {
         this.isbn = isbn;
     }
 
+    public int getAvailableCopies () {
+        return copies - getBorrowers().size();
+    }
+
     public String getId() {
         return id;
     }
@@ -107,26 +111,28 @@ public class BookEntity {
         this.copies = copies;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof BookEntity)) return false;
-
-        BookEntity that = (BookEntity) o;
-
-        if (isbn != null ? !isbn.equals(that.isbn) : that.isbn != null) return false;
-
-        return true;
+    public BookDetailsEntity getDetails() {
+        return details;
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
+    public void setDetails(BookDetailsEntity details) {
+        this.details = details;
     }
 
-    @Override
-    public int hashCode() {
-        return isbn != null ? isbn.hashCode() : 0;
+    public List<UserEntity> getWatchers() {
+        return watchers;
+    }
+
+    public void addWatcher(UserEntity user) {
+        this.watchers.add(user);
+    }
+
+    public void removeWatcher(UserEntity user) {
+        this.watchers.remove(user);
+    }
+
+    public void clearAllWatchers() {
+        watchers.clear();
     }
 
     public void lendTo(UserEntity userEntity) {
@@ -143,31 +149,25 @@ public class BookEntity {
         getBorrowers().remove(user);
     }
 
-    public BookDetailsEntity getDetails() {
-        return details;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BookEntity)) return false;
+
+        BookEntity that = (BookEntity) o;
+
+        if (isbn != null ? !isbn.equals(that.isbn) : that.isbn != null) return false;
+
+        return true;
     }
 
-    public void setDetails(BookDetailsEntity details) {
-        this.details = details;
+    @Override
+    public int hashCode() {
+        return isbn != null ? isbn.hashCode() : 0;
     }
 
-    public void addWatcher(UserEntity user) {
-        this.watchers.add(user);
-    }
-
-    public List<UserEntity> getWatchers() {
-        return watchers;
-    }
-
-    public void clearAllWatchers() {
-        watchers.clear();
-    }
-
-    public int getAvailableCopies () {
-        return copies - getBorrowers().size();
-    }
-
-    public void removeWatcher(UserEntity user) {
-        this.watchers.remove(user);
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }
