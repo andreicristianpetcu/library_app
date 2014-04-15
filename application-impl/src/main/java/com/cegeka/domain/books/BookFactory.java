@@ -18,7 +18,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Scope(value = SCOPE_SINGLETON)
 public class BookFactory {
 
-    public BookTo toTo(BookEntity bookEntity, String userId) {
+    public BookTo toTo(BookEntity bookEntity, String currentUserId) {
         BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn());
         bookTo.setBorrowedByCurrentUser(false);
 
@@ -27,7 +27,7 @@ public class BookFactory {
         for (UserEntity borrower : borrowers) {
             BorrowerTo borrowerTo = new BorrowerTo(borrower.getId(), borrower.getProfile().getFullName(), borrower.getEmail());
             borrowerToList.add(borrowerTo);
-            if (borrowerTo.getId().equals(userId)) {
+            if (borrowerTo.getId().equals(currentUserId)) {
                 bookTo.setBorrowedByCurrentUser(true);
             }
         }
