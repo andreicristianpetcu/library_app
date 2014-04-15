@@ -11,6 +11,7 @@ function BooksController(Books, $scope, $location, Auth, Alerts, $routeParams) {
     $scope.book_id = $routeParams.bookId;
 
     //TODO: Move this to its own controller and write a test to check no other posts are made
+    //Or maybe not, if we want to add Borrow/Return buttons to the view book screen
     if ($routeParams.bookId) {
         Books.getBook($scope.book_id,
             function success(responseData) {

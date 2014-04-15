@@ -94,7 +94,8 @@ public class BookFacadeImpl implements BookFacade {
 
         int availableCopiesAfterReturn = book.getAvailableCopies();
         if ( availableCopiesBeforeReturn == 0 && availableCopiesAfterReturn > 0) {
-            //send email to all watchers
+            //TODO: send link to book
+            //TODO: better handling of templates
             for(UserEntity watcher : book.getWatchers()) {
                 Map<String, Object> values = new HashMap<String, Object>();
                 values.put("user_name", watcher.getProfile().getFirstName());
