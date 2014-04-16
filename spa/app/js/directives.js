@@ -31,7 +31,7 @@ app.directive('appVersion', ['version', function (version) {
         }
     });
 
-app.directive("clickToEdit", function() {
+app.directive("clickToEdit", [ "$parse", function($parse) {
     var editorTemplate = '<div class="click-to-edit">' +
         '<div ng-hide="view.editorEnabled">' +
         '{{value}} ' +
@@ -50,7 +50,8 @@ app.directive("clickToEdit", function() {
         replace: true,
         template: editorTemplate,
         scope: {
-            value: "=clickToEdit"
+            value: "=clickToEditValue",
+            callback: "=clickToEditSave"
         },
         controller: function($scope) {
             $scope.view = {
@@ -70,7 +71,8 @@ app.directive("clickToEdit", function() {
             $scope.save = function() {
                 $scope.value = $scope.view.editableValue;
                 $scope.disableEditor();
+                $scope.callback();
             };
         }
     };
-});
+}]);
