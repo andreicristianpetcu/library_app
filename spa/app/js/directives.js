@@ -71,7 +71,7 @@ app.directive("clickToEdit", [ "$parse", function($parse) {
             $scope.save = function() {
                 $scope.value = $scope.view.editableValue;
                 $scope.disableEditor();
-                $scope.callback();
+                $scope.callback($scope.value);
             };
         }
     };

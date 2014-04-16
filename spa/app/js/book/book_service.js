@@ -54,6 +54,13 @@ angular.module('book.bookService', ['ngCookies','http-auth-interceptor'])
             return $http.post(BOOK_URLS.UNWATCH, book.id);
         }
 
+        //TODO: test me pls
+        function updateNumberOfCopies(book, availableCopies) {
+            var url = BOOK_URLS.UPDATE_NUMBER_OF_COPIES.replace('{bookId}', book.id);
+            url = url.replace('{numberOfCopies}', availableCopies);
+            return $http.post(url);
+        }
+
         return {
             getBooks: getBooks,
             getBook: getBook,
@@ -62,7 +69,8 @@ angular.module('book.bookService', ['ngCookies','http-auth-interceptor'])
             returnBook: returnBook,
             watchBook: watchBook,
             unwatchBook: unwatchBook,
-            lookUpBookByIsbn: lookUpBookByIsbn
+            lookUpBookByIsbn: lookUpBookByIsbn,
+            updateNumberOfCopies: updateNumberOfCopies
         };
     }])
 
@@ -73,6 +81,7 @@ angular.module('book.bookService', ['ngCookies','http-auth-interceptor'])
     RETURN: 'http://libraryapp.cegeka.com:8080/backend/rest/return',
     WATCH: 'http://libraryapp.cegeka.com:8080/backend/rest/watch',
     UNWATCH: 'http://libraryapp.cegeka.com:8080/backend/rest/unwatch',
+    UPDATE_NUMBER_OF_COPIES: 'http://libraryapp.cegeka.com:8080/backend/rest/book/{bookId}/updateNumberOfCopies/{numberOfCopies}',
     BOOKS_BY_ISBN_GOOGLE: 'https://www.googleapis.com/books/v1/volumes?callback=JSON_CALLBACK&q=isbn:'
   })
 ;

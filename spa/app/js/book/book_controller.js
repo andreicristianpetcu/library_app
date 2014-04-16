@@ -107,12 +107,8 @@ function BooksController(Books, $scope, $location, Auth, Alerts, $routeParams) {
         );
     }
 
-    $scope.saveAvailableCopies = function(){
-        console.log("saveAvailableCopies from controller " + $scope.book);
-        console.dir($scope.book);
+    $scope.saveAvailableCopies = function(availableCopies){
+        Books.updateNumberOfCopies($scope.book, availableCopies);
     }
 
 }
-
-
-

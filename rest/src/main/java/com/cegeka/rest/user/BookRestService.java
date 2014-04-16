@@ -77,6 +77,14 @@ public class BookRestService {
         return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "book/{bookId}/updateNumberOfCopies/{numberOfCopies}", method = POST)
+    @ResponseBody
+    public void setNumberOfCopies(@PathVariable("bookId") String bookId,
+                                  @PathVariable("numberOfCopies") String numberOfCopies) {
+        int copies = Integer.valueOf(numberOfCopies);
+        bookFacade.updateAvailableCopies(bookId, copies);
+    }
+
     private String getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
