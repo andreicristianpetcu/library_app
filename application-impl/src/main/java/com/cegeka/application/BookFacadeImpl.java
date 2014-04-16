@@ -85,30 +85,27 @@ public class BookFacadeImpl implements BookFacade {
 
     @Override
     @Transactional
-    public BookTo returnBook(String bookId, String userId) {
+    public BookTo returnBook(String bookId, String currentUserId) {
         BookEntity book = bookRepository.findOne(bookId);
-        UserEntity user = userRepository.findOne(userId);
-        int availableCopiesBeforeReturn = book.getAvailableCopies();
+        UserEntity user = userRepository.findOne(currentUserId);
 
-        if(book.isLendTo(user)) {
-            book.returnFrom(user);
-            bookRepository.flush();
-        }
-
-        int availableCopiesAfterReturn = book.getAvailableCopies();
-        if ( availableCopiesBeforeReturn == 0 && availableCopiesAfterReturn > 0) {
-            //TODO: send link to book
-            //TODO: better handling of templates
-            for(UserEntity watcher : book.getWatchers()) {
-                Map<String, Object> values = new HashMap<String, Object>();
-                values.put("user_name", watcher.getProfile().getFirstName());
-                values.put("book_title", book.getTitle());
-                values.put("book_author", book.getAuthor());
-                emailComposer.sendEmail(watcher.getEmail(), "notify-book-available-subject", "notify-book-available-content", watcher.getLocale(), values);
-            }
+        boolean bookWasUnavailable = !book.isAvailable();
+        book.returnFrom(user);
+        if (bookWasUnavailable) {
+            alertWatchersBookIsAvailable(book);
             book.clearAllWatchers();
         }
 
-        return bookToMapper.toTo(book, userId);
+        return bookToMapper.toTo(book, currentUserId);
+    }
+
+    private void alertWatchersBookIsAvailable(BookEntity book) {
+        for (UserEntity watcher : book.getWatchers()) {
+            Map<String, Object> values = new HashMap<String, Object>();
+            values.put("user_name", watcher.getProfile().getFirstName());
+            values.put("book_title", book.getTitle());
+            values.put("book_author", book.getAuthor());
+            emailComposer.sendEmail(watcher.getEmail(), "notify-book-available-subject", "notify-book-available-content", watcher.getLocale(), values);
+        }
     }
 }

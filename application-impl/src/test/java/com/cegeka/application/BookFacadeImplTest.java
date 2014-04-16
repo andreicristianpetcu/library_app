@@ -28,7 +28,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class BookFacadeImplTest {
 
-
     @Mock
     private BookRepository bookRepositoryMock;
     @Mock

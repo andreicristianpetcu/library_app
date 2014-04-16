@@ -59,7 +59,7 @@ public class BookEntity {
         this.isbn = isbn;
     }
 
-    public int getAvailableCopies () {
+    public int availableCopies() {
         return copies - getBorrowers().size();
     }
 
@@ -169,5 +169,9 @@ public class BookEntity {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    public boolean isAvailable() {
+        return availableCopies() > 0;
     }
 }

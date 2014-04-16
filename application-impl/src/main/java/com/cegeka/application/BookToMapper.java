@@ -32,7 +32,7 @@ public class BookToMapper {
             }
         }
         bookTo.setBorrowers(borrowerToList);
-        bookTo.setAvailableCopies(bookEntity.getAvailableCopies());
+        bookTo.setAvailableCopies(bookEntity.availableCopies());
 
         BookDetailsEntity details = bookEntity.getDetails();
         if (details != null) {

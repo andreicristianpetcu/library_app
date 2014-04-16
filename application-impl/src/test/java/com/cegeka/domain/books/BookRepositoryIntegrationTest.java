@@ -157,7 +157,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
 
     private void assertBook(BookEntity expected, BookEntity actual) {
         assertThat(actual.getId()).isEqualTo(expected.getId());
-        assertThat(actual.getAvailableCopies()).isEqualTo(expected.getAvailableCopies());
+        assertThat(actual.availableCopies()).isEqualTo(expected.availableCopies());
         assertThat(actual.getIsbn()).isEqualTo(expected.getIsbn());
         assertThat(actual.getTitle()).isEqualTo(expected.getTitle());
         assertThat(actual.getAuthor()).isEqualTo(expected.getAuthor());
