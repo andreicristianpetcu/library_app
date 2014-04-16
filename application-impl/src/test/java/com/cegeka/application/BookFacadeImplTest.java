@@ -6,7 +6,6 @@ import com.cegeka.domain.books.BookToMapper;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
 import com.cegeka.infrastructure.EmailComposer;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -90,9 +89,12 @@ public class BookFacadeImplTest {
 
         bookFacade.returnBook(hamlet.getId(), juliet.getId());
 
-        verify(emailComposer).sendEmail(eq(romeo.getEmail()), eq("?"), eq("?"), eq(romeo.getLocale()), anyMap());
-        verify(emailComposer).sendEmail(eq(secondWatcher.getEmail()), eq("?"), eq("?"), eq(secondWatcher.getLocale()),
-                anyMap());
+        verify(emailComposer).sendEmail(
+                eq(romeo.getEmail()), eq("notify-book-available-subject"),
+                eq("notify-book-available-content"), eq(romeo.getLocale()), anyMap());
+        verify(emailComposer).sendEmail(
+                eq(secondWatcher.getEmail()), eq("notify-book-available-subject"),
+                eq("notify-book-available-content"), eq(secondWatcher.getLocale()), anyMap());
         assertThat(hamlet.getWatchers()).isEmpty();
     }
 
@@ -112,7 +114,7 @@ public class BookFacadeImplTest {
         BookTo result = bookFacade.returnBook(hamlet.getId(), romeo.getId());
 
         //ASSERT
-        Assert.assertFalse("return method didn't return the book", hamlet.isLendTo(romeo));
+        assertThat(hamlet.isLendTo(romeo)).isFalse();
         assertThat(hamlet.getBorrowers().size()).isEqualTo(0);
         verify(bookToMapperMock).toTo(hamlet, romeo.getId());
     }
