@@ -108,6 +108,16 @@ public class BookFacadeImpl implements BookFacade {
         return bookToMapper.toTo(book, userId);
     }
 
+    @Override
+    @Transactional
+    public void updateAvailableCopies(String bookId, int numberOfCopies) {
+        BookEntity book = bookRepository.findOne(bookId);
+        if (book == null) {
+            throw new IllegalArgumentException("Bad Book id. The book does not exist");
+        }
+        book.setCopies(numberOfCopies);
+    }
+
     public void setBookRepository(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
