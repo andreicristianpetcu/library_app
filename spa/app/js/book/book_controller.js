@@ -107,7 +107,9 @@ function BooksController(Books, $scope, $location, Auth, Alerts, $routeParams) {
             Alerts.handler
         );
     }
+
+    $scope.saveAvailableCopies = function(availableCopies){
+        Books.updateNumberOfCopies($scope.book, availableCopies);
+    }
+
 }
-
-
-

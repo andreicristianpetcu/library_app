@@ -15,6 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import static com.cegeka.domain.books.BookEntityTestFixture.aBook;
 import static com.cegeka.domain.books.BookEntityTestFixture.aBookWithOneCopy;
@@ -23,6 +24,7 @@ import static com.cegeka.domain.user.UserEntityTestFixture.romeoUser;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -184,5 +186,39 @@ public class BookFacadeImplTest {
         assertThat(hamlet.getWatchers()).contains(juliet);
     }
 
+    @Test
+    public void whenUpdatingNumberBookOfCopies_shouldSaveChanges() {
+        //ARANGE
+        BookEntity hamlet = aBook();
+        UserEntity romeo = romeoUser();
+        int copies = new Random().nextInt(100) + 1;
+        //mocking
+        when(bookRepositoryMock.findOne(hamlet.getId())).thenReturn(hamlet);
+
+        //ACT
+        bookFacade.updateAvailableCopies(hamlet.getId(), copies);
+        BookTo hamletTo = bookFacade.getBook(hamlet.getId(), romeo.getId());
+
+        //ASSERT
+        assertThat(hamletTo.getAvailableCopies()).isEqualTo(copies);
+        verify(bookRepositoryMock, times(2)).findOne(hamlet.getId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenUpdatingNumberOfBookCopiesForInexistentBookId_shouldThrowException() {
+        //ARANGE
+        UserEntity romeo = romeoUser();
+        int someId = new Random().nextInt(100) + 100;
+        String bookId = String.valueOf(someId);
+        int copies = new Random().nextInt(100) + 1;
+        //mocking
+        when(bookRepositoryMock.findOne(bookId)).thenReturn(null);
+
+        //ACT
+        bookFacade.updateAvailableCopies(bookId, copies);
+
+        //ASSERT
+        verify(bookRepositoryMock).findOne(bookId);
+    }
 
 }

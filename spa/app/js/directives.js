@@ -1,7 +1,7 @@
 'use strict';
+var app = angular.module('userAdmin.directives', []);
 
-angular.module('userAdmin.directives', [])
-    .directive('appVersion', ['version', function (version) {
+app.directive('appVersion', ['version', function (version) {
         return function (scope, elm, attrs) {
             elm.text(version);
         };
@@ -30,3 +30,36 @@ angular.module('userAdmin.directives', [])
             }
         }
     });
+
+app.directive("clickToEdit", [ "$parse", function($parse) {
+    return {
+        restrict: "A",
+        replace: true,
+        template: '<div ng-include src="\'partials/directives/clickToEdit.html\'" />',
+        scope: {
+            value: "=clickToEditValue",
+            callback: "=clickToEditSave"
+        },
+        controller: function($scope) {
+            $scope.view = {
+                editableValue: $scope.value,
+                editorEnabled: false
+            };
+
+            $scope.enableEditor = function() {
+                $scope.view.editorEnabled = true;
+                $scope.view.editableValue = $scope.value;
+            };
+
+            $scope.disableEditor = function() {
+                $scope.view.editorEnabled = false;
+            };
+
+            $scope.save = function() {
+                $scope.value = $scope.view.editableValue;
+                $scope.disableEditor();
+                $scope.callback($scope.value);
+            };
+        }
+    };
+}]);

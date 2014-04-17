@@ -108,6 +108,10 @@ public class BookEntity {
         return copies;
     }
 
+    public void updateAvailableCopies(int availableCopies){
+        this.copies = availableCopies;
+    }
+
     public BookDetailsEntity getDetails() {
         return details;
     }
