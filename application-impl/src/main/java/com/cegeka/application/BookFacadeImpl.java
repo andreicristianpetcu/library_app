@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
@@ -118,7 +116,7 @@ public class BookFacadeImpl implements BookFacade {
         if (book == null) {
             throw new IllegalArgumentException("Bad Book id. The book does not exist");
         }
-        book.updateAvailableCopies(numberOfCopies);
+        book.updateNumberOfCopies(numberOfCopies);
         bookRepository.save(book);
     }
 }
