@@ -4,12 +4,13 @@ import com.cegeka.domain.users.UserEntity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -144,6 +145,9 @@ public class BookEntity {
     }
 
     static class Builder {
+
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();;
+
         private String id;
         private String title;
         private String author;
@@ -193,7 +197,7 @@ public class BookEntity {
             return this;
         }
 
-        public BookEntity build() {
+        public BookEntity build() throws ConstraintViolationException {
             BookEntity entity = new BookEntity();
             entity.id = id;
             entity.title = title;
@@ -203,6 +207,11 @@ public class BookEntity {
             entity.borrowers = borrowers;
             entity.details = details;
             entity.watchers = watchers;
+
+            Set<ConstraintViolation<BookEntity>> constraintViolations = validator.validate(entity);
+            if (!constraintViolations.isEmpty()) {
+                throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(constraintViolations));
+            }
             return entity;
         }
 
