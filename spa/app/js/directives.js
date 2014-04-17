@@ -31,14 +31,15 @@ app.directive('appVersion', ['version', function (version) {
         }
     });
 
-app.directive("clickToEdit", [ "$parse", function($parse) {
+app.directive("clickToEdit", [ "$parse", "Alerts", function($parse, Alerts) {
     return {
         restrict: "A",
         replace: true,
         template: '<div ng-include src="\'partials/directives/clickToEdit.html\'" />',
         scope: {
             value: "=clickToEditValue",
-            callback: "=clickToEditSave"
+            callback: "=clickToEditSave",
+            isValidCallback: "=clickToEditIsValid"
         },
         controller: function($scope) {
             $scope.view = {
@@ -55,10 +56,14 @@ app.directive("clickToEdit", [ "$parse", function($parse) {
                 $scope.view.editorEnabled = false;
             };
 
-            $scope.save = function() {
-                $scope.value = $scope.view.editableValue;
+            $scope.save = function () {
                 $scope.disableEditor();
-                $scope.callback($scope.value);
+                if ($scope.isValidCallback($scope.value, $scope.view.editableValue)) {
+                    $scope.value = $scope.view.editableValue;
+                    $scope.callback($scope.value);
+                } else {
+                    Alerts.dangerHandler("The value is invalid!");
+                }
             };
         }
     };

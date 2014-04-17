@@ -112,4 +112,7 @@ function BooksController(Books, $scope, $location, Auth, Alerts, $routeParams) {
         Books.updateNumberOfCopies($scope.book, availableCopies);
     }
 
+    $scope.validateAvailableCopies = function(oldVal, newVal){
+        return oldVal < newVal;
+    }
 }

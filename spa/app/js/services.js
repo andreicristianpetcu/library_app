@@ -18,16 +18,21 @@ angular.module('userAdmin.services', ['ngCookies', 'http-auth-interceptor'])
             } else {
                 errorMessage = 'Accessing ' + config.url + ' returned with status code: ' + status + " \r\n" + data;
             }
-            $rootScope.alerts.push({msg: errorMessage, type: "danger" });
+            dangerHandler(errorMessage);
         }
 
         function successHandler(message) {
             $rootScope.alerts.push({msg: message, type: "success" });
         }
 
+        function dangerHandler(message) {
+            $rootScope.alerts.push({msg: message, type: "danger" });
+        }
+
         return {
             handler: genericErrorHandler,
-            successHandler: successHandler
+            successHandler: successHandler,
+            dangerHandler: dangerHandler
         }
     }])
 
