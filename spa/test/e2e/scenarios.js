@@ -206,6 +206,27 @@ describe('Library app', function () {
             expect(browser().location().url()).toContain("/book/");
         });
 
+        it('add a book with 1 available copy, then update the copies', function () {
+            var copies = Math.random() * 40|0;
+            expect(browser().location().url()).toBe("/books");
+            input('query').enter(newIsbn);
+            element("a.bookTitleLink").click();
+
+            element("a#clickToEditEditLink").click();
+            input('view.editableValue').enter(copies);
+            element("a#clickToEditSaveLink").click();
+
+            browser().navigateTo('#/books');
+            input('query').enter(newIsbn);
+
+            element("a.bookTitleLink").click();
+
+            element("a#clickToEditEditLink").click();
+            expect(input('view.editableValue').val()).toEqual(String(copies));
+        });
+
+
     });
+
 
 });
