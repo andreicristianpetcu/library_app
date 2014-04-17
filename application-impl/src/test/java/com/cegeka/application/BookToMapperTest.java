@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.cegeka.domain.books.BookEntityTestFixture.newValidBook;
+import static com.cegeka.domain.books.BookEntityTestFixture.*;
 import static com.cegeka.domain.user.UserEntityTestFixture.romeoUser;
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -16,15 +16,9 @@ public class BookToMapperTest {
 
     @Test
     public void givenABookWithDetailsAndOneBorrower_WhenMapping_ThenToShouldHaveSameFieldsDetailAndBorrowerList () {
-        BookEntity book = newValidBook();
-        book.setId("book_id");
-        book.setCopies(1);
-        BookDetailsEntity bookDetailsEntity = new BookDetailsEntity(
-                "2014", "Nemira",
-                "http://sciencelakes.com/data_images/out/13/8811007-funny-dog-face.jpg", "Odiseea spatiala 2001");
-        book.setDetails(bookDetailsEntity);
+
+        BookEntity book = aBookWithOneCopy();
         UserEntity romeo = romeoUser();
-        romeo.setId("romeo_id");
 
         book.lendTo(romeo);
 
@@ -35,8 +29,7 @@ public class BookToMapperTest {
         assertThat(bookTo.getTitle()).isEqualTo(book.getTitle());
         assertThat(bookTo.getAvailableCopies()).isEqualTo(0);
 
-        assertBookDetails(bookDetailsEntity, bookTo);
-
+        assertBookDetails(book.getDetails(), bookTo);
 
         List<BorrowerTo> borrowers = bookTo.getBorrowers();
         assertThat(borrowers.size()).isEqualTo(1);
@@ -49,7 +42,7 @@ public class BookToMapperTest {
 
     @Test
     public void givenABook_WhenMappingWithNullCurrentUserId_ThenToIsNotBorrowedByCurrentUser () {
-        BookEntity book = newValidBook();
+        BookEntity book = aBook();
         book.lendTo(romeoUser());
 
         BookTo bookTo = bookToMapper.toTo(book, null);
@@ -59,7 +52,7 @@ public class BookToMapperTest {
 
     @Test
     public void givenABookWithNoLender_WhenMapping_ThenToIsNotBorrowedByCurrentUser () {
-        BookEntity book = newValidBook();
+        BookEntity book = aBook();
 
         BookTo bookTo = bookToMapper.toTo(book, "currentUserId");
 
@@ -68,8 +61,7 @@ public class BookToMapperTest {
 
     @Test
     public void givenABookBorrowedByTheCurrentUser_WhenMapping_ThenToShouldHaveBorrowedByCurrentUser () {
-        BookEntity book = newValidBook();
-        book.setCopies(2);
+        BookEntity book = aBook();
 
         UserEntity romeo = romeoUser();
         romeo.setId("romeo_id");
@@ -85,8 +77,8 @@ public class BookToMapperTest {
 
     @Test
     public void givenABookWithNullDetails_WhenMapping_ThenToHasNoDetails() {
-        BookEntity book = newValidBook();
-        book.setDetails(null);
+        BookEntity book = aBookWithoutDetails();
+//        book.setDetails(null); // Details already null
 
         BookTo bookTo = bookToMapper.toTo(book, null);
 
@@ -98,9 +90,7 @@ public class BookToMapperTest {
 
     @Test
     public void givenABookWatchedByTheCurrentUser_WhenMapping_ThenToShouldBeWatchedByCurrentUser () {
-        BookEntity book = newValidBook();
-        book.setId("book_id");
-        book.setCopies(2);
+        BookEntity book = aBook();
 
         UserEntity romeo = romeoUser();
         romeo.setId("romeo_id");
@@ -115,8 +105,7 @@ public class BookToMapperTest {
 
     @Test
     public void givenABookWatchedByAnotherUser_WhenMapping_ThenToShouldNotBeWatchedByCurrentUser () {
-        BookEntity book = newValidBook();
-        book.setId("book_id");
+        BookEntity book = aBook();
 
         UserEntity romeo = romeoUser();
         romeo.setId("romeo_id");
@@ -130,24 +119,18 @@ public class BookToMapperTest {
 
     @Test
     public void givenABookWithNoBorrowers_WhenMapping_ThenToShouldHaveNoBorrowersAndAllCopiesAvailable () {
-        BookEntity book = newValidBook();
-        book.setId("book_id");
-        book.setCopies(2);
+        BookEntity book = aBook();
 
         BookTo bookTo = bookToMapper.toTo(book, null);
 
-        assertThat(bookTo.getAvailableCopies()).isEqualTo(2);
+        assertThat(bookTo.getAvailableCopies()).isEqualTo(book.getCopies());
         assertThat(bookTo.getBorrowers().size()).isEqualTo(0);
     }
 
     @Test
     public void givenABookWithMoreThanOneBorrower_WhenMapping_ThenToHasSameBorrowers () {
-        BookEntity book = newValidBook();
-        book.setId("book_id");
-        book.setCopies(3);
-
+        BookEntity book = aBookWithThreeCopies();
         UserEntity romeo = romeoUser();
-        romeo.setId("romeo_id");
 
         book.lendTo(romeo);
         book.lendTo(romeo);

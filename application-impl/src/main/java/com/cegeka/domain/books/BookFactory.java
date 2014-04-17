@@ -11,10 +11,18 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 public class BookFactory {
 
     public BookEntity toNewEntity(BookTo bookTo) {
-        BookEntity bookEntity = new BookEntity(bookTo.getTitle(), bookTo.getAuthor(), bookTo.getIsbn());
-        bookEntity.setCopies(bookTo.getAvailableCopies());
-        bookEntity.setDetails(new BookDetailsEntity(bookTo.getPublishedDate(), bookTo.getPublisher(),
-                bookTo.getCoverImage(), bookTo.getDescription()));
-        return bookEntity;
+        BookEntity entity = new BookEntity.Builder()
+                .withDetails(detailsFrom(bookTo))
+                .withCopies(bookTo.getAvailableCopies())
+                .withTitle(bookTo.getTitle())
+                .withAuthor(bookTo.getAuthor())
+                .withIsbn(bookTo.getIsbn())
+                .build();
+        return entity;
+    }
+
+    private BookDetailsEntity detailsFrom(BookTo bookTo) {
+        return new BookDetailsEntity(bookTo.getPublishedDate(), bookTo.getPublisher(),
+                bookTo.getCoverImage(), bookTo.getDescription());
     }
 }

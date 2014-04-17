@@ -10,8 +10,7 @@ import javax.annotation.Resource;
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 
-import static com.cegeka.domain.books.BookEntityTestFixture.newValidBook;
-import static com.cegeka.domain.books.BookEntityTestFixture.newValidBookWithoutId;
+import static com.cegeka.domain.books.BookEntityTestFixture.aBookWithoutId;
 import static com.cegeka.domain.user.UserEntityTestFixture.aUserEntity;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.fest.assertions.Assertions.assertThat;
@@ -38,7 +37,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     public void givenANewBookWithoutId_WhenPersisting_ThenIdIsAssigned() {
-        BookEntity macbeth = bookRepository.save(newValidBookWithoutId());
+        BookEntity macbeth = bookRepository.save(aBookWithoutId());
 
         BookEntity persistedBook = bookRepository.findOne(macbeth.getId());
 
@@ -56,8 +55,11 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Test
     public void emptyTitleThrowsError() {
         try {
-            BookEntity bookEntity = newValidBook();
-            bookEntity.setTitle(null);
+            BookEntity bookEntity = new BookEntityTestFixture()
+                    .withDefaults()
+                    .withTitle(null)
+                    .build();
+
             BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
             fail("Saved book with null title");
         } catch (ConstraintViolationException e) {
@@ -67,8 +69,11 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Test
     public void emptyAuthorThrowsError() {
         try {
-            BookEntity bookEntity = newValidBook();
-            bookEntity.setAuthor(null);
+            BookEntity bookEntity = new BookEntityTestFixture()
+                    .withDefaults()
+                    .withAuthor(null)
+                    .build();
+
             BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
             fail("Saved book with null author");
         } catch (ConstraintViolationException e) {
@@ -78,8 +83,11 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Test
     public void emptyIsbnThrowsError() {
         try {
-            BookEntity bookEntity = newValidBook();
-            bookEntity.setIsbn(null);
+            BookEntity bookEntity = new BookEntityTestFixture()
+                    .withDefaults()
+                    .withIsbn(null)
+                    .build();
+
             BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
             fail("Saved book with null ISBN");
         } catch (ConstraintViolationException e) {
@@ -89,8 +97,11 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Test
     public void emptyCopiesThrowsError() {
         try {
-            BookEntity bookEntity = newValidBook();
-            bookEntity.setCopies(null);
+            BookEntity bookEntity = new BookEntityTestFixture()
+                    .withDefaults()
+                    .withCopies(null)
+                    .build();
+
             BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
             fail("Saved book with null copies");
         } catch (ConstraintViolationException e) {
@@ -100,8 +111,11 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Test
     public void zeroCopiesThrowsError() {
         try {
-            BookEntity bookEntity = newValidBook();
-            bookEntity.setCopies(0);
+            BookEntity bookEntity = new BookEntityTestFixture()
+                    .withDefaults()
+                    .withCopies(0)
+                    .build();
+
             BookEntity bookEntityReturned = bookRepository.saveAndFlush(bookEntity);
             fail("Saved book with null copies");
         } catch (ConstraintViolationException e) {
@@ -111,9 +125,17 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
     @Test
     public void uniqueISBN() {
         try {
-            BookEntity bookEntity1 = newValidBook();
-            BookEntity bookEntity2 = newValidBook();
-            bookEntity2.setIsbn(bookEntity1.getIsbn());
+            BookEntity bookEntity1 = new BookEntityTestFixture()
+                    .withDefaults()
+                    .withIsbn("123456")
+                    .build();
+
+            BookEntity bookEntity2 = new BookEntityTestFixture()
+                    .withDefaults()
+                    .withIsbn("123456")
+                    .build();
+
+
             bookRepository.saveAndFlush(bookEntity1);
             bookRepository.saveAndFlush(bookEntity2);
             fail("Saved two books with same isbn");
@@ -123,25 +145,31 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     public void borrowTwice() {
-        BookEntity book = newValidBook();
-        book.setCopies(2);
 
-        book.lendTo(romeo);
-        book.lendTo(juliet);
+        BookEntity entity = new BookEntityTestFixture()
+                .withDefaults()
+                .withCopies(2)
+                .build();
 
-        bookRepository.saveAndFlush(book);
+        entity.lendTo(romeo);
+        entity.lendTo(juliet);
 
-        assertThat(book.isLendTo(romeo)).isTrue();
-        assertThat(book.isLendTo(juliet)).isTrue();
+        bookRepository.saveAndFlush(entity);
+
+        assertThat(entity.isLendTo(romeo)).isTrue();
+        assertThat(entity.isLendTo(juliet)).isTrue();
     }
 
     @Test
     public void checkLimit() {
         try {
-            BookEntity book = newValidBook();
-            book.setCopies(1);
-            book.lendTo(aUserEntity("romeo@mailinator.com"));
-            book.lendTo(aUserEntity("romeo@mailinator.com"));
+            BookEntity entity = new BookEntityTestFixture()
+                    .withDefaults()
+                    .withCopies(1)
+                    .build();
+
+            entity.lendTo(aUserEntity("romeo@mailinator.com"));
+            entity.lendTo(aUserEntity("romeo@mailinator.com"));
             fail("Overborrowed!");
         } catch (ConstraintViolationException e) {
         }

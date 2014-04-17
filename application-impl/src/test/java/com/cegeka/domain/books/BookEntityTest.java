@@ -7,11 +7,11 @@ public class BookEntityTest {
     @Test
     public void givenAnAvailableBook_ThenIsAvailable(){
 
-//        new BookEntityBuilder.withDefaults()
+//        new Builder.withDefaults()
 //                .withCopies(3)
 //                .build();
 
-        BookEntity entity = BookEntityTestFixture.newValidBook();
+        BookEntity entity = BookEntityTestFixture.aBook();
 //        entity.setCopies();
     }
 

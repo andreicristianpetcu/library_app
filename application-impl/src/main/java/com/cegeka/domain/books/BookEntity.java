@@ -50,77 +50,7 @@ public class BookEntity {
             joinColumns = {@JoinColumn(name = "BOOK_ID", nullable = false, updatable = false)})
     private List<UserEntity> watchers = new ArrayList<UserEntity>();
 
-    public BookEntity() {
-    }
-
-    public BookEntity(String title, String author, String isbn) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-    }
-
-    public int availableCopies() {
-        return copies - getBorrowers().size();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public List<UserEntity> getBorrowers() {
-        return borrowers;
-    }
-
-    public void setBorrowers(List<UserEntity> borrowers) {
-        this.borrowers = borrowers;
-    }
-
-    public Integer getCopies() {
-        return copies;
-    }
-
-    public void setCopies(Integer copies) {
-        this.copies = copies;
-    }
-
-    public BookDetailsEntity getDetails() {
-        return details;
-    }
-
-    public void setDetails(BookDetailsEntity details) {
-        this.details = details;
-    }
-
-    public List<UserEntity> getWatchers() {
-        return watchers;
+    private BookEntity() {
     }
 
     public void addWatcher(UserEntity user) {
@@ -149,6 +79,44 @@ public class BookEntity {
         getBorrowers().remove(user);
     }
 
+    public int availableCopies() {
+        return copies - getBorrowers().size();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public List<UserEntity> getBorrowers() {
+        return borrowers;
+    }
+
+    public Integer getCopies() {
+        return copies;
+    }
+
+    public BookDetailsEntity getDetails() {
+        return details;
+    }
+
+    public List<UserEntity> getWatchers() {
+        return watchers;
+    }
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -173,5 +141,70 @@ public class BookEntity {
 
     public boolean isAvailable() {
         return availableCopies() > 0;
+    }
+
+    static class Builder {
+        private String id;
+        private String title;
+        private String author;
+        private Integer copies;
+        private String isbn;
+        private List<UserEntity> borrowers = new ArrayList<UserEntity>();
+        private BookDetailsEntity details;
+        private List<UserEntity> watchers = new ArrayList<UserEntity>();
+
+        public Builder withId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder withAuthor(String author) {
+            this.author = author;
+            return this;
+        }
+
+        public Builder withCopies(Integer copies) {
+            this.copies = copies;
+            return this;
+        }
+
+        public Builder withIsbn(String isbn) {
+            this.isbn = isbn;
+            return this;
+        }
+
+        public Builder withBorrowers(List<UserEntity> borrowers) {
+            this.borrowers = borrowers;
+            return this;
+        }
+
+        public Builder withDetails(BookDetailsEntity details) {
+            this.details = details;
+            return this;
+        }
+
+        public Builder withWatchers(List<UserEntity> watchers) {
+            this.watchers = watchers;
+            return this;
+        }
+
+        public BookEntity build() {
+            BookEntity entity = new BookEntity();
+            entity.id = id;
+            entity.title = title;
+            entity.author = author;
+            entity.copies = copies;
+            entity.isbn = isbn;
+            entity.borrowers = borrowers;
+            entity.details = details;
+            entity.watchers = watchers;
+            return entity;
+        }
+
     }
 }
