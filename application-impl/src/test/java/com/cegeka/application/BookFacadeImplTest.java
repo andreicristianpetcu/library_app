@@ -221,4 +221,22 @@ public class BookFacadeImplTest {
         verify(bookRepositoryMock).findOne(bookId);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void whenUpdatingNumberOfBookCopiesWithSmallValue_shouldThrowException() {
+        //ARANGE
+        BookEntity hamlet = aBook();
+        UserEntity romeo = romeoUser();
+        int copies = hamlet.getCopies() - 1;
+        //mocking
+        when(bookRepositoryMock.findOne(hamlet.getId())).thenReturn(hamlet);
+
+        //ACT
+        bookFacade.updateAvailableCopies(hamlet.getId(), copies);
+        BookTo hamletTo = bookFacade.getBook(hamlet.getId(), romeo.getId());
+
+        //ASSERT
+        assertThat(hamletTo.getAvailableCopies()).isEqualTo(copies);
+        verify(bookRepositoryMock, times(2)).findOne(hamlet.getId());
+    }
+
 }

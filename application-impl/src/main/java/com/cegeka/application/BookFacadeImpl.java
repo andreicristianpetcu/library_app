@@ -107,6 +107,10 @@ public class BookFacadeImpl implements BookFacade {
         if (book == null) {
             throw new IllegalArgumentException("Bad Book id. The book does not exist");
         }
+        Integer existingCopies = book.getCopies();
+        if (numberOfCopies < 0 || numberOfCopies < existingCopies) {
+            throw new IllegalArgumentException("Please select a value that is bigger than " + existingCopies);
+        }
         book.updateAvailableCopies(numberOfCopies);
     }
 

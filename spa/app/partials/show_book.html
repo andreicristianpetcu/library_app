@@ -5,6 +5,10 @@
 </div>
 
 <div class="row">
+    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+</div>
+
+<div class="row">
     <div class="col-lg-2" ng-show="book.coverImage">
         <img src="{{book.coverImage}}" />
     </div>
@@ -29,7 +33,10 @@
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Copies</label>
-                        <span class="col-lg-10 form-group-info" click-to-edit click-to-edit-value="book.availableCopies" click-to-edit-save="saveAvailableCopies"/>
+                        <span class="col-lg-10 form-group-info" click-to-edit
+                              click-to-edit-value="book.availableCopies"
+                              click-to-edit-save="saveAvailableCopies"
+                              click-to-edit-is-valid="validateAvailableCopies"/>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Description</label>
