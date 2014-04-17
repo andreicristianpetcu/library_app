@@ -58,11 +58,12 @@ app.directive("clickToEdit", [ "$parse", "Alerts", function($parse, Alerts) {
 
             $scope.save = function () {
                 $scope.disableEditor();
-                if ($scope.isValidCallback($scope.value, $scope.view.editableValue)) {
+                var validationMessage = $scope.isValidCallback($scope.value, $scope.view.editableValue);
+                if (validationMessage == "VALID") {
                     $scope.value = $scope.view.editableValue;
                     $scope.callback($scope.value);
                 } else {
-                    Alerts.dangerHandler("The value is invalid!");
+                    Alerts.dangerHandler(validationMessage);
                 }
             };
         }

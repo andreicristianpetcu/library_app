@@ -113,6 +113,6 @@ function BooksController(Books, $scope, $location, Auth, Alerts, $routeParams) {
     }
 
     $scope.validateAvailableCopies = function(oldVal, newVal){
-        return oldVal < newVal;
+        return oldVal < newVal ? "VALID" : ("Please select a value that is bigger than " + oldVal);
     }
 }
