@@ -1,1 +1,1 @@
-You can now borrow ${book_title}!
+You can now borrow ${book.title}!

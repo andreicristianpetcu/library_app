@@ -45,7 +45,7 @@ public class UserFacadeImplTest {
 
     @Test
     public void testIfFindByEmailCallsUserRepositoryFindByEmail() {
-        when(userRepositoryMock.findByEmail(EMAIL)).thenReturn(aUserEntity());
+        when(userRepositoryMock.findByEmail(EMAIL)).thenReturn(aUserEntity("romeo@mailinator.com"));
 
         UserTo user = userFacade.findByEmail(EMAIL);
 
@@ -70,7 +70,7 @@ public class UserFacadeImplTest {
 
     @Test
     public void givenTwoUsersWereAdded_thenRepositoryFindAllIsCalled() {
-        when(userRepositoryMock.findAll()).thenReturn(Lists.newArrayList(aUserEntity(), aUserEntity()));
+        when(userRepositoryMock.findAll()).thenReturn(Lists.newArrayList(aUserEntity("romeo@mailinator.com"), aUserEntity("romeo@mailinator.com")));
 
         List<UserTo> users = userFacade.getUsers();
 
@@ -81,7 +81,7 @@ public class UserFacadeImplTest {
     @Test
     public void givenAnExistingUserEntity_whenUpdateUserToForEntity_thenMaptoExistingUserAndSaveIsCalled() {
         userFacade.setUserToMapper(userToMapperMock);
-        UserEntity userEntity = aUserEntity();
+        UserEntity userEntity = aUserEntity("romeo@mailinator.com");
         userEntity.setId(ID);
         when(userRepositoryMock.findOne(ID)).thenReturn(userEntity);
         when(userRepositoryMock.findByEmail(EMAIL)).thenReturn(userEntity);

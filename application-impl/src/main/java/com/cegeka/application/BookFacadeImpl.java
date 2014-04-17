@@ -1,8 +1,8 @@
 package com.cegeka.application;
 
 import com.cegeka.domain.books.BookEntity;
+import com.cegeka.domain.books.BookFactory;
 import com.cegeka.domain.books.BookRepository;
-import com.cegeka.domain.books.BookToMapper;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
 import com.cegeka.infrastructure.EmailComposer;
@@ -24,6 +24,9 @@ public class BookFacadeImpl implements BookFacade {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BookFactory bookFactory;
 
     @Autowired
     private BookToMapper bookToMapper;
@@ -65,7 +68,7 @@ public class BookFacadeImpl implements BookFacade {
     @Override
     @Transactional
     public BookTo saveBook(BookTo newBook, String userId) {
-        BookEntity bookEntity = bookToMapper.toNewEntity(newBook);
+        BookEntity bookEntity = bookFactory.toNewEntity(newBook);
         bookEntity = bookRepository.saveAndFlush(bookEntity);
         return bookToMapper.toTo(bookEntity, userId);
     }
@@ -82,38 +85,28 @@ public class BookFacadeImpl implements BookFacade {
 
     @Override
     @Transactional
-    public BookTo returnBook(String bookId, String userId) {
+    public BookTo returnBook(String bookId, String currentUserId) {
         BookEntity book = bookRepository.findOne(bookId);
-        UserEntity user = userRepository.findOne(userId);
-        int availableCopiesBeforeReturn = book.getAvailableCopies();
+        UserEntity user = userRepository.findOne(currentUserId);
 
-        if(book.isLendTo(user)) {
-            book.returnFrom(user);
-            bookRepository.flush();
-        }
+        boolean bookWasUnavailable = !book.isAvailable();
+        book.returnFrom(user);
 
-        int availableCopiesAfterReturn = book.getAvailableCopies();
-        if ( availableCopiesBeforeReturn == 0 && availableCopiesAfterReturn > 0) {
-            //TODO: send link to book
-            //TODO: better handling of templates
-            for(UserEntity watcher : book.getWatchers()) {
-                Map<String, Object> values = new HashMap<String, Object>();
-                values.put("user_name", watcher.getProfile().getFirstName());
-                values.put("book_title", book.getTitle());
-                values.put("book_author", book.getAuthor());
-                emailComposer.sendEmail(watcher.getEmail(), "notify-book-available-subject", "notify-book-available-content", watcher.getLocale(), values);
-            }
+        if (bookWasUnavailable) {
+            alertWatchersBookIsAvailable(book);
             book.clearAllWatchers();
         }
 
-        return bookToMapper.toTo(book, userId);
+        return bookToMapper.toTo(book, currentUserId);
     }
 
-    public void setBookRepository(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
-
-    public void setBookToMapper(BookToMapper bookToMapper) {
-        this.bookToMapper = bookToMapper;
+    private void alertWatchersBookIsAvailable(BookEntity book) {
+        for (UserEntity watcher : book.getWatchers()) {
+            Map<String, Object> values = new HashMap<String, Object>();
+            values.put("user", watcher);
+            values.put("book", book);
+            values.put("link", "http://libraryapp.cegeka.com:8000/#/book/" + book.getId());
+            emailComposer.sendEmail(watcher.getEmail(), "notify-book-available-subject", "notify-book-available-content", watcher.getLocale(), values);
+        }
     }
 }

@@ -1,7 +1,7 @@
-package com.cegeka.domain.books;
+package com.cegeka.application;
 
-import com.cegeka.application.BookTo;
-import com.cegeka.application.BorrowerTo;
+import com.cegeka.domain.books.BookDetailsEntity;
+import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.users.UserEntity;
 import com.google.common.base.Function;
 import org.springframework.context.annotation.Scope;
@@ -18,7 +18,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Scope(value = SCOPE_SINGLETON)
 public class BookToMapper {
 
-    public BookTo toTo(BookEntity bookEntity, String userId) {
+    public BookTo toTo(BookEntity bookEntity, String currentUserId) {
         BookTo bookTo = new BookTo(bookEntity.getId(), bookEntity.getTitle(), bookEntity.getAuthor(), bookEntity.getIsbn());
         bookTo.setBorrowedByCurrentUser(false);
 
@@ -27,12 +27,12 @@ public class BookToMapper {
         for (UserEntity borrower : borrowers) {
             BorrowerTo borrowerTo = new BorrowerTo(borrower.getId(), borrower.getProfile().getFullName(), borrower.getEmail());
             borrowerToList.add(borrowerTo);
-            if (borrowerTo.getId().equals(userId)) {
+            if (borrowerTo.getId().equals(currentUserId)) {
                 bookTo.setBorrowedByCurrentUser(true);
             }
         }
         bookTo.setBorrowers(borrowerToList);
-        bookTo.setAvailableCopies(bookEntity.getAvailableCopies());
+        bookTo.setAvailableCopies(bookEntity.availableCopies());
 
         BookDetailsEntity details = bookEntity.getDetails();
         if (details != null) {
@@ -45,20 +45,12 @@ public class BookToMapper {
         bookTo.setWatchedByCurrentUser(false);
         List<UserEntity> watchers = bookEntity.getWatchers();
         for (UserEntity watcher : watchers) {
-            if (watcher.getId().equals(userId)) {
+            if (watcher.getId().equals(currentUserId)) {
                 bookTo.setWatchedByCurrentUser(true);
             }
         }
 
         return bookTo;
-    }
-
-    public BookEntity toNewEntity(BookTo bookTo) {
-        BookEntity bookEntity = new BookEntity(bookTo.getTitle(), bookTo.getAuthor(), bookTo.getIsbn());
-        bookEntity.setCopies(bookTo.getAvailableCopies());
-        bookEntity.setDetails(new BookDetailsEntity(bookTo.getPublishedDate(), bookTo.getPublisher(),
-                bookTo.getCoverImage(), bookTo.getDescription()));
-        return bookEntity;
     }
 
     public List<BookTo> from(List<BookEntity> all, String userId) {

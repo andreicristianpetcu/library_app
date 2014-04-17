@@ -1,8 +1,8 @@
 package com.cegeka.application;
 
 import com.cegeka.domain.books.BookEntity;
+import com.cegeka.domain.books.BookFactory;
 import com.cegeka.domain.books.BookRepository;
-import com.cegeka.domain.books.BookToMapper;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
 import com.cegeka.infrastructure.EmailComposer;
@@ -16,7 +16,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import static com.cegeka.domain.books.BookEntityTestFixture.hamletBook;
+import static com.cegeka.domain.books.BookEntityTestFixture.aBook;
+import static com.cegeka.domain.books.BookEntityTestFixture.aBookWithOneCopy;
 import static com.cegeka.domain.user.UserEntityTestFixture.aUserEntity;
 import static com.cegeka.domain.user.UserEntityTestFixture.romeoUser;
 import static org.fest.assertions.Assertions.assertThat;
@@ -31,18 +32,20 @@ public class BookFacadeImplTest {
     @Mock
     private BookRepository bookRepositoryMock;
     @Mock
-    private UserRepository userRepositoryMock;
+    private BookFactory bookFactoryMock;
     @Mock
     private BookToMapper bookToMapperMock;
     @Mock
-    private EmailComposer emailComposer;
-
+    private UserRepository userRepositoryMock;
+    @Mock
+    private EmailComposer emailComposerMock;
 
     @InjectMocks
     private BookFacadeImpl bookFacade = new BookFacadeImpl();
 
+
     @Test
-    public void getBooksCallsRepositoryFindAll () {
+    public void getBooksCallsRepositoryFindAll() {
         when(bookRepositoryMock.findAll()).thenReturn(Collections.<BookEntity>emptyList());
 
         List<BookTo> books = bookFacade.getBooks(null);
@@ -51,57 +54,57 @@ public class BookFacadeImplTest {
     }
 
     @Test
-    public void saveBookCallsMapperAndRepositorySaveAndFlush () {
+    public void saveBookCallsMapperAndRepositorySaveAndFlush() {
         BookTo bookTo = new BookTo(null, "One", "Two", "Three");
         BookTo expected = new BookTo("123", "One", "Two", "Three");
 
-        BookEntity bookEntity = hamletBook();
+        BookEntity bookEntity = aBook();
 
-        when(bookToMapperMock.toNewEntity(bookTo)).thenReturn(bookEntity);
+        when(bookFactoryMock.toNewEntity(bookTo)).thenReturn(bookEntity);
         when(bookRepositoryMock.saveAndFlush(bookEntity)).thenReturn(bookEntity);
-        when(bookToMapperMock.toTo(bookEntity, null)).thenReturn(expected);
+        when(bookToMapperMock.toTo(bookEntity, "current_user_id")).thenReturn(expected);
 
-        BookTo result = bookFacade.saveBook(bookTo, null);
+        BookTo result = bookFacade.saveBook(bookTo, "current_user_id");
 
-        verify(bookToMapperMock).toNewEntity(bookTo);
+        verify(bookFactoryMock).toNewEntity(bookTo);
         verify(bookRepositoryMock).saveAndFlush(bookEntity);
-        verify(bookToMapperMock).toTo(bookEntity, null);
+        verify(bookToMapperMock).toTo(bookEntity, "current_user_id");
 
         assertThat(result).isSameAs(expected);
     }
 
     @Test
-    public void whenReturnBook_shouldSendEmailToWatchersAndClearWatchersList () {
-        BookEntity hamlet = hamletBook();
-        hamlet.setCopies(1);
+    public void whenReturnBook_shouldSendEmailToWatchersAndClearWatchersList() {
+        BookEntity book = aBookWithOneCopy();
 
         UserEntity romeo = romeoUser();
-        UserEntity juliet = aUserEntity();
-        UserEntity secondWatcher = aUserEntity();
+        UserEntity juliet = aUserEntity("juliet@mailinator.com");
+        UserEntity secondWatcher = aUserEntity("secondWatcher@mailinator.com");
         secondWatcher.setLocale(Locale.JAPAN);
 
-        when(bookRepositoryMock.findOne(hamlet.getId())).thenReturn(hamlet);
+        when(bookRepositoryMock.findOne(book.getId())).thenReturn(book);
         when(userRepositoryMock.findOne(juliet.getId())).thenReturn(juliet);
 
-        hamlet.lendTo(juliet);
-        hamlet.addWatcher(romeo);
-        hamlet.addWatcher(secondWatcher);
+        book.lendTo(juliet);
+        book.addWatcher(romeo);
+        book.addWatcher(secondWatcher);
 
-        bookFacade.returnBook(hamlet.getId(), juliet.getId());
+        bookFacade.returnBook(book.getId(), juliet.getId());
 
-        verify(emailComposer).sendEmail(
+        verify(emailComposerMock).sendEmail(
                 eq(romeo.getEmail()), eq("notify-book-available-subject"),
                 eq("notify-book-available-content"), eq(romeo.getLocale()), anyMap());
-        verify(emailComposer).sendEmail(
+        verify(emailComposerMock).sendEmail(
                 eq(secondWatcher.getEmail()), eq("notify-book-available-subject"),
                 eq("notify-book-available-content"), eq(secondWatcher.getLocale()), anyMap());
-        assertThat(hamlet.getWatchers()).isEmpty();
+        assertThat(book.getWatchers()).isEmpty();
     }
 
+
     @Test
-    public void whenBorrowerReturnsBook_shouldReturnBook () {
+    public void whenBorrowerReturnsBook_shouldReturnBook() {
         //ARANGE
-        BookEntity hamlet = hamletBook();
+        BookEntity hamlet = aBook();
         UserEntity romeo = romeoUser();
         hamlet.lendTo(romeo);
 
@@ -121,9 +124,9 @@ public class BookFacadeImplTest {
 
 
     @Test
-    public void whenWatchBook_shouldWatchBook () {
+    public void whenWatchBook_shouldWatchBook() {
         //ARANGE
-        BookEntity hamlet = hamletBook();
+        BookEntity hamlet = aBook();
         UserEntity romeo = romeoUser();
 
         when(bookRepositoryMock.findOne(hamlet.getId())).thenReturn(hamlet);
@@ -140,9 +143,9 @@ public class BookFacadeImplTest {
     }
 
     @Test
-    public void whenUnwatchBook_shouldUnwatchBook () {
+    public void whenUnwatchBook_shouldUnwatchBook() {
         //ARANGE
-        BookEntity hamlet = hamletBook();
+        BookEntity hamlet = aBook();
         UserEntity romeo = romeoUser();
 
         when(bookRepositoryMock.findOne(hamlet.getId())).thenReturn(hamlet);
@@ -160,11 +163,11 @@ public class BookFacadeImplTest {
     }
 
     @Test
-    public void whenUnwatchBook_shouldDoNothingIfBookIsNotWatched () {
+    public void whenUnwatchBook_shouldDoNothingIfBookIsNotWatched() {
         //ARANGE
-        BookEntity hamlet = hamletBook();
+        BookEntity hamlet = aBook();
         UserEntity romeo = romeoUser();
-        UserEntity juliet = aUserEntity();
+        UserEntity juliet = aUserEntity("juliet@mailinator.com");
 
         when(bookRepositoryMock.findOne(hamlet.getId())).thenReturn(hamlet);
         when(userRepositoryMock.findOne(romeo.getId())).thenReturn(romeo);
@@ -180,7 +183,6 @@ public class BookFacadeImplTest {
         assertThat(hamlet.getWatchers().size()).isEqualTo(1);
         assertThat(hamlet.getWatchers()).contains(juliet);
     }
-
 
 
 }

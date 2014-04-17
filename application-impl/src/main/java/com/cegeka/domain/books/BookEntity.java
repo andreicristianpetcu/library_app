@@ -4,12 +4,13 @@ import com.cegeka.domain.users.UserEntity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -50,62 +51,72 @@ public class BookEntity {
             joinColumns = {@JoinColumn(name = "BOOK_ID", nullable = false, updatable = false)})
     private List<UserEntity> watchers = new ArrayList<UserEntity>();
 
-    public BookEntity() {
+    private BookEntity() {
     }
 
-    public BookEntity(String title, String author, String isbn) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
+    public void addWatcher(UserEntity user) {
+        this.watchers.add(user);
+    }
+
+    public void removeWatcher(UserEntity user) {
+        this.watchers.remove(user);
+    }
+
+    public void clearAllWatchers() {
+        watchers.clear();
+    }
+
+    public void lendTo(UserEntity userEntity) {
+        if (getBorrowers().size() < copies) {
+            getBorrowers().add(userEntity);
+        } else throw new ConstraintViolationException(Collections.EMPTY_SET);
+    }
+
+    public boolean isLendTo(UserEntity userEntity) {
+        return getBorrowers().contains(userEntity);
+    }
+
+    public void returnFrom(UserEntity user) {
+        getBorrowers().remove(user);
+    }
+
+    public int availableCopies() {
+        return copies - getBorrowers().size();
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public String getIsbn() {
         return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
     }
 
     public List<UserEntity> getBorrowers() {
         return borrowers;
     }
 
-    public void setBorrowers(List<UserEntity> borrowers) {
-        this.borrowers = borrowers;
-    }
-
     public Integer getCopies() {
         return copies;
     }
 
-    public void setCopies(Integer copies) {
-        this.copies = copies;
+    public BookDetailsEntity getDetails() {
+        return details;
     }
+
+    public List<UserEntity> getWatchers() {
+        return watchers;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -124,45 +135,85 @@ public class BookEntity {
         return isbn != null ? isbn.hashCode() : 0;
     }
 
-    public void lendTo(UserEntity userEntity) {
-        if (getBorrowers().size() < copies) {
-            getBorrowers().add(userEntity);
-        } else throw new ConstraintViolationException(Collections.EMPTY_SET);
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
-    public boolean isLendTo(UserEntity userEntity) {
-        return getBorrowers().contains(userEntity);
+    public boolean isAvailable() {
+        return availableCopies() > 0;
     }
 
-    public void returnFrom(UserEntity user) {
-        getBorrowers().remove(user);
-    }
+    static class Builder {
 
-    public BookDetailsEntity getDetails() {
-        return details;
-    }
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();;
 
-    public void setDetails(BookDetailsEntity details) {
-        this.details = details;
-    }
+        private String id;
+        private String title;
+        private String author;
+        private Integer copies;
+        private String isbn;
+        private List<UserEntity> borrowers = new ArrayList<UserEntity>();
+        private BookDetailsEntity details;
+        private List<UserEntity> watchers = new ArrayList<UserEntity>();
 
-    public void addWatcher(UserEntity user) {
-        this.watchers.add(user);
-    }
+        public Builder withId(String id) {
+            this.id = id;
+            return this;
+        }
 
-    public List<UserEntity> getWatchers() {
-        return watchers;
-    }
+        public Builder withTitle(String title) {
+            this.title = title;
+            return this;
+        }
 
-    public void clearAllWatchers() {
-        watchers.clear();
-    }
+        public Builder withAuthor(String author) {
+            this.author = author;
+            return this;
+        }
 
-    public int getAvailableCopies () {
-        return copies - getBorrowers().size();
-    }
+        public Builder withCopies(Integer copies) {
+            this.copies = copies;
+            return this;
+        }
 
-    public void removeWatcher(UserEntity user) {
-        this.watchers.remove(user);
+        public Builder withIsbn(String isbn) {
+            this.isbn = isbn;
+            return this;
+        }
+
+        public Builder withBorrowers(List<UserEntity> borrowers) {
+            this.borrowers = borrowers;
+            return this;
+        }
+
+        public Builder withDetails(BookDetailsEntity details) {
+            this.details = details;
+            return this;
+        }
+
+        public Builder withWatchers(List<UserEntity> watchers) {
+            this.watchers = watchers;
+            return this;
+        }
+
+        public BookEntity build() throws ConstraintViolationException {
+            BookEntity entity = new BookEntity();
+            entity.id = id;
+            entity.title = title;
+            entity.author = author;
+            entity.copies = copies;
+            entity.isbn = isbn;
+            entity.borrowers = borrowers;
+            entity.details = details;
+            entity.watchers = watchers;
+
+            Set<ConstraintViolation<BookEntity>> constraintViolations = validator.validate(entity);
+            if (!constraintViolations.isEmpty()) {
+                throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(constraintViolations));
+            }
+            return entity;
+        }
+
     }
 }

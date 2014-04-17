@@ -77,6 +77,7 @@ public class BookRestService {
         return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
     }
 
+    //TODO - make available globally
     private String getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
