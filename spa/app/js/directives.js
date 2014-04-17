@@ -32,23 +32,10 @@ app.directive('appVersion', ['version', function (version) {
     });
 
 app.directive("clickToEdit", [ "$parse", function($parse) {
-    var editorTemplate = '<div class="click-to-edit">' +
-        '<div id="clickToEditValue" ng-hide="view.editorEnabled">' +
-        '{{value}} ' +
-        '<a id="clickToEditEditLink" ng-click="enableEditor()">Edit</a>' +
-        '</div>' +
-        '<div ng-show="view.editorEnabled">' +
-        '<input id="clickToEditInput" ng-model="view.editableValue">' +
-        '<a id="clickToEditSaveLink" ng-click="save()">Save</a>' +
-        ' or ' +
-        '<a ng-click="disableEditor()">cancel</a>.' +
-        '</div>' +
-        '</div>';
-
     return {
         restrict: "A",
         replace: true,
-        template: editorTemplate,
+        template: '<div ng-include src="\'partials/directives/clickToEdit.html\'" />',
         scope: {
             value: "=clickToEditValue",
             callback: "=clickToEditSave"

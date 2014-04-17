@@ -222,7 +222,7 @@ describe('Library app', function () {
             element("a.bookTitleLink").click();
 
             element("a#clickToEditEditLink").click();
-            expect(input('view.editableValue').val()).toEqual(copies);
+            expect(input('view.editableValue').val()).toEqual(String(copies));
         });
 
 
