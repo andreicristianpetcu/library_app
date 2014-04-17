@@ -91,6 +91,7 @@ public class BookFacadeImpl implements BookFacade {
 
         boolean bookWasUnavailable = !book.isAvailable();
         book.returnFrom(user);
+
         if (bookWasUnavailable) {
             alertWatchersBookIsAvailable(book);
             book.clearAllWatchers();
@@ -102,9 +103,9 @@ public class BookFacadeImpl implements BookFacade {
     private void alertWatchersBookIsAvailable(BookEntity book) {
         for (UserEntity watcher : book.getWatchers()) {
             Map<String, Object> values = new HashMap<String, Object>();
-            values.put("user_name", watcher.getProfile().getFirstName());
-            values.put("book_title", book.getTitle());
-            values.put("book_author", book.getAuthor());
+            values.put("user", watcher);
+            values.put("book", book);
+            values.put("link", "http://libraryapp.cegeka.com:8000/#/book/" + book.getId());
             emailComposer.sendEmail(watcher.getEmail(), "notify-book-available-subject", "notify-book-available-content", watcher.getLocale(), values);
         }
     }

@@ -15,6 +15,7 @@ public class BookFactoryTest {
     @Test
     public void testToNewEntity() {
         BookTo bookTo = new BookTo("7", "Title", "Author", "123");
+        bookTo.setAvailableCopies(3);
         bookTo.setPublishedDate("2006");
         bookTo.setPublisher("Nemira");
         bookTo.setDescription("An awesome romance novel");
