@@ -6,6 +6,7 @@ import com.cegeka.domain.books.BookRepository;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
 import com.cegeka.infrastructure.EmailComposer;
+import com.cegeka.infrastructure.NotifyBookAvailableCommand;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -40,7 +41,7 @@ public class BookFacadeImplTest {
     @Mock
     private UserRepository userRepositoryMock;
     @Mock
-    private EmailComposer emailComposerMock;
+    private NotifyBookAvailableCommand notifyBookAvailableCommandMock;
 
     @InjectMocks
     private BookFacadeImpl bookFacade = new BookFacadeImpl();
@@ -93,12 +94,7 @@ public class BookFacadeImplTest {
 
         bookFacade.returnBook(book.getId(), juliet.getId());
 
-        verify(emailComposerMock).sendEmail(
-                eq(romeo.getEmail()), eq("notify-book-available-subject"),
-                eq("notify-book-available-content"), eq(romeo.getLocale()), anyMap());
-        verify(emailComposerMock).sendEmail(
-                eq(secondWatcher.getEmail()), eq("notify-book-available-subject"),
-                eq("notify-book-available-content"), eq(secondWatcher.getLocale()), anyMap());
+        verify(notifyBookAvailableCommandMock).alertWatchersBookIsAvailable(book);
         assertThat(book.getWatchers()).isEmpty();
     }
 

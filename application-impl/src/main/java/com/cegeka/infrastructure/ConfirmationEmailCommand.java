@@ -16,10 +16,13 @@ public class ConfirmationEmailCommand {
 
     private static final String CONFIRMATION_TOKEN_VARIABLE_NAME = "confirmation_token";
     private final static Logger  logger = LoggerFactory.getLogger(ConfirmationEmailCommand.class);
+
     @Resource
     private EmailComposer emailComposer;
+
     @Resource
     private ConfirmationTokenRepository confirmationTokenRepository;
+
     @Value("${application_url}")
     private String applicationUrl;
 

@@ -6,11 +6,12 @@ import com.cegeka.domain.books.BookRepository;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
 import com.cegeka.infrastructure.EmailComposer;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cegeka.infrastructure.NotifyBookAvailableCommand;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,20 +20,23 @@ import java.util.Map;
 @Transactional(readOnly = true)
 public class BookFacadeImpl implements BookFacade {
 
-    @Autowired
+    @Resource
     private BookRepository bookRepository;
 
-    @Autowired
+    @Resource
     private UserRepository userRepository;
 
-    @Autowired
+    @Resource
     private BookFactory bookFactory;
 
-    @Autowired
+    @Resource
     private BookToMapper bookToMapper;
 
-    @Autowired
+    @Resource
     private EmailComposer emailComposer;
+
+    @Resource
+    private NotifyBookAvailableCommand notifyBookAvailableCommand;
 
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
@@ -47,6 +51,7 @@ public class BookFacadeImpl implements BookFacade {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     @Transactional
     public BookTo watchBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
@@ -57,6 +62,8 @@ public class BookFacadeImpl implements BookFacade {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
+    @Transactional
     public BookTo unwatchBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
@@ -67,6 +74,7 @@ public class BookFacadeImpl implements BookFacade {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).ADMIN)")
     public BookTo saveBook(BookTo newBook, String userId) {
         BookEntity bookEntity = bookFactory.toNewEntity(newBook);
         bookEntity = bookRepository.saveAndFlush(bookEntity);
@@ -74,6 +82,7 @@ public class BookFacadeImpl implements BookFacade {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     @Transactional
     public BookTo borrowBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
@@ -84,6 +93,7 @@ public class BookFacadeImpl implements BookFacade {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     @Transactional
     public BookTo returnBook(String bookId, String currentUserId) {
         BookEntity book = bookRepository.findOne(bookId);
@@ -93,7 +103,7 @@ public class BookFacadeImpl implements BookFacade {
         book.returnFrom(user);
 
         if (bookWasUnavailable) {
-            alertWatchersBookIsAvailable(book);
+            notifyBookAvailableCommand.alertWatchersBookIsAvailable(book);
             book.clearAllWatchers();
         }
 
@@ -101,6 +111,7 @@ public class BookFacadeImpl implements BookFacade {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).ADMIN)")
     @Transactional
     public void updateAvailableCopies(String bookId, int numberOfCopies) {
         BookEntity book = bookRepository.findOne(bookId);
@@ -109,15 +120,5 @@ public class BookFacadeImpl implements BookFacade {
         }
         book.updateAvailableCopies(numberOfCopies);
         bookRepository.save(book);
-    }
-
-    private void alertWatchersBookIsAvailable(BookEntity book) {
-        for (UserEntity watcher : book.getWatchers()) {
-            Map<String, Object> values = new HashMap<String, Object>();
-            values.put("user", watcher);
-            values.put("book", book);
-            values.put("link", "http://libraryapp.cegeka.com:8000/#/book/" + book.getId());
-            emailComposer.sendEmail(watcher.getEmail(), "notify-book-available-subject", "notify-book-available-content", watcher.getLocale(), values);
-        }
     }
 }
