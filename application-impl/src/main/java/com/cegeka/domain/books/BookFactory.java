@@ -21,8 +21,8 @@ public class BookFactory {
         return entity;
     }
 
-    private BookDetailsEntity detailsFrom(BookTo bookTo) {
-        return new BookDetailsEntity(bookTo.getPublishedDate(), bookTo.getPublisher(),
+    private BookDetails detailsFrom(BookTo bookTo) {
+        return new BookDetails(bookTo.getPublishedDate(), bookTo.getPublisher(),
                 bookTo.getCoverImage(), bookTo.getDescription());
     }
 }

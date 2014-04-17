@@ -65,7 +65,7 @@ public class BookEntityTestFixture extends BookEntity.Builder {
         return "" + Math.round(Math.random() * 123456789);
     }
 
-    private static BookDetailsEntity defaultBookDetails() {
-        return new BookDetailsEntity(new DateTime().toString(), "publisher", "coverImageUrl", "description");
+    private static BookDetails defaultBookDetails() {
+        return new BookDetails(new DateTime().toString(), "publisher", "coverImageUrl", "description");
     }
 }
