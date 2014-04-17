@@ -1,6 +1,7 @@
 package com.cegeka.domain.books;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +22,8 @@ public class BookDetailsEntity {
     private String publishedDate;
     private String publisher;
     private String coverImage;
+
+    @Type(type="text")
     private String description;
 
     public BookDetailsEntity() {
