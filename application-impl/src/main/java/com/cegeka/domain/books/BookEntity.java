@@ -12,6 +12,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 @Entity
 @Table(name = "BOOKS")
 public class BookEntity {
@@ -105,8 +107,9 @@ public class BookEntity {
         return copies;
     }
 
-    public void updateNumberOfCopies(int availableCopies){
-        this.copies = availableCopies;
+    public void updateNumberOfCopies(int copies){
+        checkArgument(copies >= borrowers.size(), "Number of copies should be positive");
+        this.copies = copies;
     }
 
     public BookDetails getDetails() {
