@@ -5,7 +5,6 @@ import com.cegeka.domain.books.BookFactory;
 import com.cegeka.domain.books.BookRepository;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
-import com.cegeka.infrastructure.EmailComposer;
 import com.cegeka.infrastructure.NotifyBookAvailableCommand;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -31,9 +30,6 @@ public class BookFacadeImpl implements BookFacade {
 
     @Resource
     private BookToMapper bookToMapper;
-
-    @Resource
-    private EmailComposer emailComposer;
 
     @Resource
     private NotifyBookAvailableCommand notifyBookAvailableCommand;

@@ -56,7 +56,7 @@ public class NotifyBookAvailableCommandTest {
         assertThat(capturedActuals().get("title")).isEqualTo(book.getTitle());
         assertThat(capturedActuals().get("author")).isEqualTo(book.getAuthor());
         assertThat(capturedActuals().get("author")).isEqualTo(book.getAuthor());
-        assertThat(capturedActuals().get("link")).isEqualTo(BOOK_RESOURCE_LINK + book.getId());
+        assertThat((String)capturedActuals().get("link")).endsWith(BOOK_RESOURCE_PATH + book.getId());
 
     }
 
