@@ -5,7 +5,6 @@ import com.cegeka.domain.books.BookFactory;
 import com.cegeka.domain.books.BookRepository;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
-import com.cegeka.infrastructure.EmailComposer;
 import com.cegeka.infrastructure.NotifyBookAvailableCommand;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,16 +15,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import static com.cegeka.domain.books.BookEntityTestFixture.aBook;
 import static com.cegeka.domain.books.BookEntityTestFixture.aBookWithOneCopy;
 import static com.cegeka.domain.user.UserEntityTestFixture.aUserEntity;
 import static com.cegeka.domain.user.UserEntityTestFixture.romeoUser;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -195,19 +190,15 @@ public class BookFacadeImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void whenUpdatingNumberOfBookCopiesForInexistentBookId_shouldThrowException() {
-        //ARANGE
-        UserEntity romeo = romeoUser();
-        int someId = new Random().nextInt(100) + 100;
-        String bookId = String.valueOf(someId);
-        int copies = new Random().nextInt(100) + 1;
         //mocking
-        when(bookRepositoryMock.findOne(bookId)).thenReturn(null);
+        String book_id = "book_id";
+        when(bookRepositoryMock.findOne(book_id)).thenReturn(null);
 
         //ACT
-        bookFacade.updateAvailableCopies(bookId, copies);
+        bookFacade.updateAvailableCopies(book_id, 7);
 
         //ASSERT
-        verify(bookRepositoryMock).findOne(bookId);
+        verify(bookRepositoryMock).findOne(book_id);
     }
 
 }

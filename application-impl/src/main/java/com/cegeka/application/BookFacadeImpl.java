@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 @Service
 @Transactional(readOnly = true)
 public class BookFacadeImpl implements BookFacade {
@@ -45,7 +47,9 @@ public class BookFacadeImpl implements BookFacade {
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     public BookTo getBook(String bookId, String currentUserId) {
-        return bookToMapper.toTo(bookRepository.findOne(bookId), currentUserId);
+        BookEntity book = bookRepository.findOne(bookId);
+        checkArgument(book != null, "Book does not exist!");
+        return bookToMapper.toTo(book, currentUserId);
     }
 
     @Override
@@ -54,6 +58,8 @@ public class BookFacadeImpl implements BookFacade {
     public BookTo watchBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
+        checkArgument(book != null, "Book does not exist!");
+        checkArgument(user != null, "User does not exist!");
         book.addWatcher(user);
         bookRepository.flush();
         return bookToMapper.toTo(book, userId);
@@ -65,6 +71,8 @@ public class BookFacadeImpl implements BookFacade {
     public BookTo unwatchBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
+        checkArgument(book != null, "Book does not exist!");
+        checkArgument(user != null, "User does not exist!");
         book.removeWatcher(user);
         bookRepository.flush();
         return bookToMapper.toTo(book, userId);
@@ -85,6 +93,10 @@ public class BookFacadeImpl implements BookFacade {
     public BookTo borrowBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
+
+        checkArgument(book != null, "Book does not exist!");
+        checkArgument(user != null, "User does not exist!");
+
         book.lendTo(user);
         bookRepository.flush();
         return bookToMapper.toTo(book, user.getId());
@@ -96,6 +108,8 @@ public class BookFacadeImpl implements BookFacade {
     public BookTo returnBook(String bookId, String currentUserId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(currentUserId);
+        checkArgument(book != null, "Book does not exist!");
+        checkArgument(user != null, "User does not exist!");
 
         boolean bookWasUnavailable = !book.isAvailable();
         book.returnFrom(user);
@@ -113,9 +127,7 @@ public class BookFacadeImpl implements BookFacade {
     @Transactional
     public void updateAvailableCopies(String bookId, int numberOfCopies) {
         BookEntity book = bookRepository.findOne(bookId);
-        if (book == null) {
-            throw new IllegalArgumentException("Bad Book id. The book does not exist");
-        }
+        checkArgument(book != null, "Book does not exist!");
         book.updateNumberOfCopies(numberOfCopies);
         bookRepository.save(book);
     }
