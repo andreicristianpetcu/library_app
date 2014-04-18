@@ -108,7 +108,7 @@ public class BookEntity {
     }
 
     public void updateNumberOfCopies(int copies){
-        checkArgument(copies >= borrowers.size(), "Number of copies should be positive");
+        checkArgument(copies >= borrowers.size(), "Number of copies should be a positive number and bigger than number of borrowed copies");
         this.copies = copies;
     }
 
