@@ -1,8 +1,8 @@
 package com.cegeka.domain.books;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 
 @Embeddable
 public class BookDetails {
@@ -10,6 +10,8 @@ public class BookDetails {
     private String publishedDate;
     private String publisher;
     private String coverImage;
+
+    @Type(type = "text")
     private String description;
 
     BookDetails(){  }
