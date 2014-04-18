@@ -27,7 +27,7 @@ public class BookFactoryTest {
         assertThat(bookTo.getIsbn()).isEqualTo(bookEntity.getIsbn());
         assertThat(bookTo.getAvailableCopies()).isEqualTo(bookEntity.getCopies());
 
-        BookDetailsEntity details = bookEntity.getDetails();
+        BookDetails details = bookEntity.getDetails();
         assertThat(details).isNotNull();
         assertThat(details.getPublishedDate()).isEqualTo(bookTo.getPublishedDate());
         assertThat(details.getPublisher()).isEqualTo(bookTo.getPublisher());

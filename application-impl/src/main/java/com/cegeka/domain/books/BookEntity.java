@@ -12,8 +12,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
-import static javax.persistence.CascadeType.ALL;
-
 @Entity
 @Table(name = "BOOKS")
 public class BookEntity {
@@ -42,9 +40,8 @@ public class BookEntity {
             joinColumns = {@JoinColumn(name = "BOOK_ID", nullable = false, updatable = false)})
     private List<UserEntity> borrowers = new ArrayList<UserEntity>();
 
-    @OneToOne(cascade = ALL)
-    @JoinColumn(referencedColumnName = "ID")
-    private BookDetailsEntity details;
+    @Embedded
+    private BookDetails details;
 
     @ManyToMany
     @JoinTable(name = "BOOK_WATCHER",
@@ -108,11 +105,11 @@ public class BookEntity {
         return copies;
     }
 
-    public void updateAvailableCopies(int availableCopies){
+    public void updateNumberOfCopies(int availableCopies){
         this.copies = availableCopies;
     }
 
-    public BookDetailsEntity getDetails() {
+    public BookDetails getDetails() {
         return details;
     }
 
@@ -158,7 +155,7 @@ public class BookEntity {
         private Integer copies;
         private String isbn;
         private List<UserEntity> borrowers = new ArrayList<UserEntity>();
-        private BookDetailsEntity details;
+        private BookDetails details;
         private List<UserEntity> watchers = new ArrayList<UserEntity>();
 
         public Builder withId(String id) {
@@ -191,7 +188,7 @@ public class BookEntity {
             return this;
         }
 
-        public Builder withDetails(BookDetailsEntity details) {
+        public Builder withDetails(BookDetails details) {
             this.details = details;
             return this;
         }

@@ -5,34 +5,34 @@ import com.cegeka.domain.books.BookFactory;
 import com.cegeka.domain.books.BookRepository;
 import com.cegeka.domain.users.UserEntity;
 import com.cegeka.domain.users.UserRepository;
-import com.cegeka.infrastructure.EmailComposer;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cegeka.infrastructure.NotifyBookAvailableCommand;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 @Service
 @Transactional(readOnly = true)
 public class BookFacadeImpl implements BookFacade {
 
-    @Autowired
+    @Resource
     private BookRepository bookRepository;
 
-    @Autowired
+    @Resource
     private UserRepository userRepository;
 
-    @Autowired
+    @Resource
     private BookFactory bookFactory;
 
-    @Autowired
+    @Resource
     private BookToMapper bookToMapper;
 
-    @Autowired
-    private EmailComposer emailComposer;
+    @Resource
+    private NotifyBookAvailableCommand notifyBookAvailableCommand;
 
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
@@ -43,23 +43,32 @@ public class BookFacadeImpl implements BookFacade {
     @Override
     @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     public BookTo getBook(String bookId, String currentUserId) {
-        return bookToMapper.toTo(bookRepository.findOne(bookId), currentUserId);
+        BookEntity book = bookRepository.findOne(bookId);
+        checkArgument(book != null, "Book does not exist!");
+        return bookToMapper.toTo(book, currentUserId);
     }
 
     @Override
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     @Transactional
     public BookTo watchBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
+        checkArgument(book != null, "Book does not exist!");
+        checkArgument(user != null, "User does not exist!");
         book.addWatcher(user);
         bookRepository.flush();
         return bookToMapper.toTo(book, userId);
     }
 
     @Override
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
+    @Transactional
     public BookTo unwatchBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
+        checkArgument(book != null, "Book does not exist!");
+        checkArgument(user != null, "User does not exist!");
         book.removeWatcher(user);
         bookRepository.flush();
         return bookToMapper.toTo(book, userId);
@@ -67,6 +76,7 @@ public class BookFacadeImpl implements BookFacade {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).ADMIN)")
     public BookTo saveBook(BookTo newBook, String userId) {
         BookEntity bookEntity = bookFactory.toNewEntity(newBook);
         bookEntity = bookRepository.saveAndFlush(bookEntity);
@@ -74,26 +84,34 @@ public class BookFacadeImpl implements BookFacade {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     @Transactional
     public BookTo borrowBook(String bookId, String userId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(userId);
+
+        checkArgument(book != null, "Book does not exist!");
+        checkArgument(user != null, "User does not exist!");
+
         book.lendTo(user);
         bookRepository.flush();
         return bookToMapper.toTo(book, user.getId());
     }
 
     @Override
+    @PreAuthorize("hasRole(T(com.cegeka.application.Role).USER)")
     @Transactional
     public BookTo returnBook(String bookId, String currentUserId) {
         BookEntity book = bookRepository.findOne(bookId);
         UserEntity user = userRepository.findOne(currentUserId);
+        checkArgument(book != null, "Book does not exist!");
+        checkArgument(user != null, "User does not exist!");
 
         boolean bookWasUnavailable = !book.isAvailable();
         book.returnFrom(user);
 
         if (bookWasUnavailable) {
-            alertWatchersBookIsAvailable(book);
+            notifyBookAvailableCommand.alertWatchersBookIsAvailable(book);
             book.clearAllWatchers();
         }
 
@@ -104,23 +122,10 @@ public class BookFacadeImpl implements BookFacade {
     @Transactional
     public void updateAvailableCopies(String bookId, int numberOfCopies) {
         BookEntity book = bookRepository.findOne(bookId);
-        if (book == null) {
-            throw new IllegalArgumentException("Bad Book id. The book does not exist");
-        }
-        Integer existingCopies = book.getCopies();
-        if (numberOfCopies < 0 || numberOfCopies < existingCopies) {
-            throw new IllegalArgumentException("Please select a value that is bigger than " + existingCopies);
-        }
-        book.updateAvailableCopies(numberOfCopies);
+        checkArgument(book != null, "Book does not exist!");
+        book.updateNumberOfCopies(numberOfCopies);
+        bookRepository.save(book);
     }
 
-    private void alertWatchersBookIsAvailable(BookEntity book) {
-        for (UserEntity watcher : book.getWatchers()) {
-            Map<String, Object> values = new HashMap<String, Object>();
-            values.put("user", watcher);
-            values.put("book", book);
-            values.put("link", "http://libraryapp.cegeka.com:8000/#/book/" + book.getId());
-            emailComposer.sendEmail(watcher.getEmail(), "notify-book-available-subject", "notify-book-available-content", watcher.getLocale(), values);
-        }
-    }
+   
 }

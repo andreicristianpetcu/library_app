@@ -105,7 +105,7 @@ public class BookRepositoryIntegrationTest extends IntegrationTest {
         }
     }
 
-    private void assertBookDetails(BookDetailsEntity macbethDetails, BookDetailsEntity persistedBookDetails) {
+    private void assertBookDetails(BookDetails macbethDetails, BookDetails persistedBookDetails) {
         assertThat(macbethDetails.getCoverImage()).isEqualTo(persistedBookDetails.getCoverImage());
         assertThat(macbethDetails.getDescription()).isEqualTo(persistedBookDetails.getDescription());
         assertThat(macbethDetails.getPublishedDate()).isEqualTo(persistedBookDetails.getPublishedDate());

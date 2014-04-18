@@ -1,6 +1,6 @@
 package com.cegeka.application;
 
-import com.cegeka.domain.books.BookDetailsEntity;
+import com.cegeka.domain.books.BookDetails;
 import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.users.UserEntity;
 import org.junit.Test;
@@ -146,7 +146,7 @@ public class BookToMapperTest {
         assertThat(bookTo.isBorrowedByCurrentUser()).isEqualTo(false);
     }
 
-    private void assertBookDetails(BookDetailsEntity bookDetailsEntity, BookTo bookTo) {
+    private void assertBookDetails(BookDetails bookDetailsEntity, BookTo bookTo) {
         assertThat(bookTo.getPublishedDate()).isEqualTo(bookDetailsEntity.getPublishedDate());
         assertThat(bookTo.getPublisher()).isEqualTo(bookDetailsEntity.getPublisher());
         assertThat(bookTo.getCoverImage()).isEqualTo(bookDetailsEntity.getCoverImage());

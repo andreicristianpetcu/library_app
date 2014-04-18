@@ -77,7 +77,8 @@ public class BookRestService {
         return new ResponseEntity<BookTo>(bookTo, HttpStatus.OK);
     }
 
-    //TODO - make available globally
+    //TODO: make it more restful: book/{bookId}/copies/{numberOfCopies}
+    //a rest url is a resource. should not contain verbs, only resources
     @RequestMapping(value = "book/{bookId}/updateNumberOfCopies/{numberOfCopies}", method = POST)
     @ResponseBody
     public void setNumberOfCopies(@PathVariable("bookId") String bookId,
@@ -86,6 +87,7 @@ public class BookRestService {
         bookFacade.updateAvailableCopies(bookId, copies);
     }
 
+    //TODO - make available globally
     private String getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();

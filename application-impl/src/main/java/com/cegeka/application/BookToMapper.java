@@ -1,6 +1,6 @@
 package com.cegeka.application;
 
-import com.cegeka.domain.books.BookDetailsEntity;
+import com.cegeka.domain.books.BookDetails;
 import com.cegeka.domain.books.BookEntity;
 import com.cegeka.domain.users.UserEntity;
 import com.google.common.base.Function;
@@ -34,7 +34,7 @@ public class BookToMapper {
         bookTo.setBorrowers(borrowerToList);
         bookTo.setAvailableCopies(bookEntity.availableCopies());
 
-        BookDetailsEntity details = bookEntity.getDetails();
+        BookDetails details = bookEntity.getDetails();
         if (details != null) {
             bookTo.setPublishedDate(details.getPublishedDate());
             bookTo.setPublisher(details.getPublisher());

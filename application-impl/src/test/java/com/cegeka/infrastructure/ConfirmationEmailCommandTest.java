@@ -23,12 +23,13 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ConfirmationEmailCommandTest {
 
-    @Captor
-    private ArgumentCaptor<Map<String, Object>> valuesForTemplateFillerCaptor;
+    @Mock
+    protected EmailComposer emailComposerMock;
     @Mock
     private ConfirmationTokenRepository confirmationTokenRepository;
-    @Mock
-    private EmailComposer emailComposerMock;
+    @Captor
+    protected ArgumentCaptor<Map<String, Object>> valuesForTemplateFillerCaptor;
+
     private ConfirmationEmailCommand command;
 
     @Before
